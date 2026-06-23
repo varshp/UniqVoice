@@ -21,6 +21,29 @@ from typing import Dict, Any
 
 sessions: Dict[str, Any] = {}
 
+
+from fastapi import UploadFile, File
+import shutil
+import os
+import json
+from agents.onboarding.voice_profile_builder import build_voice_profile
+
+@app.post("/api/voice-upload")
+async def voice_upload(audio: UploadFile = File(...)):
+    temp_path = f"/tmp/{audio.filename}"
+    with open(temp_path, "wb") as f:
+        shutil.copyfileobj(audio.file, f)
+        
+    success = build_voice_profile(temp_path, text_answers=[])
+    
+    if success:
+        profile_path = os.path.join(os.path.dirname(__file__), "profile", "voice_profile.json")
+        if os.path.exists(profile_path):
+            with open(profile_path, "r") as f:
+                return json.load(f)
+                
+    return {"error": "Failed to build voice profile"}
+
 class ScoutRequest(BaseModel):
     topic: str
 

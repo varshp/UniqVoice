@@ -331,6 +331,40 @@
             </p>
         </div>
     </main>
+
+    <script>
+        document.getElementById('audio-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const btnText = document.getElementById('upload-btn-text');
+            btnText.innerHTML = 'Analyzing... <span class="material-symbols-outlined text-sm spinner">refresh</span>';
+            
+            const formData = new FormData();
+            formData.append('audio', file);
+            
+            try {
+                const res = await fetch('/api/voice-upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    localStorage.setItem('voiceProfile', JSON.stringify(data));
+                    window.location.href = '/tone-captured';
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error uploading file");
+            } finally {
+                btnText.innerHTML = 'Select Audio File';
+            }
+        });
+    </script>
+
 </body>
 
 </html>

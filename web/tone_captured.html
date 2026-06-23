@@ -245,39 +245,26 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-surface border-2 border-magic-violet rounded-xl p-8 ai-glow">
                     <div class="text-magic-violet font-label-sm uppercase tracking-widest mb-2">Tone</div>
-                    <div class="font-headline-md text-2xl text-primary mb-4">Direct, evidence-based, sharp, authentic
-                    </div>
-                    <p class="text-sm text-on-surface-variant">Your voice avoids qualifiers and focuses on high-impact
-                        assertions backed by logic.</p>
+                    <div id="vp-tone" class="font-headline-md text-2xl text-primary mb-4">Loading...</div>
+                    <p class="text-sm text-on-surface-variant">Based on your vocal cadence and word choices.</p>
                 </div>
                 <div class="bg-surface border border-border-subtle rounded-xl p-8">
                     <div class="text-ink-secondary font-label-sm uppercase tracking-widest mb-2">Rhythm</div>
-                    <div class="font-headline-md text-2xl text-primary mb-4">Short and sharp — narrative that unpacks
-                        into lessons</div>
-                    <p class="text-sm text-on-surface-variant">You use punchy sentences to build tension before
-                        delivering a structured takeaway.</p>
+                    <div id="vp-rhythm" class="font-headline-md text-2xl text-primary mb-4">Loading...</div>
+                    <p class="text-sm text-on-surface-variant">Your structural pacing and sentence variation.</p>
                 </div>
             </div>
             <div class="bg-surface border border-border-subtle rounded-xl p-8 mb-12">
                 <h3 class="font-headline-md text-xl mb-6">Rhetorical Moves</h3>
                 <ol
                     class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12 list-decimal list-inside font-body-md text-primary">
-                    <li class="pb-2 border-b border-border-subtle">Opens with a story</li>
-                    <li class="pb-2 border-b border-border-subtle">Unpacks into a business lesson</li>
-                    <li class="pb-2 border-b border-border-subtle">Integrates sharp questions</li>
-                    <li class="pb-2 border-b border-border-subtle">Builds to a revelation</li>
+<div id="vp-moves" class="contents"><li>Loading...</li></div>
                 </ol>
             </div>
             <div class="bg-surface border border-border-subtle rounded-xl p-8">
                 <h3 class="font-headline-md text-xl mb-6">Never Does This</h3>
-                <div class="flex flex-wrap gap-3"><span
-                        class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">AI
-                        slop</span><span
-                        class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">formulaic
-                        transitions</span><span
-                        class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">"that's
-                        the plan"</span><span
-                        class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">filler</span>
+                <div class="flex flex-wrap gap-3">
+<span id="vp-avoid" class="contents"></span>
                 </div>
             </div>
         </div>
@@ -285,11 +272,37 @@
         <!-- Footer Note -->
         <div class="mt-auto pt-12 flex items-center justify-between w-full border-t border-border-subtle">
             <div class="flex items-center gap-2 text-[#2e7d32] font-bold uppercase text-xs tracking-widest"><span
-                    class="material-symbols-outlined text-lg">check_circle</span> Voice profile captured</div><button
-                class="bg-primary hover:bg-ink-primary text-on-primary font-label-md text-label-md px-10 py-4 rounded-lg shadow-lg transition-all flex items-center gap-2">Next:
-                Angle <span class="material-symbols-outlined">arrow_forward</span></button>
+                    class="material-symbols-outlined text-lg">check_circle</span> Voice profile captured</div><button onclick="window.location.href='/angle'" class="bg-primary hover:bg-ink-primary text-on-primary font-label-md text-label-md px-10 py-4 rounded-lg shadow-lg transition-all flex items-center gap-2">Next: Angle <span class="material-symbols-outlined">arrow_forward</span></button>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dataStr = localStorage.getItem('voiceProfile');
+            if (dataStr) {
+                try {
+                    const data = JSON.parse(dataStr);
+                    const vp = data.voice_profile;
+                    
+                    if (vp) {
+                        document.getElementById('vp-tone').innerText = vp.tone || "Unknown";
+                        document.getElementById('vp-rhythm').innerText = vp.sentence_rhythm || "Unknown";
+                        
+                        if (vp.rhetorical_moves) {
+                            document.getElementById('vp-moves').innerHTML = vp.rhetorical_moves.map(m => `<li class="pb-2 border-b border-border-subtle">${m}</li>`).join('');
+                        }
+                        
+                        if (vp.avoid) {
+                            document.getElementById('vp-avoid').innerHTML = vp.avoid.map(a => `<span class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">${a}</span>`).join('');
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error parsing voice profile", e);
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>
