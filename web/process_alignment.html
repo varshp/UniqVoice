@@ -262,9 +262,19 @@
 </aside>
 <!-- Main Content Canvas -->
 <section class="flex-grow flex flex-col justify-center max-w-[800px] mx-auto text-center md:text-left py-12">
-<header class="mb-12">
+<header class="mb-10">
 <h1 class="font-headline-lg text-headline-lg md:text-headline-lg text-ink-primary mb-4 leading-tight">Aligning with Your<br>Voice Signature</h1>
-<p class="font-body-lg text-body-lg text-ink-secondary max-w-xl">The engine is now fitting the selected angle to your unique linguistic profile to ensure authentic delivery.</p>
+<p class="font-body-lg text-body-lg text-ink-secondary max-w-xl mb-8">The engine is now fitting the selected angle to your unique linguistic profile to ensure authentic delivery.</p>
+<!-- Progress Bar Moved to Header -->
+<div class="w-full bg-surface border border-border-hairline rounded-xl p-6 shadow-sm max-w-2xl">
+<div class="flex justify-between items-end mb-4">
+<p class="font-body-md text-ink-faint italic text-sm">Large language models are aligning parameters...</p>
+<button class="font-label-caps text-label-caps text-ink-secondary hover:text-ink-primary transition-colors cursor-pointer border-b border-transparent hover:border-ink-primary">View Log Details</button>
+</div>
+<div class="h-[6px] w-full bg-border-hairline rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-500 ease-out animate-pulse" id="progress-bar" style="width: 100%;"></div>
+</div>
+</div>
 </header>
 <!-- Visual Mapping Interface -->
 <div class="relative bg-surface border border-border-hairline rounded-xl aspect-[16/9] mb-4 overflow-hidden flex items-center justify-center">
@@ -335,16 +345,6 @@
 <p class="font-data-mono text-[11px] text-ink-faint" id="log-text">Writing in your voice...</p>
 </div>
 <p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Generating Content...</p>
-</div>
-</div>
-<!-- Footer Progress Bar -->
-<div class="w-full bg-surface border border-border-hairline rounded-xl p-6 shadow-sm">
-<div class="flex justify-between items-end mb-4">
-<p class="font-body-md text-ink-faint italic text-sm">Large language models are aligning parameters...</p>
-<button class="font-label-caps text-label-caps text-ink-secondary hover:text-ink-primary transition-colors cursor-pointer border-b border-transparent hover:border-ink-primary">View Log Details</button>
-</div>
-<div class="h-[6px] w-full bg-border-hairline rounded-full overflow-hidden">
-<div class="h-full bg-primary transition-all duration-500 ease-out animate-pulse" id="progress-bar" style="width: 100%;"></div>
 </div>
 </div>
 </section>

@@ -170,7 +170,7 @@
 <div class="flex items-center bg-surface rounded-xl overflow-hidden border-2 border-ink-primary shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] transition-all focus-within:translate-y-[2px] focus-within:translate-x-[2px] focus-within:shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">
 <input id="topic-input" class="w-full bg-transparent border-none py-5 px-6 font-data-mono text-data-mono text-ink-primary focus:ring-0 placeholder-ink-faint" placeholder="Type your topic here..." type="text" value="is it a mistake to invest in SpaceX post-IPO">
 <button id="btn-scan" class="bg-primary text-on-primary border-l-2 border-ink-primary px-8 py-5 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shrink-0">
-                        RE-SCAN 
+                        SCAN 
                         <span class="material-symbols-outlined text-sm">refresh</span>
 </button>
 </div>
@@ -260,7 +260,7 @@
 
 <!-- Enhanced Angle Cards -->
 <div id="candidates-container" class="grid grid-cols-1 gap-component-gap">
-    <p class="text-ink-secondary py-4">Click RE-SCAN to find angles...</p>
+    <p class="text-ink-secondary py-4">Click SCAN to find angles...</p>
 </div>
 <!-- Research Footprint -->
 
@@ -420,7 +420,7 @@
                 console.error(e);
                 document.getElementById('candidates-container').innerHTML = '<p class="text-error">Error scanning topic.</p>';
             } finally {
-                btn.innerHTML = 'RE-SCAN <span class="material-symbols-outlined text-sm">refresh</span>';
+                btn.innerHTML = 'SCAN <span class="material-symbols-outlined text-sm">refresh</span>';
                 btn.disabled = false;
             }
         });
