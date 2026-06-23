@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>UniqVoice - AI writes like a robot. You don't.</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap"
-        rel="stylesheet">
-    <!-- Material Symbols -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Tailwind Configuration -->
-    <script id="tailwind-config">
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>UniqVoice - AI writes like a robot. You don't.</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -102,20 +95,20 @@
                         "headline-lg-mobile": ["\"Source Serif 4\""]
                     },
                     "fontSize": {
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
-                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
-                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
-                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }]
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
                     }
                 }
             }
         }
     </script>
-    <style>
+<style>
         .dashed-border-animate {
             background-image: repeating-linear-gradient(0deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(90deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(180deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(270deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px);
             background-size: 2px 100%, 100% 2px, 2px 100%, 100% 2px;
@@ -135,23 +128,13 @@
         }
 
         @keyframes pulse-soft {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
-
+        
         .ai-glow {
             position: relative;
         }
-
         .ai-glow::before {
             content: '';
             position: absolute;
@@ -167,241 +150,60 @@
         }
     </style>
 </head>
-
 <body class="bg-background text-primary font-body-md min-h-screen flex flex-col">
-    <!-- TopAppBar -->
-    <nav class="bg-surface border-b-2 border-ink-primary w-full h-20 flex items-center sticky top-0 z-50">
-        <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
-            <div class="font-headline-md text-headline-md text-ink-primary font-bold">UniqVoice</div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a class="text-ink-primary font-bold border-b-2 border-ink-primary pb-1 font-body-md text-body-md transition-colors cursor-pointer active:opacity-80"
-                    href="#">1 Tone</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">2 Angle</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">3 Create</a>
-            </div>
-            <div class="flex items-center">
-                <span
-                    class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
-            </div>
-        </div>
-    </nav>
-    <!-- Main Content Canvas -->
-    <main
-        class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-16 md:py-20 max-w-[1000px] mx-auto w-full">
-        <!-- Header Text -->
-        <div class="text-center mb-12 w-full">
-            <h1
-                class="font-display-lg text-display-lg text-primary mb-4 md:hidden font-headline-lg-mobile text-headline-lg-mobile">
+<!-- TopAppBar -->
+<nav class="bg-surface border-b-2 border-ink-primary w-full h-20 flex items-center sticky top-0 z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
+<div class="font-headline-md text-headline-md text-ink-primary font-bold">UniqVoice</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-16 md:py-20 max-w-[1000px] mx-auto w-full">
+<!-- Header Text -->
+<div class="text-center mb-12 w-full">
+<h1 class="font-display-lg text-display-lg text-primary mb-4 md:hidden font-headline-lg-mobile text-headline-lg-mobile">
                 AI writes like a robot.<br>You don't.
             </h1>
-            <h1 class="font-display-lg text-display-lg text-primary mb-6 hidden md:block">
-                AI writes like a robot. You don't.<br><span class="text-magic-violet">Let's capture your unique
-                    edge.</span>
-            </h1>
-            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-                Mainstream AI produces "slop." UniqVoice maps your rhetorical rhythm, evidence-based tone, and unique
-                perspective to create content that actually sounds like you.
-            </p>
-        </div>
-        <!-- Flashy Upload Zone -->
-        <div
-            class="w-full max-w-[800px] bg-surface rounded-xl p-8 md:p-12 mb-16 relative overflow-hidden group cursor-pointer dashed-border-animate hover:bg-magic-violet-soft/20 transition-colors duration-500">
-            <div
-                class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                <div class="w-64 h-64 bg-magic-violet rounded-full blur-[100px] opacity-10"></div>
-            </div>
-            <div class="flex flex-col items-center justify-center relative z-10 text-center">
-                <div
-                    class="w-20 h-20 rounded-full bg-magic-violet-soft flex items-center justify-center mb-6 upload-pulse group-hover:scale-110 transition-transform duration-300 shadow-[0_4px_12px_rgba(90,61,240,0.15)]">
-                    <span class="material-symbols-outlined text-magic-violet text-[40px]" data-icon="auto_awesome"
-                        style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                </div>
-                <h3 class="font-headline-md text-headline-md text-primary mb-2">Drag &amp; Drop Voice Sample</h3>
-                <p class="font-body-md text-body-md text-on-surface-variant mb-6">Seeds your engine with 1:1 tone
-                    matching (MP3, WAV, M4A)</p>
-                <button id="upload-btn-text"
-                    class="bg-magic-violet hover:bg-secondary text-on-secondary font-label-md text-label-md px-8 py-3 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-200 transform hover:-translate-y-0.5">
+<h1 class="font-display-lg text-display-lg text-primary mb-6 hidden md:block">
+                AI writes like a robot. You don't.<br><span class="text-magic-violet">Let's capture your unique edge.</span>
+</h1>
+</div>
+<!-- Flashy Upload Zone -->
+<div class="w-full max-w-[800px] bg-surface rounded-xl p-8 md:p-12 mb-16 relative overflow-hidden group cursor-pointer dashed-border-animate hover:bg-magic-violet-soft/20 transition-colors duration-500">
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+<div class="w-64 h-64 bg-magic-violet rounded-full blur-[100px] opacity-10"></div>
+</div>
+<div class="flex flex-col items-center justify-center relative z-10 text-center">
+<div class="w-20 h-20 rounded-full bg-magic-violet-soft flex items-center justify-center mb-6 upload-pulse group-hover:scale-110 transition-transform duration-300 shadow-[0_4px_12px_rgba(90,61,240,0.15)]">
+<span class="material-symbols-outlined text-magic-violet text-[40px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Drag &amp; Drop Voice Sample</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Seeds your engine with 1:1 tone matching (MP3, WAV, M4A)</p>
+<button class="bg-magic-violet hover:bg-secondary text-on-secondary font-bold text-xl px-12 py-5 rounded-xl shadow-[0_8px_24px_rgba(90,61,240,0.3)] transition-all duration-200 transform hover:-translate-y-1 active:scale-95">
                     Start Voice Capture
                 </button>
-            </div>
-            <input id="audio-input" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" type="file">
-        </div>
-        <!-- High-Fidelity Comparison Section -->
-        <div class="w-full mb-20">
-            <div class="text-center mb-10">
-                <h2 class="font-headline-lg text-headline-lg text-primary mb-2">See the UniqVoice Difference</h2>
-                <p class="font-body-md text-on-surface-variant">Topic: Australia's 2026 World Cup Chances</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Generic AI Card -->
-                <div
-                    class="bg-surface border border-border-subtle rounded-xl p-8 flex flex-col h-full relative overflow-hidden">
-                    <div class="flex items-center gap-2 mb-6 text-on-surface-variant opacity-60">
-                        <span class="material-symbols-outlined text-sm">smart_toy</span>
-                        <span class="font-label-sm uppercase tracking-widest text-[10px]">Generic AI Output</span>
-                    </div>
-                    <h3 class="font-headline-md text-xl mb-4 text-on-surface-variant italic">"A Journey of Hope"</h3>
-                    <p class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4">
-                        The Australian national team faces a challenging but exciting road ahead as they prepare for the
-                        2026 World Cup. With a blend of youth and experience, fans are hopeful that the Socceroos can
-                        make their mark on the world stage. It's anyone's game, and the spirit of Australian
-                        sportsmanship will surely shine through...
-                    </p>
-                    <div class="mt-auto pt-4 border-t border-border-subtle flex flex-wrap gap-2">
-                        <span
-                            class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-medium uppercase text-on-surface-variant">Vague</span>
-                        <span
-                            class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-medium uppercase text-on-surface-variant">Cliché</span>
-                        <span
-                            class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-medium uppercase text-on-surface-variant">"AI
-                            Slop"</span>
-                    </div>
-                </div>
-                <!-- UniqVoice Card -->
-                <div class="bg-surface border-2 border-magic-violet rounded-xl p-8 flex flex-col h-full ai-glow">
-                    <div class="flex items-center gap-2 mb-6 text-magic-violet">
-                        <span class="material-symbols-outlined text-sm"
-                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                        <span class="font-label-sm uppercase tracking-widest text-[10px]">UniqVoice Profile: Direct
-                            &amp; Sharp</span>
-                    </div>
-                    <h3 class="font-headline-md text-xl mb-4 text-primary">"The 90% Illusion"</h3>
-                    <p class="font-body-md text-primary text-sm leading-relaxed mb-4">
-                        Australia is kidding itself. 90% of our 'rebuilding' phase is structural rot, not potential. We
-                        don’t need 'spirit'; we need a 4-year cycle that prioritizes tactical discipline over hope. If
-                        we aren’t cracking the top 20 FIFA rankings by mid-2025, the 2026 tournament isn't a
-                        journey—it’s an early exit.
-                    </p>
-                    <div class="mt-auto pt-4 border-t border-border-subtle flex flex-wrap gap-2">
-                        <span
-                            class="px-2 py-1 bg-magic-violet-soft text-magic-violet rounded text-[10px] font-bold uppercase">Evidence-Based</span>
-                        <span
-                            class="px-2 py-1 bg-magic-violet-soft text-magic-violet rounded text-[10px] font-bold uppercase">Short
-                            Rhythm</span>
-                        <span
-                            class="px-2 py-1 bg-magic-violet-soft text-magic-violet rounded text-[10px] font-bold uppercase">Unique
-                            Angle</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Value Proposition Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-16">
-            <!-- Card 1 -->
-            <div
-                class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start">
-                <div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4">
-                    <span class="material-symbols-outlined text-ink-secondary" data-icon="analytics">analytics</span>
-                </div>
-                <h4 class="font-label-md text-label-md text-primary mb-2">Editorial Rhythm Analysis</h4>
-                <p class="font-body-md text-body-md text-on-surface-variant text-sm">We map your specific cadence. If
-                    you write in short, sharp bursts, the engine avoids the flowery, run-on sentences typical of
-                    standard AI.</p>
-            </div>
-            <!-- Card 2 -->
-            <div
-                class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start">
-                <div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4">
-                    <span class="material-symbols-outlined text-ink-secondary" data-icon="psychology">psychology</span>
-                </div>
-                <h4 class="font-label-md text-label-md text-primary mb-2">Tone: Evidence-Based</h4>
-                <p class="font-body-md text-body-md text-on-surface-variant text-sm">Captured profiles favor direct
-                    claims and data over vague adjectives. The engine learns to find the 'sharp edge' in any topic you
-                    give it.</p>
-            </div>
-            <!-- Card 3 -->
-            <div
-                class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start">
-                <div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4">
-                    <span class="material-symbols-outlined text-ink-secondary"
-                        data-icon="history_edu">history_edu</span>
-                </div>
-                <h4 class="font-label-md text-label-md text-primary mb-2">Rhetorical Signature</h4>
-                <p class="font-body-md text-body-md text-on-surface-variant text-sm">Your unique profile persists.
-                    Upload once, and every piece of content—from emails to blog posts—will maintain your structural
-                    signature.</p>
-            </div>
-        </div>
-        <!-- Footer Note -->
-        <div class="mt-auto pt-8 text-center w-full">
-            <p class="font-mono text-[10px] text-on-tertiary-container tracking-widest uppercase">
+</div>
+<input accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file">
+</div>
+<!-- High-Fidelity Comparison Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-20"><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">analytics</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Authentic Point of View</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">We have a sharp take on what's converting today. The engine avoids the generic 'AI slop' by prioritizing your unique editorial perspective and expertise.</p></div><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">psychology</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Deeply Researched</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">Every article is grounded in a rigorous indexing of top-ranking sources and financial transcripts. Professional, credible, and built on real-world data.</p></div><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">history_edu</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Conversion &amp; Pipeline</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">Content that speaks directly to the bottom line. Our voice-aware engine is engineered for engagement that drives actual pipeline and measurable ROI.</p></div></div><div class="w-full mb-20">
+<div class="text-center mb-10">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">See the UniqVoice Difference</h2>
+<p class="font-body-md text-on-surface-variant">Topic: Australia's 2026 World Cup Chances</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="bg-surface-container-low border border-border-subtle rounded-xl p-8 flex flex-col h-full opacity-60 grayscale hover:grayscale-0 transition-all duration-500"><div class="flex items-center justify-between mb-6"><div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined text-sm">smart_toy</span><span class="font-label-sm uppercase tracking-widest text-[10px]">Generic AI Output</span></div><span class="text-[10px] font-bold text-error uppercase">Failing Grade</span></div><h3 class="font-headline-md text-xl mb-4 text-on-surface-variant italic">"A Journey of Hope"</h3><p class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4">The Australian national team faces a challenging but exciting road ahead as they prepare for the 2026 World Cup. With a blend of youth and experience, fans are hopeful that the Socceroos can make their mark on the world stage. It's anyone's game, and the spirit of Australian sportsmanship will surely shine through...</p><div class="mt-auto pt-4 border-t border-border-subtle flex flex-wrap gap-2"><span class="px-2 py-1 bg-error-container text-on-error-container rounded text-[10px] font-bold uppercase">Vague</span><span class="px-2 py-1 bg-error-container text-on-error-container rounded text-[10px] font-bold uppercase">Cliché</span><span class="px-2 py-1 bg-error-container text-on-error-container rounded text-[10px] font-bold uppercase">Low Signal</span></div></div><div class="bg-surface border-2 border-ink-primary rounded-xl p-8 flex flex-col h-full shadow-[0_20px_50px_rgba(0,0,0,0.1)] relative z-10"><div class="absolute -top-3 -right-3 bg-magic-violet text-on-secondary px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg">Superior Match</div><div class="flex items-center gap-2 mb-6 text-magic-violet"><span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span><span class="font-label-sm uppercase tracking-widest text-[10px]">UniqVoice Profile: Direct &amp; Sharp</span></div><h3 class="font-headline-md text-2xl mb-4 text-primary">"The 90% Illusion"</h3><p class="font-body-md text-primary text-md leading-relaxed mb-4 font-medium">Australia is kidding itself. 90% of our 'rebuilding' phase is structural rot, not potential. We don’t need 'spirit'; we need a 4-year cycle that prioritizes tactical discipline over hope. If we aren’t cracking the top 20 FIFA rankings by mid-2025, the 2026 tournament isn't a journey—it’s an early exit.</p><div class="mt-auto pt-4 border-t border-ink-primary flex flex-wrap gap-2"><span class="px-2 py-1 bg-magic-violet text-on-secondary rounded text-[10px] font-bold uppercase">Evidence-Based</span><span class="px-2 py-1 bg-magic-violet text-on-secondary rounded text-[10px] font-bold uppercase">Short Rhythm</span><span class="px-2 py-1 bg-magic-violet text-on-secondary rounded text-[10px] font-bold uppercase">Unique Angle</span></div></div></div>
+</div>
+<!-- Value Proposition Cards -->
+<!-- Footer Note -->
+<div class="mt-auto pt-8 text-center w-full">
+<p class="font-mono text-[10px] text-on-tertiary-container tracking-widest uppercase">
                 Profile Mapping Duration: ~45 seconds
             </p>
-        </div>
-    </main>
+</div>
+</main>
 
-    <script>
-        document.getElementById('audio-input').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const btnText = document.getElementById('upload-btn-text');
-            btnText.innerHTML = 'Analyzing... <span class="material-symbols-outlined text-sm spinner">refresh</span>';
-            
-            const formData = new FormData();
-            formData.append('audio', file);
-            
-            try {
-                // Fetch and display loading screen
-                // Fetch and display loading screen (with cache buster)
-                const loadingRes = await fetch(`/voice-loading?t=${Date.now()}`);
-                const loadingHtml = await loadingRes.text();
-                
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(loadingHtml, 'text/html');
-                
-                // Copy styles
-                Array.from(doc.head.querySelectorAll('style')).forEach(el => document.head.appendChild(el));
-                
-                // Hide the underlying original input that is poking through
-                const audioInput = document.getElementById('audio-input');
-                if (audioInput) audioInput.style.display = 'none';
 
-                // Create overlay
-                const overlay = document.createElement('div');
-                overlay.className = doc.body.className; // Keep body classes
-                overlay.style.position = 'fixed';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100vw';
-                overlay.style.height = '100vh';
-                overlay.style.zIndex = '99999';
-                overlay.style.backgroundColor = '#F3F1EA';
-                overlay.style.overflow = 'auto';
-                overlay.innerHTML = doc.body.innerHTML;
-                
-                document.body.appendChild(overlay);
-
-                // Execute scripts safely
-                Array.from(overlay.querySelectorAll('script')).forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    newScript.textContent = oldScript.textContent;
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                });
-
-                // Start the upload
-                const data = await fetch('/api/voice-upload', {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json());
-                
-                if (data.error) {
-                    alert(data.error);
-                    window.location.href = '/';
-                } else {
-                    localStorage.setItem('voiceProfile', JSON.stringify(data));
-                    window.location.href = '/tone-captured';
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error uploading file");
-                window.location.href = '/';
-            }
-        });
-    </script>
-
-</body>
-
-</html>
+</body></html>
