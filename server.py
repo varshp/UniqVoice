@@ -62,7 +62,7 @@ async def scout(req: ScoutRequest):
     async for event in gen:
         if getattr(event, "tool_calls", None):
             for tc in getattr(event, "tool_calls", []):
-                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) == "request_input":
+                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) in ["request_input", "adk_request_input"]:
                     args = getattr(tc.function_call, "args", {})
                     logger.info(f"ARGS IS: {args}, type: {type(args)}")
                     if args and "message" in args:
@@ -140,7 +140,7 @@ async def run_pipeline_no_hitl(req: RunRequest):
     async for event in gen:
         if getattr(event, "tool_calls", None):
             for tc in getattr(event, "tool_calls", []):
-                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) == "request_input":
+                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) in ["request_input", "adk_request_input"]:
                     needs_input = True
                     
     if needs_input:

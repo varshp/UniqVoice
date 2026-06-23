@@ -234,9 +234,7 @@
                                     style="opacity: 0.75;">hub</span>
                             </div>
                             <div>
-                                <p class="text-ink-primary font-bold">Scanning 100+ sources</p>
-                                <p class="text-ink-secondary text-sm font-data-mono mt-1">Indexing financial
-                                    transcripts, Reddit, &amp; news...</p>
+                                <p class="text-ink-primary font-bold">Reading top-ranking sources</p>
                             </div>
                         </div>
                         <!-- Step 2: Consensus Traps -->
@@ -246,9 +244,7 @@
                                 <span class="material-symbols-outlined text-sm">check</span>
                             </div>
                             <div>
-                                <p class="text-ink-primary font-bold">Identifying consensus traps</p>
-                                <p class="text-ink-secondary text-xs font-data-mono mt-0.5">Found 4 recurring
-                                    echo-chamber points.</p>
+                                <p class="text-ink-primary font-bold">Finding the consensus</p>
                             </div>
                         </div>
                         <!-- Step 3: Drafting Unique Angles -->
@@ -399,10 +395,21 @@
                 container.innerHTML = '';
                 
                 data.topic_candidates.forEach((cand, idx) => {
+                    let title = `Angle Option ${idx + 1}`;
+                    let desc = cand;
+                    let cleaned = cand.replace(/^\d+\.\s*/, '').replace(/\*\*/g, '');
+                    const colonIdx = cleaned.indexOf(':');
+                    if (colonIdx > 0 && colonIdx < 80) {
+                        title = cleaned.substring(0, colonIdx).trim();
+                        desc = cleaned.substring(colonIdx + 1).trim();
+                    } else {
+                        desc = cleaned;
+                    }
+                    
                     const btnHtml = `
                     <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20">
-                        <h4 class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">Angle Option ${idx + 1}</h4>
-                        <p class="text-ink-secondary font-body-md">${cand}</p>
+                        <h4 class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">${title}</h4>
+                        <p class="text-ink-secondary font-body-md">${desc}</p>
                         <div class="mt-6 flex gap-2">
                             <span class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Select</span>
                         </div>
