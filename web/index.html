@@ -221,12 +221,12 @@
                 <h3 class="font-headline-md text-headline-md text-primary mb-2">Drag &amp; Drop Voice Sample</h3>
                 <p class="font-body-md text-body-md text-on-surface-variant mb-6">Seeds your engine with 1:1 tone
                     matching (MP3, WAV, M4A)</p>
-                <button
+                <button id="upload-btn-text"
                     class="bg-magic-violet hover:bg-secondary text-on-secondary font-label-md text-label-md px-8 py-3 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-200 transform hover:-translate-y-0.5">
                     Start Voice Capture
                 </button>
             </div>
-            <input accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file">
+            <input id="audio-input" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" type="file">
         </div>
         <!-- High-Fidelity Comparison Section -->
         <div class="w-full mb-20">
