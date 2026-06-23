@@ -165,21 +165,19 @@
 </head>
 <body class="min-h-screen flex flex-col">
 <!-- TopNavBar -->
-<header class="bg-surface dark:bg-surface border-b border-border-subtle dark:border-outline-variant fixed top-0 w-full z-50">
-<div class="flex justify-between items-center px-margin-desktop h-16 w-full max-w-container-max mx-auto">
-<div class="text-headline-md font-headline-md font-bold text-primary dark:text-on-surface">
-                UniqVoice
-            </div>
-<nav class="hidden md:flex items-center gap-10 h-full">
-<a class="text-primary dark:text-on-surface font-bold border-b-2 border-primary dark:border-on-surface pb-1 text-label-md font-label-md" href="#">Tone</a>
-<a class="text-ink-secondary dark:text-on-surface-variant font-medium hover:text-primary dark:hover:text-on-surface transition-colors text-label-md font-label-md" href="#">Angle</a>
-<a class="text-ink-secondary dark:text-on-surface-variant font-medium hover:text-primary dark:hover:text-on-surface transition-colors text-label-md font-label-md" href="#">Create</a>
+<nav class="bg-surface border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+<div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-magic-violet font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer" href="/">1 Voice</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/angle">2 Angle</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/create">3 Create</a>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-magic-violet cursor-pointer hover:opacity-80 transition-opacity">account_circle</span>
+</div>
+</div>
 </nav>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
-</div>
-</div>
-</header>
 <!-- Main Content Canvas -->
 <main class="flex-grow pt-16 flex flex-col items-center justify-center relative overflow-hidden px-margin-mobile md:px-margin-desktop">
 <!-- Background Atmospheric Element -->

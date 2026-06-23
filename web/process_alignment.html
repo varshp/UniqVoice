@@ -152,19 +152,19 @@
 </head>
 <body class="flex flex-col min-h-screen">
 <!-- TopNavBar from Shared Components -->
-<header class="bg-surface w-full h-20 border-b border-border-hairline z-50">
-<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full h-full">
-<div class="font-headline-md text-headline-md text-ink-primary cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
-<nav class="hidden md:flex gap-8 items-center">
-<a class="font-body-md text-body-md text-ink-faint hover:text-primary transition-colors cursor-pointer" href="/">1 Voice</a>
-<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="/angle">2 Run</a>
-<a class="font-body-md text-body-md text-ink-faint hover:text-primary transition-colors cursor-pointer" href="/create">3 Report</a>
+<nav class="bg-surface border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+<div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/">1 Voice</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/angle">2 Angle</a>
+<a class="text-magic-violet font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer" href="/create">3 Create</a>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-magic-violet cursor-pointer hover:opacity-80 transition-opacity">account_circle</span>
+</div>
+</div>
 </nav>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary cursor-pointer active:opacity-80">account_circle</span>
-</div>
-</div>
-</header>
 <main class="flex-grow flex flex-col md:flex-row max-w-container-max mx-auto w-full p-margin-mobile md:p-margin-desktop gap-12">
 <!-- Sidebar: Agent Execution Pipeline -->
 <aside class="w-full md:w-80 flex-shrink-0 flex">

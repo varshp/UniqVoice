@@ -162,26 +162,19 @@
 
 <body class="bg-canvas text-ink-primary font-body-md min-h-screen selection:bg-accent-soft selection:text-primary">
     <!-- TopNavBar -->
-    <header
-        class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-border-hairline h-16 flex items-center px-margin-desktop w-full max-w-container-max mx-auto">
-        <div class="flex justify-between items-center w-full">
-            <div class="flex items-center gap-8">
-                <span class="font-headline-md text-headline-md font-bold text-ink-primary">UniqVoice</span>
-                <nav class="hidden md:flex gap-6 items-center font-label-caps text-label-caps">
-                    <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
-                        href="#">Tone</a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
-                        href="#">Angle</a>
-                    <a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="#">Create</a>
-                </nav>
+    <nav class="bg-surface border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
+        <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+            <div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/">1 Voice</a>
+                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/angle">2 Angle</a>
+                <a class="text-magic-violet font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer" href="/create">3 Create</a>
             </div>
-            <div class="flex items-center gap-4">
-
-                <span class="material-symbols-outlined text-ink-secondary cursor-pointer"
-                    data-icon="account_circle">account_circle</span>
+            <div class="flex items-center">
+                <span class="material-symbols-outlined text-magic-violet cursor-pointer hover:opacity-80 transition-opacity">account_circle</span>
             </div>
         </div>
-    </header>
+    </nav>
     <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative">
         <!-- Noise Texture Overlay -->
         <div class="fixed inset-0 pointer-events-none noise-texture"></div>
