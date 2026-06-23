@@ -5,9 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import logging
 
-from google.adk.agents.runner import InMemoryRunner
+from google.adk.runners import InMemoryRunner
 from google.genai import types
-from agents.orchestrator import content_pipeline_agent
+from agents.orchestrator import root_agent
 
 app = FastAPI(title="UniqVoice Content Pipeline")
 logger = logging.getLogger(__name__)
@@ -127,7 +127,7 @@ class RunRequest(BaseModel):
 
 @app.post("/api/run")
 async def run_pipeline_no_hitl(req: RunRequest):
-    runner = InMemoryRunner(agent=content_pipeline_agent)
+    runner = InMemoryRunner(agent=root_agent)
     initial_msg = types.Content(role="user", parts=[types.Part.from_text(req.topic)])
     
     logger.info(f"Starting no-HITL run for topic: {req.topic}")
