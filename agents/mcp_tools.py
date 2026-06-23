@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # Ensure .env is loaded (especially agents/.env where we copied TAVILY_API_KEY)
 # In ADK, load_dotenv_for_agent typically does this, but we do it explicitly
 # here so the module-level loading works.
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"), override=True)
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 def _load_mcp_config() -> Dict[str, McpToolset]:
     config_path = os.path.join(
