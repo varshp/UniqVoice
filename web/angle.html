@@ -200,12 +200,8 @@
             <div class="relative group">
                 <div
                     class="flex items-center bg-surface rounded-xl overflow-hidden border-2 border-ink-primary shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] transition-all focus-within:translate-y-[2px] focus-within:translate-x-[2px] focus-within:shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">
-                    <input
-                        class="w-full bg-transparent border-none py-5 px-6 font-data-mono text-data-mono text-ink-primary focus:ring-0 placeholder-ink-faint"
-                        placeholder="Type your topic here..." type="text"
-                        value="is it a mistake to invest in SpaceX post-IPO">
-                    <button
-                        class="bg-primary text-on-primary border-l-2 border-ink-primary px-8 py-5 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shrink-0">
+                    <input id="topic-input" class="w-full bg-transparent border-none py-5 px-6 font-data-mono text-data-mono text-ink-primary focus:ring-0 placeholder-ink-faint" placeholder="Type your topic here..." type="text" value="is it a mistake to invest in SpaceX post-IPO">
+                    <button id="btn-scan" class="bg-primary text-on-primary border-l-2 border-ink-primary px-8 py-5 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shrink-0">
                         RE-SCAN
                         <span class="material-symbols-outlined text-sm">refresh</span>
                     </button>
@@ -308,8 +304,7 @@
                     class="bg-ink-primary rounded-xl p-6 border-2 border-ink-primary flex items-center justify-between shadow-[4px_4px_0px_0px_rgba(65,19,217,1)]">
                     <div class="flex items-center gap-3">
                         <span class="text-primary-fixed font-bold text-xl">💡</span>
-                        <span class="font-headline-md text-headline-md text-surface">3 DISCOVERED ANGLES · AGENT
-                            VERIFIED</span>
+                        <span id="angles-count-label" class="font-headline-md text-headline-md text-surface">0 CANDIDATE ANGLES</span>
                     </div>
                     <div
                         class="text-primary-fixed text-sm font-label-caps uppercase tracking-wide bg-ink-primary border border-primary-fixed px-3 py-1 rounded hidden sm:block">
@@ -317,75 +312,9 @@
                 </div>
                 <!-- Enhanced Angle Cards -->
                 <div class="grid grid-cols-1 gap-component-gap">
-                    <!-- Candidate 1: Highly Authoritative Recommended -->
-                    <button
-                        class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[6px_6px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="material-symbols-outlined text-ink-primary">arrow_forward</span>
-                        </div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <p
-                                class="font-label-caps text-label-caps text-primary font-bold border-b-2 border-primary inline-block pb-1">
-                                GAP ANALYSIS</p>
-                            <span
-                                class="text-[10px] bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Recommended</span>
-                        </div>
-                        <h4
-                            class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">
-                            The Two SpaceXes: Mars mission or AI monopoly?</h4>
-                        <p class="text-ink-secondary italic font-body-md border-l-2 border-ink-primary pl-4 my-4">"the
-                            market is pricing two companies under one ticker, ignoring the Starlink-AI compute
-                            crossover."</p>
-                        <div class="mt-4 p-3 bg-canvas/50 rounded-lg border border-border-hairline">
-                            <p class="text-xs font-data-mono text-ink-secondary flex items-start gap-2">
-                                <span class="material-symbols-outlined text-xs mt-0.5">info</span>
-                                <span class=""><strong>Agent Note:</strong> This avoids the 90% "consensus trap"
-                                    identified in NYT/Forbes reports regarding valuation bubbles. Focuses on
-                                    under-reported hardware utility.</span>
-                            </p>
-                        </div>
-                        <div class="mt-6 flex gap-2">
-                            <span
-                                class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Market
-                                Analysis</span>
-                            <span
-                                class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Deep
-                                Dive</span>
-                        </div>
-                    </button>
-                    <!-- Candidate 2 -->
-                    <button
-                        class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20">
-                        <h4
-                            class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">
-                            Investment timing: invest now vs wait for lock-up</h4>
-                        <p class="text-ink-secondary font-body-md">A pragmatic look at liquidity cycles and retail entry
-                            points for private market transitions.</p>
-                        <div class="mt-4 p-3 bg-canvas/30 rounded-lg border border-border-hairline/50">
-                            <p class="text-xs font-data-mono text-ink-faint flex items-start gap-2">
-                                <span class="material-symbols-outlined text-xs mt-0.5">psychology</span>
-                                <span class=""><strong>Agent Note:</strong> Leverages your previous tone on "Retail
-                                    Traps" in the 2021 SaaS boom. Consistency score: 94%.</span>
-                            </p>
-                        </div>
-                        <div class="mt-6 flex gap-2">
-                            <span
-                                class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Timely</span>
-                        </div>
-                    </button>
-                    <!-- Candidate 3 -->
-                    <button
-                        class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20">
-                        <h4
-                            class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">
-                            Retail's post-IPO trap: too few shares, tough call.</h4>
-                        <p class="text-ink-secondary font-body-md">Warning against the dilution-heavy structures common
-                            in high-profile tech valuations.</p>
-                        <div class="mt-6 flex gap-2">
-                            <span
-                                class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Cautionary</span>
-                        </div>
-                    </button>
+<div id="candidates-container" class="contents">
+    <p class="text-ink-secondary py-4">Click RE-SCAN to find angles...</p>
+</div>
                 </div>
                 <!-- Research Footprint -->
                 <div class="pt-4">
@@ -393,39 +322,7 @@
                         Research Footprint</p>
                     <div
                         class="flex flex-wrap items-center gap-8 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                        <!-- Mocking Source Logos -->
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">
-                                N</div>
-                            <span class="text-xs font-bold font-data-mono">NYT</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">
-                                W</div>
-                            <span class="text-xs font-bold font-data-mono">WSJ</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">
-                                B</div>
-                            <span class="text-xs font-bold font-data-mono">Bloomberg</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">
-                                X</div>
-                            <span class="text-xs font-bold font-data-mono">Twitter/X</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">
-                                R</div>
-                            <span class="text-xs font-bold font-data-mono">Reddit</span>
-                        </div>
-                    </div>
-                </div>
+                        <div id="sources-container" class="flex flex-wrap items-center gap-8 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-500"></div>
                 <!-- Featured Image -->
 
             </div>
@@ -471,6 +368,105 @@
         }
     </script>
 
+
+
+    <script>
+        let currentRunId = null;
+
+        document.getElementById('btn-scan').addEventListener('click', async () => {
+            const topic = document.getElementById('topic-input').value;
+            if (!topic) return;
+            
+            const btn = document.getElementById('btn-scan');
+            btn.innerHTML = 'SCANNING... <span class="material-symbols-outlined text-sm spinner">refresh</span>';
+            btn.disabled = true;
+            
+            document.getElementById('candidates-container').innerHTML = '<p class="text-ink-secondary py-4">Agent is searching and proposing angles...</p>';
+
+            try {
+                const res = await fetch('/api/scout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic })
+                });
+                const data = await res.json();
+                
+                currentRunId = data.run_id;
+                
+                document.getElementById('angles-count-label').innerText = `${data.topic_candidates.length} CANDIDATE ANGLES`;
+                
+                const container = document.getElementById('candidates-container');
+                container.innerHTML = '';
+                
+                data.topic_candidates.forEach((cand, idx) => {
+                    const btnHtml = `
+                    <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20">
+                        <h4 class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">Angle Option ${idx + 1}</h4>
+                        <p class="text-ink-secondary font-body-md">${cand}</p>
+                        <div class="mt-6 flex gap-2">
+                            <span class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Select</span>
+                        </div>
+                    </button>
+                    `;
+                    container.innerHTML += btnHtml;
+                });
+            } catch (e) {
+                console.error(e);
+                document.getElementById('candidates-container').innerHTML = '<p class="text-error">Error scanning topic.</p>';
+            } finally {
+                btn.innerHTML = 'RE-SCAN <span class="material-symbols-outlined text-sm">refresh</span>';
+                btn.disabled = false;
+            }
+        });
+        
+        async function resumeRun(idx) {
+            if (!currentRunId) return;
+            
+            const btn = document.getElementById('btn-scan');
+            btn.innerHTML = 'GENERATING... <span class="material-symbols-outlined text-sm spinner">refresh</span>';
+            btn.disabled = true;
+            
+            try {
+                const res = await fetch('/api/resume', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ run_id: currentRunId, chosen_index: idx })
+                });
+                const data = await res.json();
+                
+                // Show real sources
+                const sourcesContainer = document.getElementById('sources-container');
+                let serp = data.serp_findings;
+                if (typeof serp === 'string') {
+                    try { serp = JSON.parse(serp.replace(/^```json\n|```$/g, '')); } catch(e) {}
+                }
+                
+                if (serp && serp.sources) {
+                    sourcesContainer.innerHTML = serp.sources.map(s => {
+                        const domain = new URL(s.url).hostname.replace('www.', '');
+                        return `<div class="flex items-center gap-2">
+                            <div class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">${domain.charAt(0).toUpperCase()}</div>
+                            <span class="text-xs font-bold font-data-mono">${domain}</span>
+                        </div>`;
+                    }).join('');
+                }
+                
+                // Redirect to create screen and let it fetch/render (we will pass topic via URL)
+                // Wait, if /api/resume returned the full article, we can't easily pass it via URL.
+                // We should store it in localStorage or modify create.html to fetch a run_id instead of a topic.
+                // For simplicity, we can store it in localStorage since it's a static app.
+                localStorage.setItem('lastRunData', JSON.stringify(data));
+                window.location.href = `/create?run_id=${currentRunId}`;
+                
+            } catch(e) {
+                console.error(e);
+                alert("Error resuming run");
+            } finally {
+                btn.innerHTML = 'RE-SCAN <span class="material-symbols-outlined text-sm">refresh</span>';
+                btn.disabled = false;
+            }
+        }
+    </script>
 
 </body>
 

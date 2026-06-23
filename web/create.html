@@ -308,14 +308,25 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const topic = urlParams.get('topic') || "SpaceX";
+            const run_id = urlParams.get('run_id');
             
             try {
-                const res = await fetch('/api/run', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic })
-                });
-                const data = await res.json();
+                let data;
+                if (run_id) {
+                    const stored = localStorage.getItem('lastRunData');
+                    if (stored) {
+                        data = JSON.parse(stored);
+                    } else {
+                        throw new Error("No data found for this run_id");
+                    }
+                } else {
+                    const res = await fetch('/api/run', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ topic })
+                    });
+                    data = await res.json();
+                }
                 
                 // Parse strings if they are JSON
                 let serp = data.serp_findings;
