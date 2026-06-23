@@ -51,28 +51,26 @@ class ScoutRequest(BaseModel):
 
 @app.post("/api/scout")
 async def scout(req: ScoutRequest):
-    run_id = str(uuid.uuid4())
-    runner = InMemoryRunner(agent=content_pipeline_agent)
-    initial_msg = types.Content(role="user", parts=[types.Part.from_text(req.topic)])
+    runner = InMemoryRunner(agent=root_agent, app_name="agents")
+    session = await runner.session_service.create_session(app_name="agents", user_id="test")
+    run_id = session.id
+    initial_msg = types.Content(role="user", parts=[types.Part.from_text(text=req.topic)])
     
-    gen = runner.run_async(new_message=initial_msg)
+    gen = runner.run_async(user_id="test", session_id=session.id, new_message=initial_msg)
     
     candidates_text = ""
     async for event in gen:
-        if event.tool_calls:
-            for tc in event.tool_calls:
-                if tc.function_call and tc.function_call.name == "request_input":
-                    # extract the prompt/message from the tool call
-                    args = tc.function_call.args
+        if getattr(event, "tool_calls", None):
+            for tc in getattr(event, "tool_calls", []):
+                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) == "request_input":
+                    args = getattr(tc.function_call, "args", {})
+                    logger.info(f"ARGS IS: {args}, type: {type(args)}")
                     if args and "message" in args:
                         candidates_text = args["message"]
                     elif args and "prompt" in args:
                         candidates_text = args["prompt"]
                     else:
                         candidates_text = str(args)
-                    break
-            if candidates_text:
-                break
                 
     sessions[run_id] = (runner, gen)
     
@@ -108,12 +106,13 @@ async def resume(req: ResumeRequest):
     
     logger.info(f"Resuming run {req.run_id} with choice {req.chosen_index + 1}")
     
-    auto_reply = types.Content(role="user", parts=[types.Part.from_text(choice_text)])
+    auto_reply = types.Content(role="user", parts=[types.Part.from_text(text=choice_text)])
     
-    async for _ in runner.run_async(new_message=auto_reply):
+    async for _ in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
         pass
         
-    state = runner.session.state
+    session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
+    state = session.state
     return {
         "final_article": state.get("final_article", ""),
         "run_report": state.get("run_report", ""),
@@ -129,23 +128,29 @@ class RunRequest(BaseModel):
 
 @app.post("/api/run")
 async def run_pipeline_no_hitl(req: RunRequest):
-    runner = InMemoryRunner(agent=root_agent)
-    initial_msg = types.Content(role="user", parts=[types.Part.from_text(req.topic)])
+    runner = InMemoryRunner(agent=root_agent, app_name="agents")
+    session = await runner.session_service.create_session(app_name="agents", user_id="test")
+    initial_msg = types.Content(role="user", parts=[types.Part.from_text(text=req.topic)])
     
     logger.info(f"Starting no-HITL run for topic: {req.topic}")
     
-    async for event in runner.run_async(new_message=initial_msg):
-        # If trend_scout asks for input, automatically reply
-        if event.tool_calls:
-            for tc in event.tool_calls:
-                if tc.function_call and tc.function_call.name == "request_input":
-                    logger.info("Auto-replying to request_input with 'Option 1'")
-                    auto_reply = types.Content(role="user", parts=[types.Part.from_text("I choose option 1.")])
-                    async for _ in runner.run_async(new_message=auto_reply):
-                        pass
-                    break
+    gen = runner.run_async(user_id="test", session_id=session.id, new_message=initial_msg)
+    
+    needs_input = False
+    async for event in gen:
+        if getattr(event, "tool_calls", None):
+            for tc in getattr(event, "tool_calls", []):
+                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) == "request_input":
+                    needs_input = True
                     
-    state = runner.session.state
+    if needs_input:
+        logger.info("Auto-replying to request_input with 'Option 1'")
+        auto_reply = types.Content(role="user", parts=[types.Part.from_text(text="I choose option 1.")])
+        async for _ in runner.run_async(user_id="test", session_id=session.id, new_message=auto_reply):
+            pass
+                    
+    session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=session.id)
+    state = session.state
     return {
         "final_article": state.get("final_article", ""),
         "run_report": state.get("run_report", ""),
