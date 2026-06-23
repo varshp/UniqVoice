@@ -257,40 +257,42 @@
             <!-- <div class="absolute bottom-0 left-0 right-0 h-32 editorial-gradient rounded-b-xl pointer-events-none"></div> -->
         </article>
         <!-- Section 3: Actions -->
-        <section class="max-w-[800px] mx-auto mt-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-4">
-                <span class="font-label-caps text-label-caps text-ink-faint">SHARE ARTICLE</span>
-                <div class="flex gap-2">
+        <div class="sticky bottom-8 z-50 mt-12 pointer-events-none">
+            <section class="max-w-[800px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 bg-canvas/80 backdrop-blur-md border border-border-hairline p-4 md:px-8 md:py-4 rounded-2xl shadow-lg pointer-events-auto">
+                <div class="flex items-center gap-4">
+                    <span class="font-label-caps text-label-caps text-ink-faint">SHARE ARTICLE</span>
+                    <div class="flex gap-2">
+                        <button
+                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
+                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
+                                data-icon="share">share</span>
+                        </button>
+                        <button
+                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
+                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
+                                data-icon="link">link</span>
+                        </button>
+                        <button
+                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
+                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
+                                data-icon="post_add">post_add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex gap-4">
                     <button
-                        class="w-10 h-10 rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                        <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                            data-icon="share">share</span>
+                        class="flex items-center gap-2 px-6 py-3 bg-surface rounded-xl border border-border-hairline font-label-caps text-label-caps hover:bg-surface-container transition-all active:scale-95">
+                        <span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
+                        DOWNLOAD PDF
                     </button>
                     <button
-                        class="w-10 h-10 rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                        <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                            data-icon="link">link</span>
-                    </button>
-                    <button
-                        class="w-10 h-10 rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                        <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                            data-icon="post_add">post_add</span>
+                        class="flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-white font-label-caps text-label-caps shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all active:scale-95">
+                        PUBLISH NOW
+                        <span class="material-symbols-outlined text-lg" data-icon="send">send</span>
                     </button>
                 </div>
-            </div>
-            <div class="flex gap-4">
-                <button
-                    class="flex items-center gap-2 px-6 py-3 rounded-xl border border-border-hairline font-label-caps text-label-caps hover:bg-surface transition-all active:scale-95">
-                    <span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
-                    DOWNLOAD PDF
-                </button>
-                <button
-                    class="flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-white font-label-caps text-label-caps shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all active:scale-95">
-                    PUBLISH NOW
-                    <span class="material-symbols-outlined text-lg" data-icon="send">send</span>
-                </button>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
     <!-- Contextual Micro-interaction JS -->
     <script>
