@@ -46,8 +46,18 @@ Your task:
    If nothing is trending, propose 3 evergreen angles based strictly on the seeds.
    CRITICAL: Every candidate MUST explicitly include the broad topic seed it is based on.
 
-4. Present the 3 candidates to the user using the `request_input` tool. Ask them 
-   which one they want to write about.
+4. Present the 3 candidates to the user using the `request_input` tool. 
+   CRITICAL: You MUST format the `message` argument of the `request_input` tool as a strictly valid JSON array of exactly 3 objects matching this schema:
+   [
+     {{
+       "title": "<A punchy, specific title for the angle (max 10 words)>",
+       "description": "<A 1-sentence summary of what the article will cover>",
+       "reasoning": "<1-2 sentences on why this angle is compelling right now>"
+     }},
+     {{ "title": "...", "description": "...", "reasoning": "..." }},
+     {{ "title": "...", "description": "...", "reasoning": "..." }}
+   ]
+   Do NOT include any other conversational text in the `message` argument. The `message` must be ONLY the raw JSON array string.
 5. Once the user replies with their choice, finalize your turn.
 
 You MUST output your final result as ONLY a JSON object matching this schema exactly:

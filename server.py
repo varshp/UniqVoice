@@ -75,17 +75,33 @@ async def scout(req: ScoutRequest):
                 
     sessions[run_id] = (runner, gen)
     
-    # Basic parsing of candidates_text into a list
-    # We'll split by newlines and try to find numbered items or just return the raw text
-    import re
+    # Try parsing candidates_text as JSON
     parsed_candidates = []
-    for line in candidates_text.split("\n"):
-        line = line.strip()
-        if re.match(r"\d+\.", line) or line.startswith("-") or line.startswith("*"):
-            parsed_candidates.append(line)
-    
-    if not parsed_candidates:
-        parsed_candidates = [candidates_text] # fallback
+    try:
+        import re
+        # Clean potential markdown fences from the LLM output
+        clean_text = re.sub(r'```json\s*', '', candidates_text)
+        clean_text = re.sub(r'```\s*', '', clean_text)
+        
+        import json
+        data = json.loads(clean_text)
+        if isinstance(data, list):
+            parsed_candidates = data
+        elif isinstance(data, dict) and "topic_candidates" in data:
+            parsed_candidates = data["topic_candidates"]
+        else:
+            raise ValueError("Parsed JSON is not a list")
+    except Exception as e:
+        logger.error(f"Failed to parse request_input message as JSON: {e}. Raw text: {candidates_text}")
+        # Fallback to basic string parsing if JSON fails
+        import re
+        for line in candidates_text.split("\n"):
+            line = line.strip()
+            if re.match(r"\d+\.", line) or line.startswith("-") or line.startswith("*"):
+                parsed_candidates.append(line)
+        
+        if not parsed_candidates:
+            parsed_candidates = [candidates_text] # fallback
     
     return {
         "run_id": run_id,
