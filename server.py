@@ -175,6 +175,10 @@ async def tone_captured_screen():
 async def voice_loading_screen():
     return FileResponse(os.path.join("web", "voice_loading.html"))
 
+@app.get("/process-alignment")
+async def process_alignment_screen():
+    return FileResponse(os.path.join("web", "process_alignment.html"))
+
 @app.get("/angle")
 async def angle_screen():
     return FileResponse(os.path.join("web", "angle.html"))

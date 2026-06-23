@@ -1,156 +1,133 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>UniqVoice — Run Pipeline</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet">
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-variant": "#e5e0ef",
-                        "surface-tint": "#583aee",
-                        "canvas": "#F3F1EA",
-                        "background": "#fcf8ff",
-                        "on-primary-fixed": "#170065",
-                        "warning-bg": "#FBF0D6",
-                        "secondary-fixed-dim": "#74daa4",
-                        "on-surface-variant": "#474556",
-                        "on-background": "#1c1a24",
-                        "on-tertiary-fixed": "#360f00",
-                        "warning-text": "#9A6B00",
-                        "surface-container-high": "#ebe6f4",
-                        "on-surface": "#1c1a24",
-                        "on-primary-container": "#ded7ff",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-container": "#ffd2c0",
-                        "surface-container-highest": "#e5e0ef",
-                        "tertiary": "#802f00",
-                        "on-secondary-fixed": "#002112",
-                        "on-secondary-fixed-variant": "#005233",
-                        "outline": "#787587",
-                        "surface": "#FBFAF6",
-                        "on-primary": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "inverse-on-surface": "#f3eefd",
-                        "on-tertiary": "#ffffff",
-                        "secondary": "#006c45",
-                        "surface-dim": "#dcd8e6",
-                        "outline-variant": "#c8c4d9",
-                        "error-container": "#ffdad6",
-                        "surface-bright": "#fcf8ff",
-                        "border-hairline": "#E2DED3",
-                        "on-primary-fixed-variant": "#3f0dd7",
-                        "ink-secondary": "#4A4A52",
-                        "on-secondary-container": "#007349",
-                        "inverse-surface": "#312f3a",
-                        "error": "#B23A6A",
-                        "secondary-container": "#90f7be",
-                        "inverse-primary": "#c7bfff",
-                        "tertiary-container": "#a73f00",
-                        "on-error": "#ffffff",
-                        "tertiary-fixed-dim": "#ffb596",
-                        "primary-fixed-dim": "#c7bfff",
-                        "ink-primary": "#17171B",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#f6f1ff",
-                        "on-tertiary-fixed-variant": "#7d2d00",
-                        "accent-soft": "#ECE8FE",
-                        "primary-fixed": "#e4dfff",
-                        "tertiary-fixed": "#ffdbcd",
-                        "surface-container": "#f1ecfa",
-                        "primary": "#4113d9",
-                        "primary-container": "#5a3df0",
-                        "ink-faint": "#8B8B93",
-                        "secondary-fixed": "#90f7be"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-max": "1280px",
-                        "margin-mobile": "20px",
-                        "gutter": "24px",
-                        "margin-desktop": "40px",
-                        "component-gap": "16px"
-                    },
-                    "fontFamily": {
-                        "label-caps": ["Inter"],
-                        "headline-lg-mobile": ["\"Source Serif 4\""],
-                        "data-mono": ["JetBrains Mono"],
-                        "headline-lg": ["\"Source Serif 4\""],
-                        "body-md": ["Inter"],
-                        "body-lg": ["Inter"],
-                        "headline-md": ["\"Source Serif 4\""]
-                    },
-                    "fontSize": {
-                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
-                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "fontWeight": "700" }],
-                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-                        "headline-lg": ["40px", { "lineHeight": "48px", "fontWeight": "700" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
-                    }
-                },
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>UniqVoice — Run Pipeline</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e5e0ef",
+                    "surface-tint": "#583aee",
+                    "canvas": "#F3F1EA",
+                    "background": "#fcf8ff",
+                    "on-primary-fixed": "#170065",
+                    "warning-bg": "#FBF0D6",
+                    "secondary-fixed-dim": "#74daa4",
+                    "on-surface-variant": "#474556",
+                    "on-background": "#1c1a24",
+                    "on-tertiary-fixed": "#360f00",
+                    "warning-text": "#9A6B00",
+                    "surface-container-high": "#ebe6f4",
+                    "on-surface": "#1c1a24",
+                    "on-primary-container": "#ded7ff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ffd2c0",
+                    "surface-container-highest": "#e5e0ef",
+                    "tertiary": "#802f00",
+                    "on-secondary-fixed": "#002112",
+                    "on-secondary-fixed-variant": "#005233",
+                    "outline": "#787587",
+                    "surface": "#FBFAF6",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3eefd",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#006c45",
+                    "surface-dim": "#dcd8e6",
+                    "outline-variant": "#c8c4d9",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fcf8ff",
+                    "border-hairline": "#E2DED3",
+                    "on-primary-fixed-variant": "#3f0dd7",
+                    "ink-secondary": "#4A4A52",
+                    "on-secondary-container": "#007349",
+                    "inverse-surface": "#312f3a",
+                    "error": "#B23A6A",
+                    "secondary-container": "#90f7be",
+                    "inverse-primary": "#c7bfff",
+                    "tertiary-container": "#a73f00",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "primary-fixed-dim": "#c7bfff",
+                    "ink-primary": "#17171B",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f6f1ff",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "accent-soft": "#ECE8FE",
+                    "primary-fixed": "#e4dfff",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container": "#f1ecfa",
+                    "primary": "#4113d9",
+                    "primary-container": "#5a3df0",
+                    "ink-faint": "#8B8B93",
+                    "secondary-fixed": "#90f7be"
             },
-        }
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "margin-desktop": "40px",
+                    "component-gap": "16px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
     </script>
-    <style>
+<style>
         body {
             background-color: #F3F1EA;
             color: #17171B;
             -webkit-font-smoothing: antialiased;
         }
-
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-
         .spinner {
             animation: rotate 2s linear infinite;
         }
-
         @keyframes rotate {
-            100% {
-                transform: rotate(360deg);
-            }
+            100% { transform: rotate(360deg); }
         }
-
         .pulse-discovery {
             animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
         }
-
         @keyframes pulse-ring {
-            0% {
-                transform: scale(.33);
-                opacity: 1;
-            }
-
-            80%,
-            100% {
-                opacity: 0;
-            }
+            0% { transform: scale(.33); opacity: 1; }
+            80%, 100% { opacity: 0; }
         }
-
         .hairline-border {
             border: 1px solid #E2DED3;
         }
-
         .step-line::before {
             content: '';
             position: absolute;
@@ -161,187 +138,129 @@
             background-color: #17171B;
             opacity: 0.1;
         }
-
         .step-line:last-child::before {
             display: none;
         }
     </style>
 </head>
-
 <body class="font-body-md text-body-md">
-    <!-- TopNavBar -->
-    <nav
-        class="bg-surface dark:bg-on-background border-b-2 border-ink-primary w-full h-20 flex items-center sticky top-0 z-50">
-        <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
-            <div class="font-headline-md text-headline-md text-ink-primary font-bold">UniqVoice</div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">1 Tone</a>
-                <a class="text-ink-primary font-bold border-b-2 border-ink-primary pb-1 font-body-md text-body-md transition-colors cursor-pointer active:opacity-80"
-                    href="#">2 Angle</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">3 Create</a>
-            </div>
-            <div class="flex items-center">
-                <span
-                    class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
-            </div>
-        </div>
-    </nav>
-    <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-16">
-        <!-- Header Section -->
-        <div class="max-w-[800px] mb-12">
-            <p class="font-label-caps text-label-caps text-primary uppercase mb-2 tracking-widest font-bold">New article
-            </p>
-            <h1 class="font-headline-lg text-headline-lg text-ink-primary mb-8 leading-tight">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-on-background border-b-2 border-ink-primary w-full h-20 flex items-center sticky top-0 z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
+<div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80" href="/">1 Tone</a>
+<a class="text-ink-primary font-bold border-b-2 border-ink-primary pb-1 font-body-md text-body-md transition-colors cursor-pointer active:opacity-80" href="/angle">2 Angle</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80" href="/create">3 Create</a>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-16">
+<!-- Header Section -->
+<div class="max-w-[800px] mb-12">
+<p class="font-label-caps text-label-caps text-primary uppercase mb-2 tracking-widest font-bold">New article</p>
+<h1 class="font-headline-lg text-headline-lg text-ink-primary mb-8 leading-tight">
                 Give it a topic. <br>Pick the angle.
             </h1>
-            <!-- Research Lab Input Row -->
-            <div class="relative group">
-                <div
-                    class="flex items-center bg-surface rounded-xl overflow-hidden border-2 border-ink-primary shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] transition-all focus-within:translate-y-[2px] focus-within:translate-x-[2px] focus-within:shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">
-                    <input id="topic-input" class="w-full bg-transparent border-none py-5 px-6 font-data-mono text-data-mono text-ink-primary focus:ring-0 placeholder-ink-faint" placeholder="Type your topic here..." type="text" value="is it a mistake to invest in SpaceX post-IPO">
-                    <button id="btn-scan" class="bg-primary text-on-primary border-l-2 border-ink-primary px-8 py-5 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shrink-0">
-                        RE-SCAN
+<!-- Research Lab Input Row -->
+<div class="relative group">
+<div class="flex items-center bg-surface rounded-xl overflow-hidden border-2 border-ink-primary shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] transition-all focus-within:translate-y-[2px] focus-within:translate-x-[2px] focus-within:shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">
+<input id="topic-input" class="w-full bg-transparent border-none py-5 px-6 font-data-mono text-data-mono text-ink-primary focus:ring-0 placeholder-ink-faint" placeholder="Type your topic here..." type="text" value="is it a mistake to invest in SpaceX post-IPO">
+<button id="btn-scan" class="bg-primary text-on-primary border-l-2 border-ink-primary px-8 py-5 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shrink-0">
+                        RE-SCAN 
                         <span class="material-symbols-outlined text-sm">refresh</span>
-                    </button>
-                </div>
-                <p class="mt-3 text-ink-secondary font-data-mono text-xs flex items-center gap-2">
-                    <span class="relative flex h-2 w-2">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                    </span>
+</button>
+</div>
+<p class="mt-3 text-ink-secondary font-data-mono text-xs flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
                     Engine scanning for the "unsaid"... identifying whitespace in the market.
                 </p>
-            </div>
-        </div>
-        <!-- Main Workspace Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <!-- Left Column: Interactive Research Pipeline (4 cols) -->
-            <div class="lg:col-span-4">
-                <div
-                    class="bg-surface border-2 border-ink-primary rounded-xl p-8 shadow-[4px_4px_0px_0px_rgba(23,23,27,1)]">
-                    <h3
-                        class="font-label-caps text-label-caps text-ink-primary font-bold mb-8 uppercase tracking-widest border-b-2 border-ink-primary pb-4">
-                        Agent Execution</h3>
-                    <div class="space-y-6">
-                        <!-- Step 1: Scanning -->
-                        <div class="relative flex items-start gap-4 step-line pb-6">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-primary text-primary rounded-full z-10 shrink-0 shadow-[2px_2px_0px_0px_rgba(65,19,217,1)] relative">
-                                <span class="material-symbols-outlined text-sm spinner"
-                                    style="opacity: 0.75;">hub</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-primary font-bold">Reading top-ranking sources</p>
-                            </div>
-                        </div>
-                        <!-- Step 2: Consensus Traps -->
-                        <div class="relative flex items-start gap-4 step-line pb-6">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
-                                <span class="material-symbols-outlined text-sm">check</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-primary font-bold">Finding the consensus</p>
-                            </div>
-                        </div>
-                        <!-- Step 3: Drafting Unique Angles -->
-                        <div class="relative flex items-start gap-4 step-line pb-6">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
-                                <span class="material-symbols-outlined text-sm">check</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-primary font-bold">Drafting unique angles</p>
-                            </div>
-                        </div>
-                        <!-- Step 4: Voice Profile Verification -->
-                        <div class="relative flex items-start gap-4 step-line pb-6">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
-                                <span class="material-symbols-outlined text-sm"
-                                    style="font-variation-settings: 'FILL' 0">record_voice_over</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-faint font-semibold">Verifying with your voice profile</p>
-                            </div>
-                        </div>
-                        <!-- Step 5: Guarding -->
-                        <div class="relative flex items-start gap-4 step-line pb-6">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
-                                <span class="material-symbols-outlined text-sm"
-                                    style="font-variation-settings: 'FILL' 0">security</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-faint font-semibold">Guarding — ToU/PII</p>
-                            </div>
-                        </div>
-                        <!-- Step 6: Finalizing -->
-                        <div class="relative flex items-start gap-4">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
-                                <span class="material-symbols-outlined text-sm"
-                                    style="font-variation-settings: 'FILL' 0">auto_awesome</span>
-                            </div>
-                            <div>
-                                <p class="text-ink-faint font-semibold">Finalizing run package</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Right Column: Found Gap & Cards (8 cols) -->
-            <div class="lg:col-span-8 space-y-gutter">
-                <!-- Discovered Angles Bar -->
-                <div
-                    class="bg-ink-primary rounded-xl p-6 border-2 border-ink-primary flex items-center justify-between shadow-[4px_4px_0px_0px_rgba(65,19,217,1)]">
-                    <div class="flex items-center gap-3">
-                        <span class="text-primary-fixed font-bold text-xl">💡</span>
-                        <span id="angles-count-label" class="font-headline-md text-headline-md text-surface">0 CANDIDATE ANGLES</span>
-                    </div>
-                    <div
-                        class="text-primary-fixed text-sm font-label-caps uppercase tracking-wide bg-ink-primary border border-primary-fixed px-3 py-1 rounded hidden sm:block">
-                        Action Required</div>
-                </div>
-                <!-- Enhanced Angle Cards -->
-                <div class="grid grid-cols-1 gap-component-gap">
-<div id="candidates-container" class="contents">
+</div>
+</div>
+<!-- Main Workspace Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Interactive Research Pipeline (4 cols) -->
+<div class="lg:col-span-4">
+<div class="bg-surface border-2 border-ink-primary rounded-xl p-8 shadow-[4px_4px_0px_0px_rgba(23,23,27,1)]">
+<h3 class="font-label-caps text-label-caps text-ink-primary font-bold mb-8 uppercase tracking-widest border-b-2 border-ink-primary pb-4">Agent Execution</h3>
+<div class="space-y-6">
+<!-- Step 1: Scanning -->
+<div class="relative flex items-start gap-4 step-line pb-6">
+<div class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-primary text-primary rounded-full z-10 shrink-0 shadow-[2px_2px_0px_0px_rgba(65,19,217,1)] relative">
+<span class="material-symbols-outlined text-sm spinner" style="opacity: 0.85;">hub</span>
+</div>
+<div>
+<p class="text-ink-primary font-bold">Scanning 100+ sources</p>
+<p class="text-ink-secondary text-sm font-data-mono mt-1">Indexing financial transcripts, Reddit, &amp; news...</p>
+</div>
+</div>
+<!-- Step 2: Consensus Traps -->
+<div class="relative flex items-start gap-4 step-line pb-6">
+<div class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div>
+<p class="text-ink-primary font-bold">Identifying consensus traps</p>
+<p class="text-ink-secondary text-xs font-data-mono mt-0.5">Found 4 recurring echo-chamber points.</p>
+</div>
+</div>
+<!-- Step 3: Drafting Unique Angles -->
+<div class="relative flex items-start gap-4 step-line pb-6">
+<div class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div>
+<p class="text-ink-primary font-bold">Drafting unique angles</p>
+</div>
+</div>
+<!-- Step 4: Voice Profile Verification -->
+
+<!-- Step 5: Guarding -->
+
+<!-- Step 6: Finalizing -->
+
+</div>
+</div>
+</div>
+<!-- Right Column: Found Gap & Cards (8 cols) -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- Discovered Angles Bar -->
+
+<!-- Enhanced Angle Cards -->
+<div id="candidates-container" class="grid grid-cols-1 gap-component-gap">
     <p class="text-ink-secondary py-4">Click RE-SCAN to find angles...</p>
 </div>
-                </div>
-                <!-- Research Footprint -->
-                <div class="pt-4">
-                    <p class="text-xs font-label-caps text-ink-faint mb-4 uppercase tracking-widest font-bold">Live
-                        Research Footprint</p>
-                    <div
-                        class="flex flex-wrap items-center gap-8 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                        <div id="sources-container" class="flex flex-wrap items-center gap-8 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-500"></div>
-                <!-- Featured Image -->
+<!-- Research Footprint -->
 
-            </div>
-        </div>
-    </main>
-    <!-- Bottom Action Bar (Mobile only) -->
-    <div
-        class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-ink-primary p-4 flex justify-around items-center z-50">
-        <button class="flex flex-col items-center gap-1 text-ink-secondary">
-            <span class="material-symbols-outlined">settings_voice</span>
-            <span class="text-[10px] font-bold">1 Tone</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 text-ink-primary">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">bolt</span>
-            <span class="text-[10px] font-bold">2 Angle</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 text-ink-secondary">
-            <span class="material-symbols-outlined">assignment</span>
-            <span class="text-[10px] font-bold">3 Create</span>
-        </button>
-    </div>
-    <!-- Micro-interaction Script -->
-    <script>
+<!-- Featured Image -->
+
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Mobile only) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-ink-primary p-4 flex justify-around items-center z-50">
+<button class="flex flex-col items-center gap-1 text-ink-secondary">
+<span class="material-symbols-outlined">settings_voice</span>
+<span class="text-[10px] font-bold">1 Tone</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-ink-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">bolt</span>
+<span class="text-[10px] font-bold">2 Angle</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-ink-secondary">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px] font-bold">3 Create</span>
+</button>
+</div>
+
+<!-- Micro-interaction Script -->
+<script>
         document.querySelectorAll('button').forEach(button => {
             button.addEventListener('mousedown', () => {
                 button.classList.add('opacity-80');
@@ -353,20 +272,16 @@
 
         // Simulating the "thinking" state for the agent
         const spinner = document.querySelector('.spinner');
-        if (spinner) {
+        if(spinner) {
             let opacity = 1;
             let direction = -1;
             setInterval(() => {
                 opacity += 0.05 * direction;
-                if (opacity <= 0.4 || opacity >= 1) direction *= -1;
+                if(opacity <= 0.4 || opacity >= 1) direction *= -1;
                 spinner.style.opacity = opacity;
             }, 50);
         }
-    </script>
-
-
-
-    <script>
+        
         let currentRunId = null;
 
         document.getElementById('btn-scan').addEventListener('click', async () => {
@@ -389,8 +304,6 @@
                 
                 currentRunId = data.run_id;
                 
-                document.getElementById('angles-count-label').innerText = `${data.topic_candidates.length} CANDIDATE ANGLES`;
-                
                 const container = document.getElementById('candidates-container');
                 container.innerHTML = '';
                 
@@ -407,11 +320,17 @@
                     }
                     
                     const btnHtml = `
-                    <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[4px_4px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[6px_6px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined text-ink-primary">arrow_forward</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <p class="font-label-caps text-label-caps text-primary font-bold border-b-2 border-primary inline-block pb-1">GAP ANALYSIS</p>
+                        </div>
                         <h4 class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">${title}</h4>
-                        <p class="text-ink-secondary font-body-md">${desc}</p>
+                        <p class="text-ink-secondary italic font-body-md border-l-2 border-ink-primary pl-4 my-4">"${desc}"</p>
                         <div class="mt-6 flex gap-2">
-                            <span class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Select</span>
+                            <span class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Select Angle</span>
                         </div>
                     </button>
                     `;
@@ -428,11 +347,31 @@
         
         async function resumeRun(idx) {
             if (!currentRunId) return;
-            
-            const btn = document.getElementById('btn-scan');
-            btn.innerHTML = 'GENERATING... <span class="material-symbols-outlined text-sm spinner">refresh</span>';
-            btn.disabled = true;
-            
+
+            // Fetch and display process alignment screen overlay
+            try {
+                const loadingRes = await fetch(`/process-alignment?t=${Date.now()}`);
+                const loadingHtml = await loadingRes.text();
+                
+                const parser = new DOMParser();
+                const loadingDoc = parser.parseFromString(loadingHtml, 'text/html');
+                
+                Array.from(loadingDoc.head.querySelectorAll('style')).forEach(style => {
+                    document.head.appendChild(style);
+                });
+                
+                document.body.innerHTML = loadingDoc.body.innerHTML;
+                
+                Array.from(loadingDoc.body.querySelectorAll('script')).forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    document.body.appendChild(newScript);
+                });
+            } catch (e) {
+                console.error("Failed to load overlay", e);
+            }
+
             try {
                 const res = await fetch('/api/resume', {
                     method: 'POST',
@@ -441,40 +380,15 @@
                 });
                 const data = await res.json();
                 
-                // Show real sources
-                const sourcesContainer = document.getElementById('sources-container');
-                let serp = data.serp_findings;
-                if (typeof serp === 'string') {
-                    try { serp = JSON.parse(serp.replace(/^```json\n|```$/g, '')); } catch(e) {}
-                }
-                
-                if (serp && serp.sources) {
-                    sourcesContainer.innerHTML = serp.sources.map(s => {
-                        const domain = new URL(s.url).hostname.replace('www.', '');
-                        return `<div class="flex items-center gap-2">
-                            <div class="w-5 h-5 bg-ink-primary rounded-sm flex items-center justify-center text-[10px] text-white font-bold">${domain.charAt(0).toUpperCase()}</div>
-                            <span class="text-xs font-bold font-data-mono">${domain}</span>
-                        </div>`;
-                    }).join('');
-                }
-                
-                // Redirect to create screen and let it fetch/render (we will pass topic via URL)
-                // Wait, if /api/resume returned the full article, we can't easily pass it via URL.
-                // We should store it in localStorage or modify create.html to fetch a run_id instead of a topic.
-                // For simplicity, we can store it in localStorage since it's a static app.
                 localStorage.setItem('lastRunData', JSON.stringify(data));
                 window.location.href = `/create?run_id=${currentRunId}`;
                 
             } catch(e) {
                 console.error(e);
                 alert("Error resuming run");
-            } finally {
-                btn.innerHTML = 'RE-SCAN <span class="material-symbols-outlined text-sm">refresh</span>';
-                btn.disabled = false;
             }
         }
-    </script>
+</script>
 
-</body>
 
-</html>
+</body></html>

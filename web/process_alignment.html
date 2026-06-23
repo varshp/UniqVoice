@@ -1,0 +1,389 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>UniqVoice - Process Alignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Source+Serif+4:wght@100..900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fcf8ff",
+                    "surface-container-high": "#ebe6f4",
+                    "inverse-surface": "#312f3a",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-tertiary-container": "#ffd2c0",
+                    "warning-text": "#9A6B00",
+                    "ink-primary": "#17171B",
+                    "border-hairline": "#E2DED3",
+                    "on-secondary-container": "#007349",
+                    "surface-bright": "#fcf8ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e5e0ef",
+                    "on-surface": "#1c1a24",
+                    "warning-bg": "#FBF0D6",
+                    "error": "#B23A6A",
+                    "surface-dim": "#dcd8e6",
+                    "primary-container": "#5a3df0",
+                    "surface": "#FBFAF6",
+                    "primary-fixed": "#e4dfff",
+                    "on-primary-container": "#ded7ff",
+                    "on-primary-fixed-variant": "#3f0dd7",
+                    "secondary": "#006c45",
+                    "surface-variant": "#e5e0ef",
+                    "surface-container": "#f1ecfa",
+                    "primary-fixed-dim": "#c7bfff",
+                    "on-background": "#1c1a24",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#c7bfff",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c8c4d9",
+                    "on-error-container": "#93000a",
+                    "ink-secondary": "#4A4A52",
+                    "on-secondary-fixed": "#002112",
+                    "ink-faint": "#8B8B93",
+                    "surface-container-low": "#f6f1ff",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#474556",
+                    "on-secondary-fixed-variant": "#005233",
+                    "outline": "#787587",
+                    "tertiary": "#802f00",
+                    "secondary-fixed-dim": "#74daa4",
+                    "secondary-container": "#90f7be",
+                    "canvas": "#F3F1EA",
+                    "accent-soft": "#ECE8FE",
+                    "on-tertiary-fixed": "#360f00",
+                    "secondary-fixed": "#90f7be",
+                    "primary": "#4113d9",
+                    "on-primary-fixed": "#170065",
+                    "tertiary-container": "#a73f00",
+                    "inverse-on-surface": "#f3eefd",
+                    "surface-tint": "#583aee",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-tertiary-fixed-variant": "#7d2d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "component-gap": "16px",
+                    "margin-desktop": "40px",
+                    "container-max": "1280px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "headline-lg-mobile": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F3F1EA;
+            font-family: 'Inter', sans-serif;
+            color: #17171B;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-completed {
+            color: #006c45;
+        }
+        .step-active {
+            color: #4113d9;
+        }
+        .step-pending {
+            color: #8B8B93;
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+        .scanning-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #4113d9, transparent);
+            position: absolute;
+            width: 100%;
+            top: 0;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        .node-pulse {
+            animation: node-flash 3s ease-in-out infinite;
+        }
+        @keyframes node-flash {
+            0%, 100% { fill: #4113d9; r: 3; }
+            50% { fill: #ded7ff; r: 5; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar from Shared Components -->
+<header class="bg-surface w-full h-20 border-b border-border-hairline z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full h-full">
+<div class="font-headline-md text-headline-md text-ink-primary cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-ink-faint hover:text-primary transition-colors cursor-pointer" href="/">1 Voice</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="/angle">2 Run</a>
+<a class="font-body-md text-body-md text-ink-faint hover:text-primary transition-colors cursor-pointer" href="/create">3 Report</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:opacity-80">account_circle</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row max-w-container-max mx-auto w-full p-margin-mobile md:p-margin-desktop gap-12">
+<!-- Sidebar: Agent Execution Pipeline -->
+<aside class="w-full md:w-80 flex-shrink-0">
+<div class="bg-surface border border-border-hairline rounded-xl p-8 sticky top-28">
+<h3 class="font-label-caps text-label-caps text-ink-faint mb-8 uppercase tracking-widest">Agent Execution</h3>
+<div class="space-y-8 relative">
+<!-- Vertical Line Connector -->
+<div class="absolute left-[11px] top-2 bottom-2 w-[1px] bg-border-hairline"></div>
+<!-- Step 1: Complete -->
+<div class="flex gap-4 items-start relative z-10">
+<div class="bg-secondary rounded-full p-1">
+<span class="material-symbols-outlined text-white text-[14px]">check</span>
+</div>
+<div>
+<p class="font-body-md text-ink-primary font-semibold">Semantic Parsing</p>
+<p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
+</div>
+</div>
+<!-- Step 2: Complete -->
+<div class="flex gap-4 items-start relative z-10">
+<div class="bg-secondary rounded-full p-1">
+<span class="material-symbols-outlined text-white text-[14px]">check</span>
+</div>
+<div>
+<p class="font-body-md text-ink-primary font-semibold">Tone Extraction</p>
+<p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
+</div>
+</div>
+<!-- Step 3: Complete -->
+<div class="flex gap-4 items-start relative z-10">
+<div class="bg-secondary rounded-full p-1">
+<span class="material-symbols-outlined text-white text-[14px]">check</span>
+</div>
+<div>
+<p class="font-body-md text-ink-primary font-semibold">Drafting Angle</p>
+<p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
+</div>
+</div>
+<!-- Step 4: Active -->
+<div class="flex gap-4 items-start relative z-10">
+<div class="bg-primary rounded-full p-1 ring-4 ring-accent-soft">
+<span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>
+</div>
+<div>
+<p class="font-body-md text-primary font-semibold">Verifying with profile</p>
+<p class="font-data-mono text-[11px] text-primary">In Progress...</p>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px]"></div>
+</div>
+<div>
+<p class="font-body-md text-ink-faint">Guarding Compliance</p>
+<p class="font-data-mono text-[11px]">Pending</p>
+</div>
+</div>
+<!-- Step 6: Pending -->
+<div class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px]"></div>
+</div>
+<div>
+<p class="font-body-md text-ink-faint">Finalizing Report</p>
+<p class="font-data-mono text-[11px]">Pending</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<section class="flex-grow flex flex-col justify-center max-w-[800px] mx-auto text-center md:text-left py-12">
+<header class="mb-12">
+<h1 class="font-headline-lg text-headline-lg md:text-headline-lg text-ink-primary mb-4 leading-tight">Aligning with Your<br>Voice Signature</h1>
+<p class="font-body-lg text-body-lg text-ink-secondary max-w-xl">The engine is now fitting the selected angle to your unique linguistic profile to ensure authentic delivery.</p>
+</header>
+<!-- Visual Mapping Interface -->
+<div class="relative bg-surface border border-border-hairline rounded-xl aspect-[16/9] mb-12 overflow-hidden flex items-center justify-center">
+<!-- Decorative Grid Background -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#17171B 1px, transparent 0); background-size: 40px 40px;"></div>
+<div class="relative w-full h-full p-12 flex justify-between items-center z-10">
+<!-- Left: Draft Angle Cluster -->
+<div class="flex flex-col items-center gap-6">
+<div class="relative">
+<div class="absolute inset-0 pulse-ring bg-primary rounded-full"></div>
+<div class="w-32 h-32 border border-primary bg-primary-container/10 rounded-xl flex items-center justify-center relative z-10">
+<span class="material-symbols-outlined text-primary text-4xl">edit_note</span>
+</div>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-label-caps text-primary mb-1">Source State</p>
+<p class="font-body-md font-bold text-ink-primary">Draft Angle</p>
+</div>
+</div>
+<!-- Center: The Mapping Visualizer (SVG) -->
+<div class="flex-grow h-full px-8 relative">
+<svg class="w-full h-full" fill="none" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Animated Connection Lines -->
+<path class="opacity-30" d="M40,100 C140,20 260,180 360,100" stroke="#5a3df0" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<path class="opacity-30" d="M40,100 C140,180 260,20 360,100" stroke="#5a3df0" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<path class="opacity-60" d="M40,100 L360,100" id="mainPath" stroke="#5a3df0" stroke-width="2"></path>
+<!-- Moving Nodes -->
+<circle class="node-pulse" cx="120" cy="80" r="4"></circle>
+<circle class="node-pulse" cx="200" cy="120" r="4" style="animation-delay: 0.5s"></circle>
+<circle class="node-pulse" cx="280" cy="70" r="4" style="animation-delay: 1.2s"></circle>
+<!-- Scanning Interface Overlay -->
+<rect class="animate-scan-x" fill="url(#grad)" height="160" width="2" x="50" y="20">
+<animate attributeName="x" dur="4s" from="40" repeatCount="indefinite" to="360"></animate>
+</rect>
+<defs>
+<linearGradient id="grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="transparent"></stop>
+<stop offset="50%" stop-color="#5a3df0"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<div class="bg-white/80 backdrop-blur-sm border border-border-hairline px-4 py-2 rounded-full shadow-sm">
+<p class="font-data-mono text-[12px] text-primary whitespace-nowrap">Analysing Syntactic Variance...</p>
+</div>
+</div>
+</div>
+<!-- Right: Voice Profile Cluster -->
+<div class="flex flex-col items-center gap-6">
+<div class="relative">
+<div class="absolute inset-0 pulse-ring bg-secondary rounded-full"></div>
+<div class="w-32 h-32 border border-secondary bg-secondary-container/10 rounded-full flex items-center justify-center relative z-10 overflow-hidden">
+<div class="absolute inset-0 scanning-line"></div>
+<span class="material-symbols-outlined text-secondary text-4xl">fingerprint</span>
+</div>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-label-caps text-secondary mb-1">Target Persona</p>
+<p class="font-body-md font-bold text-ink-primary">Voice Profile</p>
+</div>
+</div>
+</div>
+<!-- Live Status Logs -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-12 flex justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
+<p class="font-data-mono text-[11px] text-ink-faint" id="log-text">Applying editorial smoothing to draft angle...</p>
+</div>
+<p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Syncing resonance...</p>
+</div>
+</div>
+<!-- Footer Progress Bar -->
+<div class="w-full">
+<div class="flex justify-between items-end mb-3">
+<p class="font-label-caps text-label-caps text-ink-faint uppercase">Internal Engine Stability</p>
+<p class="font-data-mono text-[12px] text-ink-primary">Nominal Range: Active</p>
+</div>
+<div class="h-[6px] w-full bg-border-hairline rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-500 ease-out animate-pulse" id="progress-bar" style="width: 100%;"></div>
+</div>
+<div class="mt-4 flex justify-between">
+<p class="font-body-md text-ink-faint italic text-sm">Large language models are aligning parameters...</p>
+<div class="flex gap-4">
+<button class="font-label-caps text-label-caps text-ink-secondary hover:text-ink-primary transition-colors cursor-pointer border-b border-transparent hover:border-ink-primary">View Log Details</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-auto py-8 border-t border-border-hairline bg-surface/50">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-6">
+<p class="font-data-mono text-[12px] text-ink-faint">v2.4.0-STABLE</p>
+<div class="h-4 w-[1px] bg-border-hairline"></div>
+<p class="font-data-mono text-[12px] text-ink-faint">Session ID: UX-8821-X</p>
+</div>
+<p class="font-body-md text-[12px] text-ink-faint">© 2024 UniqVoice Editorial Engine. Confidential Process.</p>
+</div>
+</footer>
+<script>
+    (() => {
+        // Micro-interactions and real-time state simulation
+        const logs = [
+            "Optimizing lexical choice for 'Authoritative' tone...",
+            "Validating sentence structure against user history...",
+            "Checking resonance harmonics for voice signature...",
+            "Filtering draft content through linguistic constraints...",
+            "Applying editorial smoothing to draft angle...",
+            "Verifying stylistic consistency across paragraphs..."
+        ];
+
+        let progress = 64;
+        const logElement = document.getElementById('log-text');
+        const percentageElement = document.getElementById('percentage-label');
+        const progressBar = document.getElementById('progress-bar');
+
+        let alignmentInterval;
+
+        function updateState() {
+            // Increment progress slowly
+            if (progress < 89) {
+                progress += Math.random() * 0.5;
+                const displayProgress = Math.floor(progress);
+                if (percentageElement) percentageElement.innerText = `Syncing resonance: ${displayProgress}%`;
+                if (progressBar) progressBar.style.width = `${displayProgress}%`;
+            }
+
+            // Cycle logs
+            if (Math.random() > 0.8) {
+                const randomLog = logs[Math.floor(Math.random() * logs.length)];
+                if (logElement) logElement.innerText = randomLog;
+            }
+        }
+
+        alignmentInterval = setInterval(updateState, 2000);
+
+        // Allow script cleanup if needed later, though redirection handles it usually
+        window._cleanupAlignment = () => {
+            clearInterval(alignmentInterval);
+        };
+    })();
+</script>
+
+
+</body></html>
