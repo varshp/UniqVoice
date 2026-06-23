@@ -351,15 +351,11 @@
                 document.write(loadingHtml);
                 document.close();
 
-                // Start the upload AND a 5-second minimum timer concurrently
-                const uploadPromise = fetch('/api/voice-upload', {
+                // Start the upload
+                const data = await fetch('/api/voice-upload', {
                     method: 'POST',
                     body: formData
                 }).then(res => res.json());
-                
-                const timerPromise = new Promise(r => setTimeout(r, 5000));
-                
-                const [data] = await Promise.all([uploadPromise, timerPromise]);
                 
                 if (data.error) {
                     alert(data.error);
