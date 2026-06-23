@@ -204,33 +204,33 @@
 </div>
 </div>
 <!-- Step 4: Active -->
-<div class="flex gap-4 items-start relative z-10">
-<div class="bg-primary rounded-full p-1 ring-4 ring-accent-soft">
+<div id="step-verify" class="flex gap-4 items-start relative z-10">
+<div class="icon-container bg-primary rounded-full p-1 ring-4 ring-accent-soft">
 <span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>
 </div>
 <div>
-<p class="font-body-md text-primary font-semibold">Verifying with profile</p>
-<p class="font-data-mono text-[11px] text-primary">In Progress...</p>
+<p class="title-text font-body-md text-primary font-semibold">Verifying with profile</p>
+<p class="status-text font-data-mono text-[11px] text-primary">In Progress...</p>
 </div>
 </div>
 <!-- Step 5: Pending -->
-<div class="flex gap-4 items-start relative z-10 opacity-50">
-<div class="bg-outline-variant rounded-full p-1">
-<div class="w-[14px] h-[14px]"></div>
+<div id="step-guard" class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="icon-container bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
 <div>
-<p class="font-body-md text-ink-faint">Guarding Compliance</p>
-<p class="font-data-mono text-[11px]">Pending</p>
+<p class="title-text font-body-md text-ink-faint font-semibold">Guarding Compliance</p>
+<p class="status-text font-data-mono text-[11px]">Pending</p>
 </div>
 </div>
 <!-- Step 6: Pending -->
-<div class="flex gap-4 items-start relative z-10 opacity-50">
-<div class="bg-outline-variant rounded-full p-1">
-<div class="w-[14px] h-[14px]"></div>
+<div id="step-finalize" class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="icon-container bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
 <div>
-<p class="font-body-md text-ink-faint">Finalizing Report</p>
-<p class="font-data-mono text-[11px]">Pending</p>
+<p class="title-text font-body-md text-ink-faint font-semibold">Finalizing Report</p>
+<p class="status-text font-data-mono text-[11px]">Pending</p>
 </div>
 </div>
 </div>
@@ -332,14 +332,6 @@
 </section>
 </main>
 <footer class="mt-auto py-8 border-t border-border-hairline bg-surface/50">
-<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
-<div class="flex items-center gap-6">
-<p class="font-data-mono text-[12px] text-ink-faint">v2.4.0-STABLE</p>
-<div class="h-4 w-[1px] bg-border-hairline"></div>
-<p class="font-data-mono text-[12px] text-ink-faint">Session ID: UX-8821-X</p>
-</div>
-<p class="font-body-md text-[12px] text-ink-faint">© 2024 UniqVoice Editorial Engine. Confidential Process.</p>
-</div>
 </footer>
 <script>
     (() => {
@@ -359,14 +351,50 @@
         const progressBar = document.getElementById('progress-bar');
 
         let alignmentInterval;
+        
+        function setStepActive(el) {
+            if(!el) return;
+            el.classList.remove('opacity-50');
+            const icon = el.querySelector('.icon-container');
+            icon.className = 'icon-container bg-primary rounded-full p-1 ring-4 ring-accent-soft flex items-center justify-center';
+            icon.innerHTML = '<span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>';
+            const title = el.querySelector('.title-text');
+            title.className = 'title-text font-body-md text-primary font-semibold';
+            const status = el.querySelector('.status-text');
+            status.className = 'status-text font-data-mono text-[11px] text-primary';
+            status.innerText = 'In Progress...';
+        }
+
+        function setStepComplete(el) {
+            if(!el) return;
+            el.classList.remove('opacity-50');
+            const icon = el.querySelector('.icon-container');
+            icon.className = 'icon-container bg-secondary rounded-full p-1 flex items-center justify-center';
+            icon.innerHTML = '<span class="material-symbols-outlined text-white text-[14px]">check</span>';
+            const title = el.querySelector('.title-text');
+            title.className = 'title-text font-body-md text-ink-primary font-semibold';
+            const status = el.querySelector('.status-text');
+            status.className = 'status-text font-data-mono text-[11px] text-on-secondary-container';
+            status.innerText = 'Complete';
+        }
 
         function updateState() {
             // Increment progress slowly
             if (progress < 89) {
-                progress += Math.random() * 0.5;
+                progress += Math.random() * 0.8;
                 const displayProgress = Math.floor(progress);
                 if (percentageElement) percentageElement.innerText = `Syncing resonance: ${displayProgress}%`;
                 if (progressBar) progressBar.style.width = `${displayProgress}%`;
+                
+                // Update side steps
+                if (displayProgress > 72 && document.getElementById('step-verify').querySelector('.status-text').innerText === 'In Progress...') {
+                    setStepComplete(document.getElementById('step-verify'));
+                    setStepActive(document.getElementById('step-guard'));
+                }
+                if (displayProgress > 82 && document.getElementById('step-guard').querySelector('.status-text').innerText === 'In Progress...') {
+                    setStepComplete(document.getElementById('step-guard'));
+                    setStepActive(document.getElementById('step-finalize'));
+                }
             }
 
             // Cycle logs

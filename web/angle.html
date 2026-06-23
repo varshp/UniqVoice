@@ -191,39 +191,61 @@
 <h3 class="font-label-caps text-label-caps text-ink-primary font-bold mb-8 uppercase tracking-widest border-b-2 border-ink-primary pb-4">Agent Execution</h3>
 <div class="space-y-6">
 <!-- Step 1: Scanning -->
-<div class="relative flex items-start gap-4 step-line pb-6">
-<div class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-primary text-primary rounded-full z-10 shrink-0 shadow-[2px_2px_0px_0px_rgba(65,19,217,1)] relative">
+<div id="agent-step-1" class="relative flex items-start gap-4 step-line pb-6 opacity-100 transition-opacity duration-300">
+<div class="step-icon w-6 h-6 flex items-center justify-center bg-surface border-2 border-primary text-primary rounded-full z-10 shrink-0 shadow-[2px_2px_0px_0px_rgba(65,19,217,1)] relative transition-all">
 <span class="material-symbols-outlined text-sm spinner" style="opacity: 0.85;">hub</span>
 </div>
 <div>
-<p class="text-ink-primary font-bold">Scanning 100+ sources</p>
-<p class="text-ink-secondary text-sm font-data-mono mt-1">Indexing financial transcripts, Reddit, &amp; news...</p>
+<p class="step-title text-ink-primary font-bold transition-colors">Scanning sources</p>
+<p class="step-desc text-ink-secondary text-sm font-data-mono mt-1">Indexing financial transcripts, Reddit, &amp; news...</p>
 </div>
 </div>
 <!-- Step 2: Consensus Traps -->
-<div class="relative flex items-start gap-4 step-line pb-6">
-<div class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
-<span class="material-symbols-outlined text-sm">check</span>
+<div id="agent-step-2" class="relative flex items-start gap-4 step-line pb-6 opacity-50 transition-opacity duration-300">
+<div class="step-icon w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0">search</span>
 </div>
 <div>
-<p class="text-ink-primary font-bold">Identifying consensus traps</p>
-<p class="text-ink-secondary text-xs font-data-mono mt-0.5">Found 4 recurring echo-chamber points.</p>
+<p class="step-title text-ink-faint font-semibold transition-colors">Identifying consensus traps</p>
+<p class="step-desc text-ink-secondary text-xs font-data-mono mt-0.5 hidden">Found recurring echo-chamber points.</p>
 </div>
 </div>
 <!-- Step 3: Drafting Unique Angles -->
-<div class="relative flex items-start gap-4 step-line pb-6">
-<div class="w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0">
-<span class="material-symbols-outlined text-sm">check</span>
+<div id="agent-step-3" class="relative flex items-start gap-4 step-line pb-6 opacity-50 transition-opacity duration-300">
+<div class="step-icon w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0">edit_note</span>
 </div>
 <div>
-<p class="text-ink-primary font-bold">Drafting unique angles</p>
+<p class="step-title text-ink-faint font-semibold transition-colors">Drafting unique angles</p>
 </div>
 </div>
 <!-- Step 4: Voice Profile Verification -->
-
+<div class="relative flex items-start gap-4 step-line pb-6 opacity-50">
+<div class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0">record_voice_over</span>
+</div>
+<div>
+<p class="text-ink-faint font-semibold">Verifying with your voice profile</p>
+</div>
+</div>
 <!-- Step 5: Guarding -->
-
+<div class="relative flex items-start gap-4 step-line pb-6 opacity-50">
+<div class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0">security</span>
+</div>
+<div>
+<p class="text-ink-faint font-semibold">Guarding — ToU/PII</p>
+</div>
+</div>
 <!-- Step 6: Finalizing -->
+<div class="relative flex items-start gap-4 opacity-50">
+<div class="w-6 h-6 flex items-center justify-center bg-surface border-2 border-outline-variant text-outline rounded-full z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0">auto_awesome</span>
+</div>
+<div>
+<p class="text-ink-faint font-semibold">Finalizing run package</p>
+</div>
+</div>
 
 </div>
 </div>
@@ -283,6 +305,56 @@
         }
         
         let currentRunId = null;
+        let scanProgressInterval = null;
+        
+        function setAgentStepActive(stepId, iconName, spin = true) {
+            const el = document.getElementById(stepId);
+            if(!el) return;
+            el.classList.remove('opacity-50');
+            el.classList.add('opacity-100');
+            const icon = el.querySelector('.step-icon');
+            icon.className = 'step-icon w-6 h-6 flex items-center justify-center bg-surface border-2 border-primary text-primary rounded-full z-10 shrink-0 shadow-[2px_2px_0px_0px_rgba(65,19,217,1)] relative transition-all';
+            icon.innerHTML = `<span class="material-symbols-outlined text-sm ${spin ? 'spinner' : ''}" style="opacity: 0.85;">${iconName}</span>`;
+            const title = el.querySelector('.step-title');
+            title.className = 'step-title text-ink-primary font-bold transition-colors';
+            const desc = el.querySelector('.step-desc');
+            if(desc) desc.classList.remove('hidden');
+        }
+
+        function setAgentStepComplete(stepId) {
+            const el = document.getElementById(stepId);
+            if(!el) return;
+            el.classList.remove('opacity-50');
+            el.classList.add('opacity-100');
+            const icon = el.querySelector('.step-icon');
+            icon.className = 'step-icon w-6 h-6 flex items-center justify-center bg-ink-primary text-surface rounded-full z-10 shrink-0 transition-all';
+            icon.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+            const title = el.querySelector('.step-title');
+            title.className = 'step-title text-ink-primary font-bold transition-colors';
+        }
+
+        function startScanProgress() {
+            setAgentStepActive('agent-step-1', 'hub', true);
+            let timeElapsed = 0;
+            
+            scanProgressInterval = setInterval(() => {
+                timeElapsed += 1;
+                if (timeElapsed === 3) {
+                    setAgentStepComplete('agent-step-1');
+                    setAgentStepActive('agent-step-2', 'search', true);
+                } else if (timeElapsed === 6) {
+                    setAgentStepComplete('agent-step-2');
+                    setAgentStepActive('agent-step-3', 'edit_note', true);
+                }
+            }, 1000);
+        }
+
+        function finishScanProgress() {
+            if(scanProgressInterval) clearInterval(scanProgressInterval);
+            setAgentStepComplete('agent-step-1');
+            setAgentStepComplete('agent-step-2');
+            setAgentStepComplete('agent-step-3');
+        }
 
         document.getElementById('btn-scan').addEventListener('click', async () => {
             const topic = document.getElementById('topic-input').value;
@@ -293,6 +365,8 @@
             btn.disabled = true;
             
             document.getElementById('candidates-container').innerHTML = '<p class="text-ink-secondary py-4">Agent is searching and proposing angles...</p>';
+            
+            startScanProgress();
 
             try {
                 const res = await fetch('/api/scout', {
@@ -336,6 +410,8 @@
                     `;
                     container.innerHTML += btnHtml;
                 });
+                
+                finishScanProgress();
             } catch (e) {
                 console.error(e);
                 document.getElementById('candidates-container').innerHTML = '<p class="text-error">Error scanning topic.</p>';
