@@ -344,14 +344,26 @@
             formData.append('audio', file);
             
             try {
-                const res = await fetch('/api/voice-upload', {
+                // Fetch and display loading screen
+                const loadingRes = await fetch('/voice-loading');
+                const loadingHtml = await loadingRes.text();
+                document.open();
+                document.write(loadingHtml);
+                document.close();
+
+                // Start the upload AND a 5-second minimum timer concurrently
+                const uploadPromise = fetch('/api/voice-upload', {
                     method: 'POST',
                     body: formData
-                });
-                const data = await res.json();
+                }).then(res => res.json());
+                
+                const timerPromise = new Promise(r => setTimeout(r, 5000));
+                
+                const [data] = await Promise.all([uploadPromise, timerPromise]);
                 
                 if (data.error) {
                     alert(data.error);
+                    window.location.href = '/';
                 } else {
                     localStorage.setItem('voiceProfile', JSON.stringify(data));
                     window.location.href = '/tone-captured';
@@ -359,8 +371,7 @@
             } catch (err) {
                 console.error(err);
                 alert("Error uploading file");
-            } finally {
-                btnText.innerHTML = 'Select Audio File';
+                window.location.href = '/';
             }
         });
     </script>
