@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>UniqVoice - AI writes like a robot. You don't.</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap"
-        rel="stylesheet">
-    <!-- Material Symbols -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Tailwind Configuration -->
-    <script id="tailwind-config">
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>UniqVoice - AI writes like a robot. You don't.</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -102,20 +95,20 @@
                         "headline-lg-mobile": ["\"Source Serif 4\""]
                     },
                     "fontSize": {
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
-                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
-                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
-                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }]
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
                     }
                 }
             }
         }
     </script>
-    <style>
+<style>
         .dashed-border-animate {
             background-image: repeating-linear-gradient(0deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(90deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(180deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px), repeating-linear-gradient(270deg, #E5E5E5, #E5E5E5 10px, transparent 10px, transparent 20px, #E5E5E5 20px);
             background-size: 2px 100%, 100% 2px, 2px 100%, 100% 2px;
@@ -130,179 +123,212 @@
             }
         }
 
-        .upload-pulse {
-            animation: pulse-soft 3s ease-in-out infinite;
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
         }
 
-        @keyframes pulse-soft {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
-        }
-
-        .ai-glow {
+        .signature-accent {
             position: relative;
         }
-
-        .ai-glow::before {
+        
+        .signature-accent::after {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #5A3DF0, #E4DFFF, #5A3DF0);
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(90, 61, 240, 0.15);
             z-index: -1;
-            filter: blur(10px);
-            opacity: 0.3;
-            border-radius: 12px;
+            transform: rotate(-1deg);
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, rgba(90, 61, 240, 0.1) 0%, rgba(90, 61, 240, 0.1) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 0.3em;
+            background-position: 0 88%;
         }
     </style>
 </head>
+<body class="bg-background paper-texture text-primary font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<nav class="bg-surface/80 backdrop-blur-md border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
+<div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-ink-primary font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer active:opacity-80" href="/">1 Tone</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80" href="/angle">2 Angle</a>
+<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80" href="/create">3 Create</a>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-12 md:py-16 max-w-[1100px] mx-auto w-full">
+<!-- Header Text -->
+<div class="text-center w-full mb-8">
+<h1 class="font-display-lg text-display-lg text-primary mb-6 hidden md:block">
+<span class="text-magic-violet">Extracted your unique signature.</span>
+</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-4 md:hidden">
+<span class="text-magic-violet">Extracted your unique signature.</span>
+</h1>
 
-<body class="bg-background text-primary font-body-md min-h-screen flex flex-col">
-    <!-- TopAppBar -->
-    <nav class="bg-surface border-b-2 border-ink-primary w-full h-20 flex items-center sticky top-0 z-50">
-        <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop w-full">
-            <div class="font-headline-md text-headline-md text-ink-primary font-bold">UniqVoice</div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a class="text-ink-primary font-bold border-b-2 border-ink-primary pb-1 font-body-md text-body-md transition-colors cursor-pointer active:opacity-80"
-                    href="#">1 Tone</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">2 Angle</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer active:opacity-80"
-                    href="#">3 Create</a>
-            </div>
-            <div class="flex items-center">
-                <span
-                    class="material-symbols-outlined text-ink-primary cursor-pointer hover:text-primary transition-colors">account_circle</span>
-            </div>
-        </div>
-    </nav>
-    <!-- Main Content Canvas -->
-    <main
-        class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-16 md:py-20 max-w-[1000px] mx-auto w-full">
-        <!-- Header Text -->
-        <div class="text-center mb-12 w-full">
-            <h1
-                class="font-display-lg text-display-lg text-primary mb-4 md:hidden font-headline-lg-mobile text-headline-lg-mobile">
-                It learns how you write.</h1>
-            <h1 class="font-display-lg text-display-lg text-primary mb-6 hidden md:block">It learns how you
-                write.<br><span class="text-magic-violet">Extracted your unique signature.</span></h1>
-            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-                Mainstream AI produces "slop." UniqVoice maps your rhetorical rhythm, evidence-based tone, and unique
-                perspective to create content that actually sounds like you.
-            </p>
-        </div>
-        <!-- Flashy Upload Zone -->
-        <div
-            class="w-full max-w-[800px] bg-surface rounded-xl p-8 md:p-12 mb-16 relative overflow-hidden group cursor-pointer dashed-border-animate hover:bg-magic-violet-soft/20 transition-colors duration-500">
-            <div class="flex flex-col md:flex-row items-center justify-between w-full gap-8 relative z-10">
-                <div class="flex items-center gap-6">
-                    <div class="w-16 h-16 rounded-full bg-magic-violet flex items-center justify-center shadow-lg"><span
-                            class="material-symbols-outlined text-on-secondary text-3xl">play_arrow</span></div>
-                    <div class="text-left">
-                        <h3 class="font-headline-md text-xl text-primary">myvoice.m4a · 1:04</h3>
-                        <p class="font-body-md text-sm text-on-surface-variant">analysed natively — no transcription</p>
-                    </div>
-                </div>
-                <div class="flex-grow h-16 flex items-center gap-1 px-4">
-                    <div class="flex-grow h-8 bg-magic-violet/10 rounded-full relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-around px-2">
-                            <div class="w-1 h-4 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-6 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-3 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-8 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-5 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-7 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-4 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-6 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-2 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-8 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-5 bg-magic-violet rounded-full"></div>
-                            <div class="w-1 h-7 bg-magic-violet rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 text-magic-violet font-bold uppercase text-[10px] tracking-widest">
-                    <span class="material-symbols-outlined text-sm">check_circle</span> ANALYSED</div>
-            </div>
-        </div>
-        <!-- High-Fidelity Comparison Section -->
-        <div class="w-full mb-16">
-            <div class="text-center mb-10">
-                <h2 class="font-headline-lg text-headline-lg text-primary mb-2">Extracted Voice Profile</h2>
-                <p class="font-body-md text-on-surface-variant">Core linguistic patterns identified from your sample</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="bg-surface border-2 border-magic-violet rounded-xl p-8 ai-glow">
-                    <div class="text-magic-violet font-label-sm uppercase tracking-widest mb-2">Tone</div>
-                    <div id="vp-tone" class="font-headline-md text-2xl text-primary mb-4">Loading...</div>
-                    <p class="text-sm text-on-surface-variant">Based on your vocal cadence and word choices.</p>
-                </div>
-                <div class="bg-surface border border-border-subtle rounded-xl p-8">
-                    <div class="text-ink-secondary font-label-sm uppercase tracking-widest mb-2">Rhythm</div>
-                    <div id="vp-rhythm" class="font-headline-md text-2xl text-primary mb-4">Loading...</div>
-                    <p class="text-sm text-on-surface-variant">Your structural pacing and sentence variation.</p>
-                </div>
-            </div>
-            <div class="bg-surface border border-border-subtle rounded-xl p-8 mb-12">
-                <h3 class="font-headline-md text-xl mb-6">Rhetorical Moves</h3>
-                <ol
-                    class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12 list-decimal list-inside font-body-md text-primary">
-<div id="vp-moves" class="contents"><li>Loading...</li></div>
-                </ol>
-            </div>
-            <div class="bg-surface border border-border-subtle rounded-xl p-8">
-                <h3 class="font-headline-md text-xl mb-6">Never Does This</h3>
-                <div class="flex flex-wrap gap-3">
-<span id="vp-avoid" class="contents"></span>
-                </div>
-            </div>
-        </div>
-        <!-- Value Proposition Cards -->
-        <!-- Footer Note -->
-        <div class="mt-auto pt-12 flex items-center justify-between w-full border-t border-border-subtle">
-            <div class="flex items-center gap-2 text-[#2e7d32] font-bold uppercase text-xs tracking-widest"><span
-                    class="material-symbols-outlined text-lg">check_circle</span> Voice profile captured</div><button onclick="window.location.href='/angle'" class="bg-primary hover:bg-ink-primary text-on-primary font-label-md text-label-md px-10 py-4 rounded-lg shadow-lg transition-all flex items-center gap-2">Next: Angle <span class="material-symbols-outlined">arrow_forward</span></button>
-        </div>
-    </main>
+</div>
+<!-- Flashy Upload Zone (Compact) -->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dataStr = localStorage.getItem('voiceProfile');
-            if (dataStr) {
-                try {
-                    const data = JSON.parse(dataStr);
-                    const vp = data.voice_profile;
-                    
-                    if (vp) {
-                        document.getElementById('vp-tone').innerText = vp.tone || "Unknown";
-                        document.getElementById('vp-rhythm').innerText = vp.sentence_rhythm || "Unknown";
-                        
-                        if (vp.rhetorical_moves) {
-                            document.getElementById('vp-moves').innerHTML = vp.rhetorical_moves.map(m => `<li class="pb-2 border-b border-border-subtle">${m}</li>`).join('');
-                        }
-                        
-                        if (vp.avoid) {
-                            document.getElementById('vp-avoid').innerHTML = vp.avoid.map(a => `<span class="px-4 py-2 bg-error-container text-error rounded-full text-sm font-bold uppercase tracking-tight">${a}</span>`).join('');
-                        }
+<!-- Redesigned High-Fidelity Comparison Section -->
+<div class="w-full mb-16">
+<div class="text-center mb-12">
+<span class="font-label-sm uppercase tracking-widest text-magic-violet mb-2 block">Linguistic Analysis</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Voice Profile Summary</h2>
+</div>
+<!-- Mosaic Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<!-- TONE CARD (Spans 7) -->
+<div class="md:col-span-7 bg-surface border border-border-subtle rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden h-full flex flex-col">
+<div class="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none transform translate-x-1/4 -translate-y-1/4">
+<span class="material-symbols-outlined text-[120px]">graphic_eq</span>
+</div>
+<div class="flex justify-between items-start mb-6 relative z-10">
+<span class="text-magic-violet font-label-sm uppercase tracking-[0.2em] border-b border-magic-violet/30 pb-1">01 Tone</span>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-magic-violet"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-border-subtle"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-border-subtle"></div>
+</div>
+</div>
+<h3 id="vp-tone" class="font-headline-lg text-3xl md:text-4xl text-primary mb-4 leading-tight italic flex-grow relative z-10">"Loading..."</h3>
+<div class="mt-auto relative z-10">
+<div class="bg-background/50 rounded-xl p-4 border border-border-subtle/50 font-mono text-[11px] leading-relaxed text-ink-secondary w-full">
+<span class="text-magic-violet">PROBABILITY DENSITY:</span>
+<div class="mt-2 flex items-end gap-1 h-12 w-full">
+<div class="flex-1 bg-magic-violet/10 h-[20%]"></div>
+<div class="flex-1 bg-magic-violet/20 h-[45%]"></div>
+<div class="flex-1 bg-magic-violet/40 h-[70%]"></div>
+<div class="flex-1 bg-magic-violet h-[95%]"></div>
+<div class="flex-1 bg-magic-violet/60 h-[50%]"></div>
+<div class="flex-1 bg-magic-violet/30 h-[25%]"></div>
+<div class="flex-1 bg-magic-violet/10 h-[10%]"></div>
+</div>
+<div class="mt-2 flex justify-between uppercase tracking-tighter w-full">
+<span class="">Qualifiers</span>
+<span class="">Direct Impact</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RHYTHM CARD (Spans 5) -->
+<div class="md:col-span-5 bg-surface border border-border-subtle rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<span class="text-magic-violet font-label-sm uppercase tracking-[0.2em] border-b border-magic-violet/30 pb-1">02 Rhythm</span>
+</div>
+<h3 id="vp-rhythm" class="font-headline-lg text-2xl text-primary mb-6 leading-tight flex-grow">Loading...</h3>
+<div class="space-y-3 mt-auto">
+<div class="flex items-center gap-3">
+<div class="h-1 bg-magic-violet w-4 rounded-full"></div>
+<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">Staccato Burst</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="h-1 bg-magic-violet w-12 rounded-full"></div>
+<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">Narrative Build</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="h-1 bg-magic-violet w-2 rounded-full"></div>
+<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">The "Drop"</span>
+</div>
+</div>
+</div>
+<!-- RHETORICAL MOVES (Spans 6) -->
+<div class="md:col-span-6 bg-surface border-2 border-primary rounded-2xl p-8 shadow-md relative group">
+<div class="absolute -top-3 left-8 px-4 bg-primary text-on-primary text-[10px] font-bold uppercase tracking-[0.3em]">Signature Moves</div>
+<div id="vp-moves" class="mt-4 space-y-6">
+    <div class="flex gap-4 items-start">
+    <span class="font-display-lg text-3xl text-magic-violet/30 italic">01</span>
+    <div>
+    <h4 class="font-bold text-lg mb-1 underline decoration-magic-violet/30 decoration-2 underline-offset-4">Loading...</h4>
+    </div>
+    </div>
+</div>
+</div>
+<!-- CONSTRAINTS / NEVER DOES (Spans 6) -->
+<div class="md:col-span-6 bg-magic-violet text-on-secondary rounded-2xl p-8 shadow-xl relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 rotate-12 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[160px]">block</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-xl">dangerous</span>
+<span class="font-label-sm uppercase tracking-[0.2em] opacity-80">Negative Constraints</span>
+</div>
+<h3 class="font-headline-lg text-3xl mb-8 leading-tight">The "Anti-Slop" Guardrails</h3>
+<div id="vp-avoid" class="flex flex-wrap gap-3">
+    <div class="px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex flex-col gap-1 hover:bg-white/20 transition-colors">
+    <span class="text-[9px] font-bold uppercase tracking-widest opacity-60">Avoid</span>
+    <span class="text-sm font-bold italic">Loading...</span>
+    </div>
+</div>
+<p class="mt-8 text-[11px] font-mono opacity-50 uppercase tracking-widest italic">Constraint engine active: 99.8% match confidence</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Note -->
+<div class="mt-12 pt-10 flex items-center justify-between w-full border-t border-border-subtle/50">
+<div class="flex items-center gap-2.5 text-[#2e7d32] font-bold uppercase text-[10px] tracking-widest">
+<span class="material-symbols-outlined text-lg">verified</span> Voice profile encrypted &amp; captured
+</div>
+<button onclick="window.location.href='/angle'" class="group bg-primary hover:bg-magic-violet text-on-primary font-label-md text-label-md px-12 py-5 rounded-full shadow-xl transition-all flex items-center gap-3 active:scale-95">
+        Next Step: Angle 
+        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dataStr = localStorage.getItem('voiceProfile');
+        if (dataStr) {
+            try {
+                const data = JSON.parse(dataStr);
+                const vp = data.voice_profile;
+                
+                if (vp) {
+                    if (vp.tone) {
+                        document.getElementById('vp-tone').innerText = `"${vp.tone}"`;
                     }
-                } catch(e) {
-                    console.error("Error parsing voice profile", e);
+                    if (vp.sentence_rhythm) {
+                        document.getElementById('vp-rhythm').innerText = vp.sentence_rhythm;
+                    }
+                    
+                    if (vp.rhetorical_moves && vp.rhetorical_moves.length > 0) {
+                        document.getElementById('vp-moves').innerHTML = vp.rhetorical_moves.map((m, index) => `
+                            <div class="flex gap-4 items-start">
+                                <span class="font-display-lg text-3xl text-magic-violet/30 italic">0${index + 1}</span>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-1 underline decoration-magic-violet/30 decoration-2 underline-offset-4">${m}</h4>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    if (vp.avoid && vp.avoid.length > 0) {
+                        document.getElementById('vp-avoid').innerHTML = vp.avoid.map(a => `
+                            <div class="px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex flex-col gap-1 hover:bg-white/20 transition-colors z-20">
+                                <span class="text-[9px] font-bold uppercase tracking-widest opacity-60">Avoid</span>
+                                <span class="text-sm font-bold italic">"${a}"</span>
+                            </div>
+                        `).join('');
+                    }
                 }
+            } catch(e) {
+                console.error("Error parsing voice profile", e);
             }
-        });
-    </script>
+        }
+    });
+</script>
 
-</body>
-
-</html>
+</body></html>
