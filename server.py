@@ -121,7 +121,7 @@ async def resume(req: ResumeRequest):
         "voice_profile": state.get("voice_profile", {}),
         "angle_brief": state.get("angle_brief", {}),
         "serp_findings": state.get("serp_findings", {}),
-        "topic": state.get("topic", req.topic),
+        "topic": state.get("topic", ""),
     }
 
 class RunRequest(BaseModel):
