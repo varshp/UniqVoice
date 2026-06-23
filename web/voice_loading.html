@@ -312,7 +312,7 @@
 </div>
 <script>
         // Micro-interaction for the progress circle
-        document.addEventListener('DOMContentLoaded', () => {
+        (() => {
             const circle = document.querySelector('circle.text-magic-violet');
             let progress = 0;
             
@@ -340,6 +340,6 @@
                     targetLabel.style.opacity = 1;
                 }, 300);
             }, 3000);
-        });
+        })();
     </script>
 </body></html>

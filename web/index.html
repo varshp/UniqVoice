@@ -345,11 +345,26 @@
             
             try {
                 // Fetch and display loading screen
-                const loadingRes = await fetch('/voice-loading');
+                // Fetch and display loading screen (with cache buster)
+                const loadingRes = await fetch(`/voice-loading?t=${Date.now()}`);
                 const loadingHtml = await loadingRes.text();
-                document.open();
-                document.write(loadingHtml);
-                document.close();
+                
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(loadingHtml, 'text/html');
+                
+                // Copy styles
+                Array.from(doc.head.querySelectorAll('style')).forEach(el => document.head.appendChild(el));
+                
+                // Replace body
+                document.body.innerHTML = doc.body.innerHTML;
+                document.body.className = doc.body.className; // copy body classes
+
+                // Execute scripts
+                Array.from(document.body.querySelectorAll('script')).forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
 
                 // Start the upload
                 const data = await fetch('/api/voice-upload', {
