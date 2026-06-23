@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# Build and Dist
+dist/
+build/
+*.egg-info/
+
+# Project specifics
+artifacts/
+profile/
+.env
+profile/
+*.m4a
+*.mp3
+*.wav
+__pycache__/
+.venv/

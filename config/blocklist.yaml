@@ -1,0 +1,12 @@
+# config/blocklist.yaml
+#
+# Role: Domain blocklist for the policy callback (agents/callbacks/policy.py).
+#       Domains listed here are completely skipped BEFORE any fetch attempt.
+#
+# Add known content farms, spam sites, or fundamentally unsafe domains here.
+# Format: bare domain name (no https://, no trailing slash).
+# Subdomains are matched automatically.
+
+blocked_domains:
+  - example-content-farm.com
+  - spam-site.net

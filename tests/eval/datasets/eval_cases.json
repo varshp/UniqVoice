@@ -1,0 +1,61 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "serp_reads_top_pages_001",
+      "agent_data": {
+        "agents": { "content_pipeline": { "agent_id": "content_pipeline" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "why AI marketing pilots stall"}]}}] },
+          { "turn_index": 1, "events": [{"author": "user", "content": {"parts": [{"text": "1"}]}}] }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "guard_strips_pii_001",
+      "agent_data": {
+        "agents": { "editor_guard": { "agent_id": "editor_guard" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "This is a great article. For questions, reach me at jane@acme.com or call 555-1234."}]}}] }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "angle_is_non_commodity_001",
+      "agent_data": {
+        "agents": { "angle_finder": { "agent_id": "angle_finder" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "{\"topic\": \"why AI marketing pilots stall\", \"explicit_topic_request\": \"why AI marketing pilots stall\", \"serp_findings\": \"{\\\"sources\\\": [{\\\"url\\\": \\\"https://example.com/post1\\\", \\\"summary\\\": \\\"Use AI to write more posts faster.\\\"}, {\\\"url\\\": \\\"https://example.com/post2\\\", \\\"summary\\\": \\\"AI tools help marketers scale content production.\\\"}], \\\"common_claims\\\": [\\\"Use AI to write more posts faster\\\", \\\"AI tools help scale content production\\\"]}\", \"topic_seeds\": [\"AI marketing ROI\", \"content quality vs quantity\"]}"}]}}] }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "subject_anchored_001",
+      "agent_data": {
+        "agents": { "content_pipeline": { "agent_id": "content_pipeline" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "is it a mistake to invest in SpaceX post-IPO"}]}}] },
+          { "turn_index": 1, "events": [{"author": "user", "content": {"parts": [{"text": "1"}]}}] }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "security_blocks_no_loop_001",
+      "agent_data": {
+        "agents": { "content_pipeline": { "agent_id": "content_pipeline" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "is it a mistake to invest in SpaceX post-IPO"}]}}] },
+          { "turn_index": 1, "events": [{"author": "user", "content": {"parts": [{"text": "1"}]}}] }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "voice_applied_001",
+      "agent_data": {
+        "agents": { "drafter": { "agent_id": "drafter" } },
+        "turns": [
+          { "turn_index": 0, "events": [{"author": "user", "content": {"parts": [{"text": "{\"explicit_topic_request\": \"why AI marketing pilots stall\", \"angle_brief\": \"{\\\"angle\\\": \\\"AI Pilots fail because of lack of strategy\\\", \\\"why_new\\\": \\\"Contradicts the notion that technology is the barrier\\\", \\\"outline\\\": [\\\"Introduction\\\", \\\"The Technology Fallacy\\\", \\\"Strategy First\\\"], \\\"must_include\\\": [\\\"Concrete example of a failed pilot\\\"]}\", \"voice_profile\": {\"tone\": \"direct, contrarian\", \"sentence_rhythm\": \"short punchy openers\", \"vocabulary\": [\"orchestrate\", \"leverage\"], \"rhetorical_moves\": [\"ends on a revelation-style close\", \"opens with a narrative/scene rather than a generic thesis\"], \"avoid\": [\"that's the plan\"]}, \"tone_notes\": \"\"}"}]}}] }
+        ]
+      }
+    }
+  ]
+}

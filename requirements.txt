@@ -1,0 +1,26 @@
+# requirements.txt
+#
+# Role: Pinned Python dependencies for the Voice-Aware Content Engine.
+# Versions align with Section 6 of specs/SPEC.md (Tech Stack).
+# Install with: pip install -r requirements.txt
+#
+# Runtime requirement: Python >= 3.11
+
+# ── Core ADK stack ─────────────────────────────────────────────────────────────
+google-adk>=1.0.0          # Agent Development Kit: SequentialAgent, LlmAgent, callbacks
+mcp>=1.0.0                 # Model Context Protocol Python SDK (tool transport layer)
+python-dotenv>=1.0.0       # Load secrets from .env into os.environ
+
+# ── Google Cloud / Auth ────────────────────────────────────────────────────────
+google-generativeai>=0.8.0 # Gemini model API (used indirectly via ADK; multimodal audio)
+
+# ── Utilities ──────────────────────────────────────────────────────────────────
+pyyaml>=6.0.0              # Parse config/allowlist.yaml and config/mcp_servers.yaml
+
+# ── google-agents-cli is installed separately via uvx, not pip ────────────────
+# Run once at project setup:
+#   uvx google-agents-cli setup
+# Then use:
+#   agents-cli playground     (dev UI)
+#   agents-cli eval           (run EDD eval cases)
+#   agents-cli deploy         (deploy to Agent Engine)

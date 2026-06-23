@@ -1,0 +1,50 @@
+# config/mcp_servers.yaml
+#
+# Role: MCP server connection configuration for the content pipeline.
+#       ADK's MCPToolset reads this file to start and connect to the servers.
+#
+# Governed by: specs/SPEC.md Section 9 (MCP servers).
+#
+# Two servers in scope for the MVP:
+#   search — tavily-mcp  (web search; requires TAVILY_API_KEY in .env)
+#   fetch  — mcp-server-fetch  (page-to-markdown; no API key)
+#
+# API keys are passed via the `env` field (environment variables only).
+# NEVER put actual key values in this file — only variable NAMES.
+#
+# The policy callback (agents/callbacks/policy.py) wraps the fetch tool.
+# Phase-2 servers (SerpApi MCP, Google Drive MCP, etc.) are listed in
+# Section 9 of specs/SPEC.md — do not connect them yet.
+
+servers:
+  # ── Search MCP (tavily-mcp) ───────────────────────────────────────────────────
+  # Discovery:     https://tavily.com  — free tier ~1 000 requests/month
+  # Used by:       trend_scout (find trending topics)
+  #                serp_analyst (find top-ranking articles for a topic)
+  # Verify:        on startup, list tools and confirm a `search` tool appears.
+  - name: search
+    transport: stdio
+    command: npx
+    args:
+      - "-y"
+      - "tavily-mcp"
+    env:
+      # Loaded from .env via python-dotenv; never hardcode the value here.
+      - TAVILY_API_KEY
+    scope: read-only
+
+  # ── Fetch MCP (mcp-server-fetch) ─────────────────────────────────────────────
+  # Discovery:     official MCP server; no API key required
+  # Used by:       serp_analyst (read full content of top-ranking pages)
+  # Security:      every call is intercepted by the policy callback BEFORE
+  #                the content is returned to the agent (allowlist + semantic check)
+  # Verify:        on startup, list tools and confirm a `fetch` tool appears.
+  - name: fetch
+    transport: stdio
+    command: uvx
+    args:
+      - "mcp-server-fetch"
+    scope: read-only
+    # The policy_callback field signals to the orchestrator that this server's
+    # tool responses must pass through agents/callbacks/policy.py.
+    policy_callback: fetch_policy_callback

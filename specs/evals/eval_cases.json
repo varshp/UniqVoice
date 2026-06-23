@@ -1,0 +1,107 @@
+[
+  {
+    "_comment": "specs/evals/eval_cases.json — EDD evaluation cases for the content pipeline.",
+    "_governed_by": "specs/SPEC.md Section 14.",
+    "_run_via": "agents-cli eval specs/evals/",
+    "_note": "Pipeline eval suite. Originally written EDD-style before code; now also regression tests for the M5/M6 fixes (subject anchoring, security/no-loop)."
+  },
+  {
+    "case_id": "serp_reads_top_pages_001",
+    "description": "serp_analyst must aggregate >=2 sources and extract a commodity consensus.",
+    "input": { "topic": "why AI marketing pilots stall" },
+    "expected_agent": "serp_analyst",
+    "expected_tool_calls": [
+      { "tool": "tavily_search", "args": { "query_contains": "AI marketing pilots" } }
+    ],
+    "_note_on_fetch": "Do NOT assert a minimum number of fetch calls — the semantic guard may make some fetches snippet-only or blocked. Assert on resulting sources instead.",
+    "expected_output_key": "serp_findings",
+    "expected_output_format": "serp_findings with sources (>=2) and common_claims populated",
+    "rubric": [
+      "serp_findings.sources has length >= 2",
+      "common_claims is a non-empty list (a consensus to differentiate against)"
+    ]
+  },
+  {
+    "case_id": "guard_strips_pii_001",
+    "description": "editor_guard must remove PII (email + phone) and log it to policy_notes.",
+    "input": {
+      "draft": "This is a great article. For questions, reach me at jane@acme.com or call 555-1234."
+    },
+    "expected_agent": "editor_guard",
+    "expected_tool_calls": [],
+    "expected_output_key": "final_article",
+    "expected_output_format": "final_article with no email or phone; policy_notes mentions PII removed",
+    "rubric": [
+      "no email present in final_article (regex check)",
+      "no phone '555-1234' present in final_article",
+      "meaning of the surrounding sentence preserved",
+      "policy_notes contains at least one entry mentioning PII"
+    ]
+  },
+  {
+    "case_id": "angle_is_non_commodity_001",
+    "description": "angle_finder must propose an angle that contradicts or meaningfully extends the common_claims.",
+    "input": {
+      "serp_findings": {
+        "sources": [
+          { "url": "https://example.com/post1", "summary": "Use AI to write more posts faster." },
+          { "url": "https://example.com/post2", "summary": "AI tools help marketers scale content production." }
+        ],
+        "common_claims": [
+          "Use AI to write more posts faster",
+          "AI tools help scale content production"
+        ]
+      },
+      "topic_seeds": ["AI marketing ROI", "content quality vs quantity"]
+    },
+    "expected_agent": "angle_finder",
+    "expected_tool_calls": [],
+    "expected_output_key": "angle_brief",
+    "expected_output_format": "angle_brief where why_new contradicts or extends the common_claim",
+    "rubric": [
+      "angle differs meaningfully from common_claims (reframes, not restates)",
+      "why_new references at least one common_claim and explains the differentiation",
+      "outline has at least 4 beats"
+    ]
+  },
+  {
+    "case_id": "subject_anchored_001",
+    "description": "An explicit subject must survive candidate selection and the whole pipeline (regression for the subject-vs-angle bug).",
+    "input": { "explicit_topic_request": "is it a mistake to invest in SpaceX post-IPO" },
+    "expected_agent": "pipeline (end-to-end)",
+    "expected_tool_calls": [],
+    "expected_output_key": "final_article",
+    "expected_output_format": "subject 'SpaceX' preserved from topic_candidates through final_article",
+    "rubric": [
+      "every topic_candidate contains 'SpaceX'",
+      "final_article mentions 'SpaceX' and ('Starship' or 'Starlink')",
+      "final_article is about SpaceX specifically, not generic IPO advice"
+    ]
+  },
+  {
+    "case_id": "security_blocks_no_loop_001",
+    "description": "The guard logs blocked sources and the fetch cap prevents loops (regression for the allowlist-starvation/loop bug).",
+    "input": { "explicit_topic_request": "is it a mistake to invest in SpaceX post-IPO" },
+    "expected_agent": "pipeline (end-to-end)",
+    "expected_tool_calls": [],
+    "expected_output_key": "final_article",
+    "expected_output_format": "policy_notes audit log present; run completes without looping",
+    "rubric": [
+      "fetch_attempt_count <= 5",
+      "final_article is produced (run completes, no infinite loop)",
+      "if a ToU/blocklisted source is encountered, policy_notes logs it as 'blocked'"
+    ]
+  },
+  {
+    "case_id": "voice_applied_001",
+    "description": "With a profile loaded, the draft reflects the captured voice.",
+    "input": { "voice_profile_loaded": true, "topic": "why AI marketing pilots stall" },
+    "expected_agent": "drafter",
+    "expected_output_key": "final_article",
+    "rubric": [
+      "final_article contains none of the avoid-list phrases (e.g. \"that's the plan\")",
+      "ends on a revelation-style close",
+      "opens with a narrative/scene rather than a generic thesis (LLM-judge)"
+    ]
+  }
+]

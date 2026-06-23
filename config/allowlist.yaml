@@ -1,0 +1,83 @@
+# config/allowlist.yaml
+#
+# Role: Domain allowlist for the policy callback (agents/callbacks/policy.py).
+#       Only URLs whose domain matches an entry here will be fetched by the
+#       fetch MCP tool. All others are silently dropped and logged to policy_notes.
+#
+# Governed by: specs/SPEC.md Section 12 (Security, structural check step).
+#
+# Add domains as you validate they are appropriate to scrape.
+# Format: bare domain name (no https://, no trailing slash).
+# Subdomains are matched automatically (e.g. 'blog.example.com' matches 'example.com').
+#
+# ⚠ Only add domains whose Terms of Use permit automated reading for research.
+
+allowed_domains:
+  # Business & strategy press
+  - hbr.org
+  - forbes.com
+  - fortune.com
+  - fastcompany.com
+  - inc.com
+  - entrepreneur.com
+  - businessinsider.com
+  - cnbc.com
+  - economist.com
+  - wsj.com
+  - ft.com
+  - bloomberg.com
+  - reuters.com
+  - sloanreview.mit.edu
+  - knowledge.wharton.upenn.edu
+
+  # Consulting & research firms
+  - mckinsey.com
+  - bain.com
+  - bcg.com
+  - deloitte.com
+  - pwc.com
+  - accenture.com
+  - gartner.com
+  - forrester.com
+  - idc.com
+  - cbinsights.com
+  - statista.com
+
+  # Marketing & growth publications
+  - marketingweek.com
+  - adweek.com
+  - marketingdive.com
+  - contentmarketinginstitute.com
+  - marketingprofs.com
+  - searchengineland.com
+  - searchenginejournal.com
+  - socialmediaexaminer.com
+  - thinkwithgoogle.com
+  - moz.com
+  - semrush.com
+  - ahrefs.com
+  - neilpatel.com
+
+  # Major SaaS / martech vendor resources
+  - salesforce.com
+  - hubspot.com
+  - adobe.com
+  - zendesk.com
+  - mailchimp.com
+  - intercom.com
+  - gong.io
+  - segment.com
+  - zapier.com
+  - atlassian.com
+  - asana.com
+  - monday.com
+  - slack.com
+  - notion.so
+
+  # Tech press
+  - techcrunch.com
+  - theverge.com
+  - wired.com
+  - venturebeat.com
+  - arstechnica.com
+  - zdnet.com

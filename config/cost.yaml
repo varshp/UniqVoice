@@ -1,0 +1,26 @@
+# config/cost.yaml
+# Governs the ROI panel in the Content Run Report (report_builder)
+
+human_baseline:
+  cost: 300
+  time_label: "1 day"
+
+models:
+  "gemini-3.5-flash":
+    input_cost_per_1k: 0.000075
+    output_cost_per_1k: 0.000300
+    estimated: true # Label costs as estimated if pricing isn't perfectly certain
+  "gemini-3.1-flash-lite":
+    input_cost_per_1k: 0.0000375
+    output_cost_per_1k: 0.000150
+    estimated: true
+  "gemini-3-flash":
+    input_cost_per_1k: 0.000075
+    output_cost_per_1k: 0.000300
+    estimated: true
+  "gemini-2.5-pro":
+    input_cost_per_1k: 0.00125
+    output_cost_per_1k: 0.00500
+  "gemini-2.5-flash":
+    input_cost_per_1k: 0.000075
+    output_cost_per_1k: 0.000300
