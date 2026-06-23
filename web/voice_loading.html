@@ -227,10 +227,10 @@
 <div class="relative w-32 h-32 flex items-center justify-center">
 <svg class="w-full h-full -rotate-90">
 <circle class="text-surface-container" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-width="4"></circle>
-<circle class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="100" stroke-width="4"></circle>
+<circle id="loading-circle" class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="100" stroke-width="4"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
-<span class="text-headline-md font-headline-md">0%</span>
+<span id="loading-percentage" class="text-headline-md font-headline-md">0%</span>
 </div>
 </div>
 <div class="flex gap-1 items-end h-6">
@@ -288,7 +288,7 @@
 <div class="w-2 h-2 bg-magic-violet rounded-full animate-ping"></div>
 </div>
 <div>
-<p class="text-label-md font-label-md text-ink-primary">Analysing your voice...</p>
+<p id="loading-target-label" class="text-label-md font-label-md text-ink-primary">Analysing your voice...</p>
 <p class="text-label-sm font-label-sm text-magic-violet font-semibold">In Progress</p>
 </div>
 </div>
@@ -313,26 +313,30 @@
 <script>
         // Micro-interaction for the progress circle
         (() => {
-            const circle = document.querySelector('circle.text-magic-violet');
+            const circle = document.getElementById('loading-circle');
             let progress = 0;
             
             // Simulating progress drift
             setInterval(() => {
-                if (progress < 99) {
-                    progress += Math.random() * 2;
-                    if (progress > 99) progress = 99;
-                    const offset = 377 - (progress / 100) * 377;
-                    circle.style.strokeDashoffset = offset;
-                    document.querySelector('.text-headline-md').innerText = `${Math.floor(progress)}%`;
-                }
+                try {
+                    if (progress < 99) {
+                        progress += Math.random() * 2;
+                        if (progress > 99) progress = 99;
+                        const offset = 377 - (progress / 100) * 377;
+                        if (circle) circle.style.strokeDashoffset = offset;
+                        const pctEl = document.getElementById('loading-percentage');
+                        if (pctEl) pctEl.innerText = `${Math.floor(progress)}%`;
+                    }
+                } catch(e) { console.error(e); }
             }, 300);
 
             // Rotating through 'Analysing' text
             const labels = ['Analysing your voice...', 'Extracting tone & rhythm...', 'Building your profile...'];
             let labelIndex = 0;
-            const targetLabel = document.querySelector('.grid > div:nth-child(2) p:first-child');
+            const targetLabel = document.getElementById('loading-target-label');
             
             setInterval(() => {
+                if (!targetLabel) return;
                 labelIndex = (labelIndex + 1) % labels.length;
                 targetLabel.style.opacity = 0;
                 setTimeout(() => {

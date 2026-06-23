@@ -355,12 +355,27 @@
                 // Copy styles
                 Array.from(doc.head.querySelectorAll('style')).forEach(el => document.head.appendChild(el));
                 
-                // Replace body
-                document.body.innerHTML = doc.body.innerHTML;
-                document.body.className = doc.body.className; // copy body classes
+                // Hide the underlying original input that is poking through
+                const audioInput = document.getElementById('audio-input');
+                if (audioInput) audioInput.style.display = 'none';
 
-                // Execute scripts
-                Array.from(document.body.querySelectorAll('script')).forEach(oldScript => {
+                // Create overlay
+                const overlay = document.createElement('div');
+                overlay.className = doc.body.className; // Keep body classes
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.zIndex = '99999';
+                overlay.style.backgroundColor = '#F3F1EA';
+                overlay.style.overflow = 'auto';
+                overlay.innerHTML = doc.body.innerHTML;
+                
+                document.body.appendChild(overlay);
+
+                // Execute scripts safely
+                Array.from(overlay.querySelectorAll('script')).forEach(oldScript => {
                     const newScript = document.createElement('script');
                     newScript.textContent = oldScript.textContent;
                     oldScript.parentNode.replaceChild(newScript, oldScript);
