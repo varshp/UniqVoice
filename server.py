@@ -60,10 +60,11 @@ async def scout(req: ScoutRequest):
     
     candidates_text = ""
     async for event in gen:
-        if getattr(event, "tool_calls", None):
-            for tc in getattr(event, "tool_calls", []):
-                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) in ["request_input", "adk_request_input"]:
-                    args = getattr(tc.function_call, "args", {})
+        if getattr(event, "content", None) and getattr(event.content, "parts", None):
+            for part in event.content.parts:
+                tc = getattr(part, "function_call", None)
+                if tc and getattr(tc, "name", None) in ["request_input", "adk_request_input"]:
+                    args = getattr(tc, "args", {})
                     logger.info(f"ARGS IS: {args}, type: {type(args)}")
                     if args and "message" in args:
                         candidates_text = args["message"]
@@ -138,9 +139,10 @@ async def run_pipeline_no_hitl(req: RunRequest):
     
     needs_input = False
     async for event in gen:
-        if getattr(event, "tool_calls", None):
-            for tc in getattr(event, "tool_calls", []):
-                if getattr(tc, "function_call", None) and getattr(tc.function_call, "name", None) in ["request_input", "adk_request_input"]:
+        if getattr(event, "content", None) and getattr(event.content, "parts", None):
+            for part in event.content.parts:
+                tc = getattr(part, "function_call", None)
+                if tc and getattr(tc, "name", None) in ["request_input", "adk_request_input"]:
                     needs_input = True
                     
     if needs_input:
