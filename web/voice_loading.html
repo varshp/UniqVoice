@@ -227,7 +227,7 @@
 <div class="relative w-32 h-32 flex items-center justify-center">
 <svg class="w-full h-full -rotate-90">
 <circle class="text-surface-container" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-width="4"></circle>
-<circle id="loading-circle" class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="100" stroke-width="4"></circle>
+<circle id="loading-circle" class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="188.5" stroke-width="4"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
 <span class="material-symbols-outlined text-magic-violet text-4xl">mic</span>
@@ -307,13 +307,13 @@
         // Micro-interaction for the progress circle
         (() => {
             const circle = document.getElementById('loading-circle');
-            let progress = 0;
+            let progress = 50;
             
             // Simulating progress drift
             setInterval(() => {
                 try {
                     if (progress < 99) {
-                        progress += Math.random() * 2;
+                        progress += Math.random() * 1.2;
                         if (progress > 99) progress = 99;
                         const offset = 377 - (progress / 100) * 377;
                         if (circle) circle.style.strokeDashoffset = offset;
