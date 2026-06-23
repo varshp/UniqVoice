@@ -60,7 +60,8 @@ def _load_mcp_config() -> Dict[str, McpToolset]:
                     command=command,
                     args=args,
                     env=server_env,
-                )
+                ),
+                timeout=60.0
             )
         )
         toolsets[name] = mcp
