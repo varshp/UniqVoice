@@ -53,9 +53,21 @@ Your task:
 You MUST output your final result as ONLY a JSON object matching this schema exactly:
 {{
   "topic_candidates": [
-    "<Candidate 1 description>",
-    "<Candidate 2 description>",
-    "<Candidate 3 description>"
+    {{
+      "title": "<A punchy, specific title for the angle (max 10 words)>",
+      "description": "<A 1-sentence summary of what the article will cover>",
+      "reasoning": "<1-2 sentences on why this angle is compelling right now>"
+    }},
+    {{
+      "title": "...",
+      "description": "...",
+      "reasoning": "..."
+    }},
+    {{
+      "title": "...",
+      "description": "...",
+      "reasoning": "..."
+    }}
   ],
   "topic": "<The final topic angle the user chose>"
 }}

@@ -386,19 +386,27 @@
                 container.innerHTML = '';
                 
                 data.topic_candidates.forEach((cand, idx) => {
-                    let title = `Angle Option ${idx + 1}`;
-                    let desc = cand;
-                    let cleaned = cand.replace(/^\d+\.\s*/, '').replace(/\*\*/g, '');
-                    const colonIdx = cleaned.indexOf(':');
-                    if (colonIdx > 0 && colonIdx < 80) {
-                        title = cleaned.substring(0, colonIdx).trim();
-                        desc = cleaned.substring(colonIdx + 1).trim();
+                    // Handle both new structured object format and old string fallback
+                    let title, desc, reasoning;
+                    if (typeof cand === 'object' && cand !== null) {
+                        title = cand.title || `Angle Option ${idx + 1}`;
+                        desc = cand.description || '';
+                        reasoning = cand.reasoning || '';
                     } else {
-                        desc = cleaned;
+                        title = `Angle Option ${idx + 1}`;
+                        let cleaned = String(cand).replace(/^\d+\.\s*/, '').replace(/\*\*/g, '');
+                        const colonIdx = cleaned.indexOf(':');
+                        if (colonIdx > 0 && colonIdx < 80) {
+                            title = cleaned.substring(0, colonIdx).trim();
+                            desc = cleaned.substring(colonIdx + 1).trim();
+                        } else {
+                            desc = cleaned;
+                        }
+                        reasoning = '';
                     }
                     
                     const btnHtml = `
-                    <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[6px_6px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20 relative overflow-hidden">
+                    <button onclick="resumeRun(${idx})" class="text-left w-full bg-surface border-2 border-ink-primary rounded-xl p-8 hover:shadow-[6px_6px_0px_0px_rgba(23,23,27,1)] hover:-translate-y-1 transition-all group focus:outline-none focus:ring-2 focus:ring-primary/20 relative overflow-hidden flex flex-col h-full">
                         <div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                             <span class="material-symbols-outlined text-ink-primary">arrow_forward</span>
                         </div>
@@ -407,7 +415,8 @@
                         </div>
                         <h4 class="font-headline-md text-headline-md text-ink-primary mb-2 group-hover:text-primary transition-colors">${title}</h4>
                         <p class="text-ink-secondary italic font-body-md border-l-2 border-ink-primary pl-4 my-4">"${desc}"</p>
-                        <div class="mt-6 flex gap-2">
+                        ${reasoning ? `<p class="text-on-surface-variant text-sm mt-2 mb-4 leading-relaxed">${reasoning}</p>` : ''}
+                        <div class="mt-auto pt-4 flex gap-2">
                             <span class="bg-surface border-2 border-ink-primary text-ink-primary px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(23,23,27,1)]">Select Angle</span>
                         </div>
                     </button>
