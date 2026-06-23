@@ -182,11 +182,11 @@
 </div>
 <h3 class="font-headline-md text-headline-md text-primary mb-2">Drag &amp; Drop Voice Sample</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6">Seeds your engine with 1:1 tone matching (MP3, WAV, M4A)</p>
-<button class="bg-magic-violet hover:bg-secondary text-on-secondary font-bold text-xl px-12 py-5 rounded-xl shadow-[0_8px_24px_rgba(90,61,240,0.3)] transition-all duration-200 transform hover:-translate-y-1 active:scale-95">
+<button id="upload-btn-text" class="bg-magic-violet hover:bg-secondary text-on-secondary font-bold text-xl px-12 py-5 rounded-xl shadow-[0_8px_24px_rgba(90,61,240,0.3)] transition-all duration-200 transform hover:-translate-y-1 active:scale-95">
                     Start Voice Capture
                 </button>
 </div>
-<input accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file">
+<input id="audio-input" accept="audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file">
 </div>
 <!-- High-Fidelity Comparison Section -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-20"><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">analytics</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Authentic Point of View</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">We have a sharp take on what's converting today. The engine avoids the generic 'AI slop' by prioritizing your unique editorial perspective and expertise.</p></div><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">psychology</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Deeply Researched</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">Every article is grounded in a rigorous indexing of top-ranking sources and financial transcripts. Professional, credible, and built on real-world data.</p></div><div class="bg-surface border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow duration-300 flex flex-col items-start"><div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center mb-4"><span class="material-symbols-outlined text-ink-secondary">history_edu</span></div><h4 class="font-label-md text-label-md text-primary mb-2">Conversion &amp; Pipeline</h4><p class="font-body-md text-body-md text-on-surface-variant text-sm">Content that speaks directly to the bottom line. Our voice-aware engine is engineered for engagement that drives actual pipeline and measurable ROI.</p></div></div><div class="w-full mb-20">
@@ -205,5 +205,73 @@
 </div>
 </main>
 
+<script>
+    document.getElementById('audio-input').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const btnText = document.getElementById('upload-btn-text');
+        btnText.innerHTML = 'Analyzing... <span class="material-symbols-outlined text-sm spinner animate-spin inline-block">refresh</span>';
+        
+        const formData = new FormData();
+        formData.append('audio', file);
+        
+        try {
+            // Fetch and display loading screen
+            const loadingRes = await fetch(`/voice-loading?t=${Date.now()}`);
+            const loadingHtml = await loadingRes.text();
+            
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(loadingHtml, 'text/html');
+            
+            // Copy styles
+            Array.from(doc.head.querySelectorAll('style')).forEach(el => document.head.appendChild(el));
+            
+            // Hide the underlying original input that is poking through
+            const audioInput = document.getElementById('audio-input');
+            if (audioInput) audioInput.style.display = 'none';
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = doc.body.className; // Keep body classes
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '99999';
+            overlay.style.backgroundColor = '#F3F1EA';
+            overlay.style.overflow = 'auto';
+            overlay.innerHTML = doc.body.innerHTML;
+            
+            document.body.appendChild(overlay);
+
+            // Execute scripts safely
+            Array.from(overlay.querySelectorAll('script')).forEach(oldScript => {
+                const newScript = document.createElement('script');
+                newScript.textContent = oldScript.textContent;
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+
+            // Start the upload
+            const data = await fetch('/api/voice-upload', {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json());
+            
+            if (data.error) {
+                alert(data.error);
+                window.location.href = '/';
+            } else {
+                localStorage.setItem('voiceProfile', JSON.stringify(data));
+                window.location.href = '/tone-captured';
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error uploading file");
+            window.location.href = '/';
+        }
+    });
+</script>
 
 </body></html>
