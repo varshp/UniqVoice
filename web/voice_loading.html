@@ -210,15 +210,15 @@
 <div class="floating-label flex items-start gap-3 bg-surface/80 backdrop-blur-sm p-3 rounded-lg border border-border-subtle shadow-sm" style="animation-delay: 0s;">
 <span class="material-symbols-outlined text-magic-violet" data-icon="graphic_eq">graphic_eq</span>
 <div>
-<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Activity</div>
+<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Action</div>
 <div class="text-label-md font-label-md text-ink-primary">Processing Audio</div>
 </div>
 </div>
 <div class="floating-label flex items-start gap-3 bg-surface/80 backdrop-blur-sm p-3 rounded-lg border border-border-subtle shadow-sm ml-6" style="animation-delay: 1.5s;">
 <span class="material-symbols-outlined text-magic-violet" data-icon="psychology">psychology</span>
 <div>
-<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Extraction</div>
-<div class="text-label-md font-label-md text-ink-primary">Analyzing Tone</div>
+<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">voice_profile_builder</div>
+<div class="text-label-md font-label-md text-ink-primary">Building Profile</div>
 </div>
 </div>
 </div>
@@ -230,7 +230,7 @@
 <circle id="loading-circle" class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="100" stroke-width="4"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
-<span id="loading-percentage" class="text-headline-md font-headline-md">0%</span>
+<span class="material-symbols-outlined text-magic-violet text-4xl">mic</span>
 </div>
 </div>
 <div class="flex gap-1 items-end h-6">
@@ -247,15 +247,8 @@
 <div class="floating-label flex items-start gap-3 bg-surface/80 backdrop-blur-sm p-3 rounded-lg border border-border-subtle shadow-sm mr-6" style="animation-delay: 0.8s;">
 <span class="material-symbols-outlined text-magic-violet" data-icon="fingerprint">fingerprint</span>
 <div>
-<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Generation</div>
-<div class="text-label-md font-label-md text-ink-primary">Building Profile</div>
-</div>
-</div>
-<div class="floating-label flex items-start gap-3 bg-surface/80 backdrop-blur-sm p-3 rounded-lg border border-border-subtle shadow-sm" style="animation-delay: 2.2s;">
-<span class="material-symbols-outlined text-magic-violet" data-icon="search_insights">search_insights</span>
-<div>
-<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Analysis</div>
-<div class="text-label-md font-label-md text-ink-primary">Extracting Rhythm</div>
+<div class="text-label-sm font-label-sm uppercase tracking-wider text-ink-secondary">Action</div>
+<div class="text-label-md font-label-md text-ink-primary">Saving Profile</div>
 </div>
 </div>
 </div>
@@ -324,8 +317,6 @@
                         if (progress > 99) progress = 99;
                         const offset = 377 - (progress / 100) * 377;
                         if (circle) circle.style.strokeDashoffset = offset;
-                        const pctEl = document.getElementById('loading-percentage');
-                        if (pctEl) pctEl.innerText = `${Math.floor(progress)}%`;
                     }
                 } catch(e) { console.error(e); }
             }, 300);

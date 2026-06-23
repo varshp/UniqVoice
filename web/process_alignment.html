@@ -179,7 +179,7 @@
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
 <div>
-<p class="font-body-md text-ink-primary font-semibold">Semantic Parsing</p>
+<p class="font-body-md text-ink-primary font-semibold">trend_scout</p>
 <p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
 </div>
 </div>
@@ -189,7 +189,7 @@
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
 <div>
-<p class="font-body-md text-ink-primary font-semibold">Tone Extraction</p>
+<p class="font-body-md text-ink-primary font-semibold">serp_analyst</p>
 <p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
 </div>
 </div>
@@ -199,7 +199,7 @@
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
 <div>
-<p class="font-body-md text-ink-primary font-semibold">Drafting Angle</p>
+<p class="font-body-md text-ink-primary font-semibold">angle_finder</p>
 <p class="font-data-mono text-[11px] text-on-secondary-container">Complete</p>
 </div>
 </div>
@@ -209,7 +209,7 @@
 <span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>
 </div>
 <div>
-<p class="title-text font-body-md text-primary font-semibold">Verifying with profile</p>
+<p class="title-text font-body-md text-primary font-semibold">drafter</p>
 <p class="status-text font-data-mono text-[11px] text-primary">In Progress...</p>
 </div>
 </div>
@@ -219,7 +219,7 @@
 <div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
 <div>
-<p class="title-text font-body-md text-ink-faint font-semibold">Guarding Compliance</p>
+<p class="title-text font-body-md text-ink-faint font-semibold">editor_guard</p>
 <p class="status-text font-data-mono text-[11px]">Pending</p>
 </div>
 </div>
@@ -229,7 +229,7 @@
 <div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
 <div>
-<p class="title-text font-body-md text-ink-faint font-semibold">Finalizing Report</p>
+<p class="title-text font-body-md text-ink-faint font-semibold">report_builder</p>
 <p class="status-text font-data-mono text-[11px]">Pending</p>
 </div>
 </div>
@@ -285,7 +285,7 @@
 </svg>
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 <div class="bg-white/80 backdrop-blur-sm border border-border-hairline px-4 py-2 rounded-full shadow-sm">
-<p class="font-data-mono text-[12px] text-primary whitespace-nowrap">Analysing Syntactic Variance...</p>
+<p class="font-data-mono text-[12px] text-primary whitespace-nowrap">Generating Content...</p>
 </div>
 </div>
 </div>
@@ -308,18 +308,14 @@
 <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-12 flex justify-between">
 <div class="flex items-center gap-3">
 <div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
-<p class="font-data-mono text-[11px] text-ink-faint" id="log-text">Applying editorial smoothing to draft angle...</p>
+<p class="font-data-mono text-[11px] text-ink-faint" id="log-text">Writing in your voice...</p>
 </div>
-<p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Syncing resonance...</p>
+<p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Generating Content...</p>
 </div>
 </div>
 <!-- Footer Progress Bar -->
 <div class="w-full">
-<div class="flex justify-between items-end mb-3">
-<p class="font-label-caps text-label-caps text-ink-faint uppercase">Internal Engine Stability</p>
-<p class="font-data-mono text-[12px] text-ink-primary">Nominal Range: Active</p>
-</div>
-<div class="h-[6px] w-full bg-border-hairline rounded-full overflow-hidden">
+<div class="h-[6px] w-full bg-border-hairline rounded-full overflow-hidden mt-6">
 <div class="h-full bg-primary transition-all duration-500 ease-out animate-pulse" id="progress-bar" style="width: 100%;"></div>
 </div>
 <div class="mt-4 flex justify-between">
@@ -337,17 +333,15 @@
     (() => {
         // Micro-interactions and real-time state simulation
         const logs = [
-            "Optimizing lexical choice for 'Authoritative' tone...",
-            "Validating sentence structure against user history...",
-            "Checking resonance harmonics for voice signature...",
-            "Filtering draft content through linguistic constraints...",
-            "Applying editorial smoothing to draft angle...",
-            "Verifying stylistic consistency across paragraphs..."
+            "Running drafter step...",
+            "Writing in your voice...",
+            "Evaluating governance parameters...",
+            "Applying PII and Terms of Use filters...",
+            "Formatting final JSON output..."
         ];
 
         let progress = 64;
         const logElement = document.getElementById('log-text');
-        const percentageElement = document.getElementById('percentage-label');
         const progressBar = document.getElementById('progress-bar');
 
         let alignmentInterval;
@@ -383,7 +377,6 @@
             if (progress < 89) {
                 progress += Math.random() * 0.8;
                 const displayProgress = Math.floor(progress);
-                if (percentageElement) percentageElement.innerText = `Syncing resonance: ${displayProgress}%`;
                 if (progressBar) progressBar.style.width = `${displayProgress}%`;
                 
                 // Update side steps
