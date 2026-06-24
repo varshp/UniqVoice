@@ -24,8 +24,12 @@ servers:
   # Verify:        on startup, list tools and confirm a `search` tool appears.
   - name: search
     transport: stdio
-    command: npx
+    command: npm
     args:
+      - "exec"
+      - "--no-update-notifier"
+      - "--no-fund"
+      - "--no-audit"
       - "-y"
       - "tavily-mcp"
     env:
