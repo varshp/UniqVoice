@@ -18,25 +18,25 @@ from google.genai import Client
 
 logger = logging.getLogger(__name__)
 
-# Load blocklist at module level
+# Load allowlist at module level
 _config_path = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
     "config",
-    "blocklist.yaml",
+    "allowlist.yaml",
 )
-_blocked_domains = []
+_allowed_domains = []
 if os.path.exists(_config_path):
     with open(_config_path, "r", encoding="utf-8") as f:
-        _blocklist_config = yaml.safe_load(f) or {}
-        _blocked_domains = _blocklist_config.get("blocked_domains", [])
+        _allowlist_config = yaml.safe_load(f) or {}
+        _allowed_domains = _allowlist_config.get("allowed_domains", [])
 
 
-def _is_blocked_domain(domain: str) -> bool:
-    """Checks if a domain ends with any blocked domain."""
+def _is_allowed_domain(domain: str) -> bool:
+    """Checks if a domain ends with any allowed domain."""
     domain = domain.lower()
-    for blocked in _blocked_domains:
-        blocked = blocked.lower()
-        if domain == blocked or domain.endswith("." + blocked):
+    for allowed in _allowed_domains:
+        allowed = allowed.lower()
+        if domain == allowed or domain.endswith("." + allowed):
             return True
     return False
 
@@ -60,7 +60,17 @@ async def fetch_before_policy_callback(
     if not url:
         return None
 
-    # Enforce fetch cap
+    parsed = urllib.parse.urlparse(url)
+    domain = parsed.netloc.split(":")[0]
+
+    # Allowlist check (structural policy)
+    if not _is_allowed_domain(domain):
+        msg = f"{url} - blocked (allowlist)"
+        logger.warning("[Policy] %s", msg)
+        _append_policy_note(tool_context, msg)
+        return {"content": [{"type": "text", "text": "Content blocked by structural policy (domain not allowlisted)."}]}
+
+    # Enforce fetch cap ONLY for allowed domains
     fetch_count = tool_context.state.get("fetch_attempt_count", 0)
     if fetch_count >= 5:
         msg = f"{url} - skipped (fetch cap reached)"
@@ -70,16 +80,6 @@ async def fetch_before_policy_callback(
 
     # Increment counter
     tool_context.state["fetch_attempt_count"] = fetch_count + 1
-
-    parsed = urllib.parse.urlparse(url)
-    domain = parsed.netloc.split(":")[0]
-
-    # Blocklist check
-    if _is_blocked_domain(domain):
-        msg = f"{url} - blocked (blocklist)"
-        logger.warning("[Policy] %s", msg)
-        _append_policy_note(tool_context, msg)
-        return {"content": [{"type": "text", "text": "Content blocked by structural policy (blocklisted domain)."}]}
 
     # Passes structural checks, continue to tool execution
     return None
