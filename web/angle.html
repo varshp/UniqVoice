@@ -472,15 +472,18 @@
                 
                 const reader = res.body.getReader();
                 const decoder = new TextDecoder();
+                let buffer = '';
                 
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) break;
                     
-                    const chunk = decoder.decode(value, { stream: true });
-                    const lines = chunk.split('\n').filter(line => line.trim());
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep partial line in buffer
                     
                     for (const line of lines) {
+                        if (!line.trim()) continue;
                         try {
                             const data = JSON.parse(line);
                             if (window.handleStreamEvent) {
@@ -494,6 +497,19 @@
                         } catch(err) {
                             console.error("Error parsing JSON chunk:", line, err);
                         }
+                    }
+                }
+                
+                if (buffer.trim()) {
+                    try {
+                        const data = JSON.parse(buffer);
+                        if (window.handleStreamEvent) window.handleStreamEvent(data);
+                        if (data.type === 'complete') {
+                            localStorage.setItem('lastRunData', JSON.stringify(data));
+                            window.location.href = `/create?run_id=${currentRunId}`;
+                        }
+                    } catch(err) {
+                        console.error("Error parsing final chunk:", buffer, err);
                     }
                 }
             } catch(e) {
