@@ -120,6 +120,9 @@ async def _unpack_scout_response(callback_context: CallbackContext) -> Optional[
         elif raw.startswith("```"):
             raw = raw[3:-3]
             
+        # Fix common LLM mistake of escaping single quotes in JSON
+        raw = raw.replace("\\'", "'")
+            
         data = json.loads(raw.strip())
         
         callback_context.state["topic_candidates"] = data.get("topic_candidates", [])
