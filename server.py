@@ -129,37 +129,43 @@ async def resume(req: ResumeRequest):
     async def event_generator():
         try:
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
-                if getattr(event, "content", None) and getattr(event.content, "parts", None):
-                    for part in event.content.parts:
+                output = getattr(event, "output", None)
+                if output and hasattr(output, "parts"):
+                    for part in output.parts:
                         fc = getattr(part, "function_call", None)
                         if fc:
                             yield json.dumps({
                                 "type": "tool_call",
                                 "tool": fc.name,
-                                "args": dict(fc.args) if hasattr(fc, "args") else {}
-                            }) + "\n"
+                                "args": fc.args if hasattr(fc, "args") else {}
+                            }, default=str) + "\n"
                         elif getattr(part, "text", None):
                             yield json.dumps({
                                 "type": "text",
                                 "text": part.text
                             }) + "\n"
+                            
+            session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
+            state = session.state
+            final_data = {
+                "type": "complete",
+                "final_article": state.get("final_article", ""),
+                "run_report": state.get("run_report", ""),
+                "policy_notes": state.get("policy_notes", ""),
+                "voice_profile": state.get("voice_profile", {}),
+                "angle_brief": state.get("angle_brief", {}),
+                "serp_findings": state.get("serp_findings", {}),
+                "topic": state.get("topic", ""),
+            }
+            def _safe_dump(o):
+                if hasattr(o, "model_dump"): return o.model_dump()
+                if hasattr(o, "dict"): return o.dict()
+                return str(o)
+            yield json.dumps(final_data, default=_safe_dump) + "\n"
+            
         except Exception as e:
             logger.error(f"Error during run_async: {e}")
             yield json.dumps({"type": "error", "message": str(e)}) + "\n"
-            
-        session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
-        state = session.state
-        final_data = {
-            "type": "complete",
-            "final_article": state.get("final_article", ""),
-            "run_report": state.get("run_report", ""),
-            "policy_notes": state.get("policy_notes", ""),
-            "voice_profile": state.get("voice_profile", {}),
-            "angle_brief": state.get("angle_brief", {}),
-            "serp_findings": state.get("serp_findings", {}),
-            "topic": state.get("topic", ""),
-        }
-        yield json.dumps(final_data) + "\n"
 
     return StreamingResponse(event_generator(), media_type="application/x-ndjson")
 
