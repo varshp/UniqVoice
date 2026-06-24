@@ -248,6 +248,17 @@
             </header>
             <!-- Article Content -->
             <div id="article-content" class="font-body-lg text-body-lg text-ink-secondary leading-[1.8] space-y-8">Loading...</div>
+            
+            <!-- References Section -->
+            <div class="mt-16 pt-8 border-t border-border-hairline">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="material-symbols-outlined text-primary">menu_book</span>
+                    <h3 class="font-headline-md text-headline-md text-ink-primary">Sources & References</h3>
+                </div>
+                <ul id="article-sources" class="space-y-4 font-body-sm text-ink-secondary">
+                    <li>Loading...</li>
+                </ul>
+            </div>
             <!-- Fade Effect at bottom of main content if it were longer -->
             <!-- <div class="absolute bottom-0 left-0 right-0 h-32 editorial-gradient rounded-b-xl pointer-events-none"></div> -->
         </article>
@@ -385,6 +396,22 @@
                 
                 if (data.voice_profile && data.voice_profile.tone) {
                     document.getElementById('roi-voice').innerText = "Matched";
+                }
+                
+                // Sources
+                const sourcesList = document.getElementById('article-sources');
+                if (serp && serp.sources && serp.sources.length > 0) {
+                    sourcesList.innerHTML = serp.sources.map(source => 
+                        `<li class="flex flex-col gap-2 p-4 bg-surface-container/30 rounded-lg border border-border-hairline">
+                            <a href="${source.url}" target="_blank" class="text-magic-violet font-bold hover:underline break-all flex items-center gap-2 text-sm">
+                                <span class="material-symbols-outlined text-[16px]">link</span>
+                                ${source.url}
+                            </a>
+                            <p class="text-[13px] opacity-80 pl-6">${source.summary || "No summary available."}</p>
+                        </li>`
+                    ).join('');
+                } else {
+                    sourcesList.innerHTML = "<li class='text-sm italic opacity-50'>No specific sources were cited or fetched for this run.</li>";
                 }
                 
                 // Content
