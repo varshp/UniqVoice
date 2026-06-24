@@ -338,12 +338,13 @@
 </div>
 </div>
 <!-- Live Status Logs -->
-<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-12 flex justify-between">
-<div class="flex items-center gap-3">
-<div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
-<p class="font-data-mono text-[11px] text-ink-faint" id="log-text">Writing in your voice...</p>
+<div class="absolute bottom-0 left-0 w-full px-12 pb-6 flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Diagnostics</p>
 </div>
-<p class="font-data-mono text-[11px] text-primary font-bold" id="percentage-label">Generating Content...</p>
+<div class="bg-black text-[#00FF41] font-data-mono text-[11px] p-3 rounded overflow-y-auto h-24 flex flex-col gap-1 border border-[#00FF41]/30" id="live-logs">
+<div>[System] Initializing pipeline...</div>
+</div>
 </div>
 </div>
 </section>
@@ -352,20 +353,11 @@
 </footer>
 <script>
     (() => {
-        // Micro-interactions and real-time state simulation
-        const logs = [
-            "Running drafter step...",
-            "Writing in your voice...",
-            "Evaluating governance parameters...",
-            "Applying PII and Terms of Use filters...",
-            "Formatting final JSON output..."
-        ];
-
-        let progress = 64;
-        const logElement = document.getElementById('log-text');
+        const liveLogs = document.getElementById('live-logs');
         const progressBar = document.getElementById('progress-bar');
-
-        let alignmentInterval;
+        
+        let progress = 10;
+        let currentStep = 'serp_analyst';
         
         function setStepActive(el) {
             if(!el) return;
@@ -392,38 +384,50 @@
             status.className = 'status-text font-data-mono text-[11px] text-on-secondary-container';
             status.innerText = 'Complete';
         }
-
-        function updateState() {
-            // Increment progress slowly
-            if (progress < 89) {
-                progress += Math.random() * 0.8;
-                const displayProgress = Math.floor(progress);
-                if (progressBar) progressBar.style.width = `${displayProgress}%`;
-                
-                // Update side steps
-                if (displayProgress > 72 && document.getElementById('step-verify').querySelector('.status-text').innerText === 'In Progress...') {
-                    setStepComplete(document.getElementById('step-verify'));
-                    setStepActive(document.getElementById('step-guard'));
-                }
-                if (displayProgress > 82 && document.getElementById('step-guard').querySelector('.status-text').innerText === 'In Progress...') {
-                    setStepComplete(document.getElementById('step-guard'));
-                    setStepActive(document.getElementById('step-finalize'));
-                }
-            }
-
-            // Cycle logs
-            if (Math.random() > 0.8) {
-                const randomLog = logs[Math.floor(Math.random() * logs.length)];
-                if (logElement) logElement.innerText = randomLog;
-            }
+        
+        function appendLog(msg) {
+            if(!liveLogs) return;
+            const div = document.createElement('div');
+            div.innerText = msg;
+            liveLogs.appendChild(div);
+            liveLogs.scrollTop = liveLogs.scrollHeight;
         }
 
-        alignmentInterval = setInterval(updateState, 2000);
-
-        // Allow script cleanup if needed later, though redirection handles it usually
-        window._cleanupAlignment = () => {
-            clearInterval(alignmentInterval);
+        window.handleStreamEvent = (data) => {
+            if (data.type === 'tool_call') {
+                if (progress < 40) progress += 2;
+                if (data.tool === 'search') {
+                    appendLog(`[Research] Searching web for: ${data.args.query || 'topic'}`);
+                } else if (data.tool === 'fetch') {
+                    appendLog(`[Research] Reading source: ${data.args.url}`);
+                } else {
+                    appendLog(`[Tool] ${data.tool} invoked.`);
+                }
+            } else if (data.type === 'text') {
+                // We transition to drafter
+                if (currentStep === 'serp_analyst') {
+                    currentStep = 'drafter';
+                    setStepComplete(document.getElementById('step-verify'));
+                    setStepActive(document.getElementById('step-guard'));
+                    progress = 60;
+                    appendLog(`[Ghostwriter] Synthesizing insights & drafting...`);
+                }
+                if (progress < 85) progress += 0.5;
+            } else if (data.type === 'complete') {
+                setStepComplete(document.getElementById('step-guard'));
+                setStepActive(document.getElementById('step-finalize'));
+                progress = 100;
+                appendLog(`[System] Pipeline complete. Redirecting...`);
+            } else if (data.type === 'error') {
+                appendLog(`[Error] ${data.message}`);
+            }
+            
+            if (progressBar) progressBar.style.width = `${Math.min(progress, 100)}%`;
         };
+        
+        // Initial setup
+        setStepActive(document.getElementById('step-verify'));
+        if (progressBar) progressBar.style.width = '10%';
     })();
 </script>
 

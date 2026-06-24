@@ -469,11 +469,33 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ run_id: currentRunId, chosen_index: idx })
                 });
-                const data = await res.json();
                 
-                localStorage.setItem('lastRunData', JSON.stringify(data));
-                window.location.href = `/create?run_id=${currentRunId}`;
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
                 
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n').filter(line => line.trim());
+                    
+                    for (const line of lines) {
+                        try {
+                            const data = JSON.parse(line);
+                            if (window.handleStreamEvent) {
+                                window.handleStreamEvent(data);
+                            }
+                            
+                            if (data.type === 'complete') {
+                                localStorage.setItem('lastRunData', JSON.stringify(data));
+                                window.location.href = `/create?run_id=${currentRunId}`;
+                            }
+                        } catch(err) {
+                            console.error("Error parsing JSON chunk:", line, err);
+                        }
+                    }
+                }
             } catch(e) {
                 console.error(e);
                 alert("Error resuming run");
