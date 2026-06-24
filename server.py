@@ -129,22 +129,29 @@ async def resume(req: ResumeRequest):
     async def event_generator():
         try:
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
+                author = getattr(event, "author", "unknown")
+                if author != "unknown":
+                    yield json.dumps({
+                        "type": "text",
+                        "text": f"Agent {author} completed its task."
+                    }) + "\n"
+
                 output = getattr(event, "output", None)
                 if output and hasattr(output, "parts"):
                     for part in output.parts:
                         fc = getattr(part, "function_call", None)
                         if fc:
+                            args_dict = fc.args if hasattr(fc, "args") else {}
                             yield json.dumps({
                                 "type": "tool_call",
                                 "tool": fc.name,
-                                "args": fc.args if hasattr(fc, "args") else {}
+                                "args": args_dict
                             }, default=str) + "\n"
                         elif getattr(part, "text", None):
                             yield json.dumps({
                                 "type": "text",
                                 "text": part.text
                             }) + "\n"
-                            
             session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
             state = session.state
             final_data = {
