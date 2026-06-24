@@ -404,6 +404,9 @@
                     appendLog(`[Tool] ${data.tool} invoked.`);
                 }
             } else if (data.type === 'text') {
+                if (data.text && data.text.startsWith('Agent ')) {
+                    appendLog(`[System] ${data.text}`);
+                }
                 // We transition to drafter
                 if (currentStep === 'serp_analyst') {
                     currentStep = 'drafter';
