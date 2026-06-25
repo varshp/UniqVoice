@@ -53,12 +53,12 @@ async def fetch_before_policy_callback(
     before_tool_callback for the fetch tool.
     Implements structural checks (blocklist) and the hard fetch cap.
     """
-    if tool.name == "search":
+    if tool.name in ("search", "tavily_search", "search_tavily_search"):
         query = args.get("query", "topic")
         _append_policy_note(tool_context, f"[Research] Searching web for: {query}")
         return None
 
-    if tool.name != "fetch":
+    if tool.name not in ("fetch", "mcp-server-fetch_fetch", "fetch_fetch"):
         return None
 
     url = args.get("url", "")

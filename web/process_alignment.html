@@ -408,11 +408,12 @@
                     if (data.text.startsWith('Agent ')) {
                         appendLog(`[System] ${data.text}`);
                     } else if (data.text.startsWith('Log: ')) {
-                        const msg = data.text.replace('Log: ', '');
+                        let msg = data.text.replace('Log: ', '');
+                        msg = msg.replace(/^-?\s*/, ''); // Strip leading hyphens and spaces
                         if (msg.startsWith('[Research]')) {
                             appendLog(msg);
                         } else {
-                            appendLog(`[Policy] ${msg}`);
+                            appendLog(`[Policy] - ${msg}`);
                         }
                     }
                 }
