@@ -128,17 +128,20 @@ async def resume(req: ResumeRequest):
     
     async def event_generator():
         last_policy_notes_len = 0
+        last_active_agent = None
         try:
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
-                # Only log completion if the agent actually ended
-                actions = getattr(event, "actions", None)
-                if actions and getattr(actions, "end_of_agent", False):
-                    author = getattr(event, "author", "unknown")
-                    if author != "unknown" and author != "content_pipeline":
+                # Track agent transitions to know when one completes
+                author = getattr(event, "author", "unknown")
+                ignore_authors = ("unknown", "content_pipeline", "search", "tavily_search", "search_tavily_search", "fetch", "mcp-server-fetch_fetch", "fetch_fetch")
+                
+                if author not in ignore_authors:
+                    if last_active_agent and last_active_agent != author:
                         yield json.dumps({
                             "type": "text",
-                            "text": f"Agent {author} completed its task."
+                            "text": f"Agent {last_active_agent} completed its task."
                         }) + "\n"
+                    last_active_agent = author
                         
                 # Extract policy notes changes to stream guardrail activity
                 if actions and hasattr(actions, "state_delta"):
@@ -171,6 +174,13 @@ async def resume(req: ResumeRequest):
                             }, default=str) + "\n"
                         elif getattr(part, "text", None):
                             pass # We won't stream raw LLM tokens to the UI to reduce noise
+                            
+            if last_active_agent:
+                yield json.dumps({
+                    "type": "text",
+                    "text": f"Agent {last_active_agent} completed its task."
+                }) + "\n"
+                
             session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
             state = session.state
             final_data = {

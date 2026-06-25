@@ -228,8 +228,7 @@ Step 1 — Search for the top-ranking articles and blog posts on this topic.
          Identify at least 3–5 URLs.
          Optional Soft Ranking: Prefer these reputable domains if they appear in your search results: {_reputable_domains_str}
 
-Step 2 — Fetch and read each URL. For each page, write a 2–3 sentence summary
-         of its main argument.
+Step 2 — Fetch and read each URL. You MUST use the fetch tool to retrieve the actual page content. Do NOT rely on search snippets. For each page, write a 2–3 sentence summary of its main argument.
 
 Step 3 — Identify the COMMON CLAIMS: the points almost every article makes.
          These are the 'commodity consensus' the next agent will go beyond.
