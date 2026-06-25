@@ -133,19 +133,32 @@ async def resume(req: ResumeRequest):
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
                 # Track agent transitions to know when one completes
                 author = getattr(event, "author", "unknown")
-                
-                target_agents = ["trend_scout", "serp_analyst", "angle_finder", "drafter", "editor_guard", "report_builder"]
-                if author in target_agents and author not in completed_agents:
-                    completed_agents.add(author)
-                    yield json.dumps({
-                        "type": "agent_complete",
-                        "agent": author
-                    }) + "\n"
-
                 # Extract policy notes changes to stream guardrail activity
                 actions = getattr(event, "actions", None)
                 if actions and hasattr(actions, "state_delta"):
-                    policy_notes = actions.state_delta.get("policy_notes", "")
+                    delta = actions.state_delta
+                    
+                    # Agent completion detection via state keys
+                    if "topic" in delta and "trend_scout" not in completed_agents:
+                        completed_agents.add("trend_scout")
+                        yield json.dumps({"type": "agent_complete", "agent": "trend_scout"}) + "\n"
+                    if "serp_findings" in delta and "serp_analyst" not in completed_agents:
+                        completed_agents.add("serp_analyst")
+                        yield json.dumps({"type": "agent_complete", "agent": "serp_analyst"}) + "\n"
+                    if "draft_angle" in delta and "angle_finder" not in completed_agents:
+                        completed_agents.add("angle_finder")
+                        yield json.dumps({"type": "agent_complete", "agent": "angle_finder"}) + "\n"
+                    if "draft_article" in delta and "drafter" not in completed_agents:
+                        completed_agents.add("drafter")
+                        yield json.dumps({"type": "agent_complete", "agent": "drafter"}) + "\n"
+                    if "editor_review" in delta and "editor_guard" not in completed_agents:
+                        completed_agents.add("editor_guard")
+                        yield json.dumps({"type": "agent_complete", "agent": "editor_guard"}) + "\n"
+                    if "final_report" in delta and "report_builder" not in completed_agents:
+                        completed_agents.add("report_builder")
+                        yield json.dumps({"type": "agent_complete", "agent": "report_builder"}) + "\n"
+
+                    policy_notes = delta.get("policy_notes", "")
                     if policy_notes and len(policy_notes) > last_policy_notes_len:
                         new_notes = policy_notes[last_policy_notes_len:].strip()
                         for line in new_notes.split('\n'):
