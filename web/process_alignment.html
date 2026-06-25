@@ -176,7 +176,7 @@
 <!-- Vertical Line Connector -->
 <div class="absolute left-[11px] top-2 bottom-2 w-[1px] bg-border-hairline"></div>
 <!-- Step 1: Complete -->
-<div class="flex gap-4 items-start relative z-10">
+<div id="step-trend_scout" class="flex gap-4 items-start relative z-10">
 <div class="bg-secondary rounded-full p-1">
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
@@ -190,7 +190,7 @@
 </div>
 </div>
 <!-- Step 2: Complete -->
-<div class="flex gap-4 items-start relative z-10">
+<div id="step-serp_analyst" class="flex gap-4 items-start relative z-10">
 <div class="bg-secondary rounded-full p-1">
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
@@ -204,7 +204,7 @@
 </div>
 </div>
 <!-- Step 3: Complete -->
-<div class="flex gap-4 items-start relative z-10">
+<div id="step-angle_finder" class="flex gap-4 items-start relative z-10">
 <div class="bg-secondary rounded-full p-1">
 <span class="material-symbols-outlined text-white text-[14px]">check</span>
 </div>
@@ -218,7 +218,7 @@
 </div>
 </div>
 <!-- Step 4: Active -->
-<div id="step-verify" class="flex gap-4 items-start relative z-10">
+<div id="step-drafter" class="flex gap-4 items-start relative z-10">
 <div class="icon-container bg-primary rounded-full p-1 ring-4 ring-accent-soft">
 <span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>
 </div>
@@ -232,7 +232,7 @@
 </div>
 </div>
 <!-- Step 5: Pending -->
-<div id="step-guard" class="flex gap-4 items-start relative z-10 opacity-50">
+<div id="step-editor_guard" class="flex gap-4 items-start relative z-10 opacity-50">
 <div class="icon-container bg-outline-variant rounded-full p-1">
 <div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
@@ -246,7 +246,7 @@
 </div>
 </div>
 <!-- Step 6: Pending -->
-<div id="step-finalize" class="flex gap-4 items-start relative z-10 opacity-50">
+<div id="step-report_builder" class="flex gap-4 items-start relative z-10 opacity-50">
 <div class="icon-container bg-outline-variant rounded-full p-1">
 <div class="w-[14px] h-[14px] flex items-center justify-center"></div>
 </div>
@@ -432,17 +432,22 @@
                     }
                 }
                 
-                // We transition to drafter
-                if (currentStep === 'serp_analyst') {
-                    currentStep = 'drafter';
-                    setStepComplete(document.getElementById('step-verify'));
-                    setStepActive(document.getElementById('step-guard'));
-                    progress = 60;
+            } else if (data.type === 'agent_complete') {
+                appendLog(`[System] Agent ${data.agent} completed its task.`);
+                const order = ['trend_scout', 'serp_analyst', 'angle_finder', 'drafter', 'editor_guard', 'report_builder'];
+                const stepEl = document.getElementById(`step-${data.agent}`);
+                if (stepEl) {
+                    setStepComplete(stepEl);
                 }
-                if (progress < 85) progress += 0.5;
+                const nextIdx = order.indexOf(data.agent) + 1;
+                if (nextIdx < order.length) {
+                    const nextEl = document.getElementById(`step-${order[nextIdx]}`);
+                    if (nextEl) {
+                        setStepActive(nextEl);
+                    }
+                }
+                progress = Math.min(100, (nextIdx / order.length) * 100);
             } else if (data.type === 'complete') {
-                setStepComplete(document.getElementById('step-guard'));
-                setStepActive(document.getElementById('step-finalize'));
                 progress = 100;
                 appendLog(`[System] Pipeline complete. Redirecting...`);
             } else if (data.type === 'error') {
@@ -453,7 +458,10 @@
         };
         
         // Initial setup
-        setStepActive(document.getElementById('step-verify'));
+        // The first agent is already complete by the time we arrive here (trend_scout).
+        // serp_analyst is active.
+        setStepComplete(document.getElementById('step-trend_scout'));
+        setStepActive(document.getElementById('step-serp_analyst'));
         if (progressBar) progressBar.style.width = '10%';
     })();
 </script>

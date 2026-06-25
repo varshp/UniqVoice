@@ -136,12 +136,8 @@ async def resume(req: ResumeRequest):
                 ignore_authors = ("unknown", "content_pipeline", "search", "tavily_search", "search_tavily_search", "fetch", "mcp-server-fetch_fetch", "fetch_fetch")
                 
                 if author not in ignore_authors:
-                    if last_active_agent and last_active_agent != author:
-                        yield json.dumps({
-                            "type": "text",
-                            "text": f"Agent {last_active_agent} completed its task."
-                        }) + "\n"
-                    last_active_agent = author
+                # We will yield agent_complete events when they yield final text parts
+                # so we don't need last_active_agent.
                         
                 # Extract policy notes changes to stream guardrail activity
                 actions = getattr(event, "actions", None)
@@ -174,13 +170,13 @@ async def resume(req: ResumeRequest):
                                 "args": args_dict
                             }, default=str) + "\n"
                         elif getattr(part, "text", None):
-                            pass # We won't stream raw LLM tokens to the UI to reduce noise
+                            if author not in ignore_authors:
+                                yield json.dumps({
+                                    "type": "agent_complete",
+                                    "agent": author
+                                }) + "\n"
                             
-            if last_active_agent:
-                yield json.dumps({
-                    "type": "text",
-                    "text": f"Agent {last_active_agent} completed its task."
-                }) + "\n"
+                # All agents have completed their tasks.
                 
             session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
             state = session.state
