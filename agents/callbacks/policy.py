@@ -77,11 +77,11 @@ async def fetch_before_policy_callback(
 
     # Enforce fetch cap ONLY for allowed domains
     fetch_count = tool_context.state.get("fetch_attempt_count", 0)
-    if fetch_count >= 5:
+    if fetch_count >= 7:
         msg = f"{url} - skipped (fetch cap reached)"
         logger.warning("[Policy] %s", msg)
         _append_policy_note(tool_context, msg)
-        return {"content": [{"type": "text", "text": "Content blocked: maximum fetch cap reached for this run."}]}
+        return {"content": [{"type": "text", "text": "SYSTEM ERROR: Maximum fetch cap of 7 reached. YOU MUST STOP FETCHING IMMEDIATELY. Output your final JSON using ONLY the sources you have successfully fetched so far. Do NOT invoke the fetch or search tools again."}]}
 
     # Increment counter
     tool_context.state["fetch_attempt_count"] = fetch_count + 1
