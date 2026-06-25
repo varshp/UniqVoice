@@ -53,6 +53,11 @@ async def fetch_before_policy_callback(
     before_tool_callback for the fetch tool.
     Implements structural checks (blocklist) and the hard fetch cap.
     """
+    if tool.name == "search":
+        query = args.get("query", "topic")
+        _append_policy_note(tool_context, f"[Research] Searching web for: {query}")
+        return None
+
     if tool.name != "fetch":
         return None
 
@@ -82,6 +87,7 @@ async def fetch_before_policy_callback(
     tool_context.state["fetch_attempt_count"] = fetch_count + 1
 
     # Passes structural checks, continue to tool execution
+    _append_policy_note(tool_context, f"[Research] Reading source: {url}")
     return None
 
 

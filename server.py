@@ -149,7 +149,7 @@ async def resume(req: ResumeRequest):
                             if line.strip():
                                 yield json.dumps({
                                     "type": "text",
-                                    "text": f"Guardrail: {line.strip()}"
+                                    "text": f"Log: {line.strip()}"
                                 }) + "\n"
                         last_policy_notes_len = len(policy_notes)
 
