@@ -135,10 +135,8 @@ async def resume(req: ResumeRequest):
                 author = getattr(event, "author", "unknown")
                 ignore_authors = ("unknown", "content_pipeline", "search", "tavily_search", "search_tavily_search", "fetch", "mcp-server-fetch_fetch", "fetch_fetch")
                 
-                if author not in ignore_authors:
                 # We will yield agent_complete events when they yield final text parts
                 # so we don't need last_active_agent.
-                        
                 # Extract policy notes changes to stream guardrail activity
                 actions = getattr(event, "actions", None)
                 if actions and hasattr(actions, "state_delta"):
