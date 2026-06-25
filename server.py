@@ -128,15 +128,20 @@ async def resume(req: ResumeRequest):
     
     async def event_generator():
         last_policy_notes_len = 0
-        last_active_agent = None
+        completed_agents = set()
         try:
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
                 # Track agent transitions to know when one completes
                 author = getattr(event, "author", "unknown")
-                ignore_authors = ("unknown", "content_pipeline", "search", "tavily_search", "search_tavily_search", "fetch", "mcp-server-fetch_fetch", "fetch_fetch")
                 
-                # We will yield agent_complete events when they yield final text parts
-                # so we don't need last_active_agent.
+                target_agents = ["trend_scout", "serp_analyst", "angle_finder", "drafter", "editor_guard", "report_builder"]
+                if author in target_agents and author not in completed_agents:
+                    completed_agents.add(author)
+                    yield json.dumps({
+                        "type": "agent_complete",
+                        "agent": author
+                    }) + "\n"
+
                 # Extract policy notes changes to stream guardrail activity
                 actions = getattr(event, "actions", None)
                 if actions and hasattr(actions, "state_delta"):
@@ -167,12 +172,6 @@ async def resume(req: ResumeRequest):
                                 "tool": fc.name,
                                 "args": args_dict
                             }, default=str) + "\n"
-                        elif getattr(part, "text", None):
-                            if author not in ignore_authors:
-                                yield json.dumps({
-                                    "type": "agent_complete",
-                                    "agent": author
-                                }) + "\n"
                             
                 # All agents have completed their tasks.
                 
