@@ -144,6 +144,7 @@ async def resume(req: ResumeRequest):
                     last_active_agent = author
                         
                 # Extract policy notes changes to stream guardrail activity
+                actions = getattr(event, "actions", None)
                 if actions and hasattr(actions, "state_delta"):
                     policy_notes = actions.state_delta.get("policy_notes", "")
                     if policy_notes and len(policy_notes) > last_policy_notes_len:
