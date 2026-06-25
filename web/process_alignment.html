@@ -404,16 +404,20 @@
                     appendLog(`[Tool] ${data.tool} invoked.`);
                 }
             } else if (data.type === 'text') {
-                if (data.text && data.text.startsWith('Agent ')) {
-                    appendLog(`[System] ${data.text}`);
+                if (data.text) {
+                    if (data.text.startsWith('Agent ')) {
+                        appendLog(`[System] ${data.text}`);
+                    } else if (data.text.startsWith('Guardrail: ')) {
+                        appendLog(`[Policy] ${data.text.replace('Guardrail: ', '')}`);
+                    }
                 }
+                
                 // We transition to drafter
                 if (currentStep === 'serp_analyst') {
                     currentStep = 'drafter';
                     setStepComplete(document.getElementById('step-verify'));
                     setStepActive(document.getElementById('step-guard'));
                     progress = 60;
-                    appendLog(`[Ghostwriter] Synthesizing insights & drafting...`);
                 }
                 if (progress < 85) progress += 0.5;
             } else if (data.type === 'complete') {

@@ -127,31 +127,50 @@ async def resume(req: ResumeRequest):
     auto_reply = types.Content(role="user", parts=[types.Part.from_text(text=choice_text)])
     
     async def event_generator():
+        last_policy_notes_len = 0
         try:
             async for event in runner.run_async(user_id="test", session_id=req.run_id, new_message=auto_reply):
-                author = getattr(event, "author", "unknown")
-                if author != "unknown":
-                    yield json.dumps({
-                        "type": "text",
-                        "text": f"Agent {author} completed its task."
-                    }) + "\n"
+                # Only log completion if the agent actually ended
+                actions = getattr(event, "actions", None)
+                if actions and getattr(actions, "end_of_agent", False):
+                    author = getattr(event, "author", "unknown")
+                    if author != "unknown" and author != "content_pipeline":
+                        yield json.dumps({
+                            "type": "text",
+                            "text": f"Agent {author} completed its task."
+                        }) + "\n"
+                        
+                # Extract policy notes changes to stream guardrail activity
+                if actions and hasattr(actions, "state_delta"):
+                    policy_notes = actions.state_delta.get("policy_notes", "")
+                    if policy_notes and len(policy_notes) > last_policy_notes_len:
+                        new_notes = policy_notes[last_policy_notes_len:].strip()
+                        for line in new_notes.split('\n'):
+                            if line.strip():
+                                yield json.dumps({
+                                    "type": "text",
+                                    "text": f"Guardrail: {line.strip()}"
+                                }) + "\n"
+                        last_policy_notes_len = len(policy_notes)
 
                 output = getattr(event, "output", None)
                 if output and hasattr(output, "parts"):
                     for part in output.parts:
-                        fc = getattr(part, "function_call", None)
+                        fc = getattr(part, "function_call", None) or getattr(part, "tool_call", None)
                         if fc:
                             args_dict = fc.args if hasattr(fc, "args") else {}
+                            # In some environments, pb.Struct might need to be converted to dict.
+                            # We'll rely on default=str if it fails, but try to coerce it here if possible.
+                            if not isinstance(args_dict, dict) and hasattr(args_dict, "items"):
+                                args_dict = dict(args_dict.items())
+                                
                             yield json.dumps({
                                 "type": "tool_call",
                                 "tool": fc.name,
                                 "args": args_dict
                             }, default=str) + "\n"
                         elif getattr(part, "text", None):
-                            yield json.dumps({
-                                "type": "text",
-                                "text": part.text
-                            }) + "\n"
+                            pass # We won't stream raw LLM tokens to the UI to reduce noise
             session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=req.run_id)
             state = session.state
             final_data = {
