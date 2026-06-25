@@ -226,7 +226,8 @@ Step 1 — Search for the top-ranking articles and blog posts on this topic.
          Use 1–2 targeted search queries. 
          CRITICAL: Build your search queries by combining the Primary Subject AND the Chosen Angle. Ensure research stays strictly anchored to the Primary Subject.
          Identify at least 3–5 URLs.
-         Optional Soft Ranking: Prefer these reputable domains if they appear in your search results: {_reputable_domains_str}
+         CRITICAL ALLOWLIST: The system guardrail will violently block any domain NOT on this list. You MUST restrict your fetches strictly to these domains: {_reputable_domains_str}.
+         Tip: Use the `site:` operator in your search queries (e.g. `site:techcrunch.com OR site:wired.com`) to guarantee allowed results!
 
 Step 2 — Fetch and read each URL. You MUST use the fetch tool to retrieve the actual page content. Do NOT rely on search snippets. For each page, write a 2–3 sentence summary of its main argument.
 
