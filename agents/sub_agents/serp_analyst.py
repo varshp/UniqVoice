@@ -240,11 +240,12 @@ Output ONLY valid JSON:
 }}}}
 
 Rules:
-- At least 2 sources (eval case serp_reads_top_pages_001 requires this).
+- You MUST include at least 3 successful sources in your final JSON (if possible, minimum 2).
 - At least 2 common_claims.
+- If a fetch fails or is blocked by policy, you MUST completely discard that URL. Do NOT include it in your final sources list and do NOT use its search snippet.
+- You must find and fetch other URLs until you have at least 2 successful full-page fetches.
+- Cap your total fetch attempts to 7. Do not retry endlessly.
 - Never invent content — only use what you actually fetched.
-- Robustness: NEVER loop on unavailable sources. If a fetch fails or is blocked by policy, skip that source and continue.
-- Cap your fetch attempts to the top 5 search results. If too few succeed, proceed with what you successfully fetched (or use search snippets) and note it in your summary. Do NOT retry endlessly.
 """
 
 # ── Agent definition ──────────────────────────────────────────────────────────

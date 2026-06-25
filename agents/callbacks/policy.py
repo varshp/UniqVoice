@@ -70,10 +70,10 @@ async def fetch_before_policy_callback(
 
     # Allowlist check (structural policy)
     if not _is_allowed_domain(domain):
-        msg = f"{url} - blocked (allowlist)"
+        msg = f"{url} - blocked (not on allowlist)"
         logger.warning("[Policy] %s", msg)
         _append_policy_note(tool_context, msg)
-        return {"content": [{"type": "text", "text": "Content blocked by structural policy (domain not allowlisted)."}]}
+        return {"content": [{"type": "text", "text": "Content blocked by structural policy (domain not on allowlist)."}]}
 
     # Enforce fetch cap ONLY for allowed domains
     fetch_count = tool_context.state.get("fetch_attempt_count", 0)
