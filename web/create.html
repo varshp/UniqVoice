@@ -180,6 +180,13 @@
     <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative">
         <!-- Noise Texture Overlay -->
         <div class="fixed inset-0 pointer-events-none noise-texture"></div>
+
+        <!-- Page Header -->
+        <header class="mb-10">
+            <h1 class="font-headline-lg text-[40px] text-ink-primary font-bold tracking-tight">Content Pipeline Report</h1>
+            <p class="text-ink-secondary mt-2 text-lg">A detailed breakdown of the unique angles, execution efficiency, and the final generated draft.</p>
+        </header>
+
         <!-- Section 1: The 'Missed' Angles -->
         <section class="mb-20">
             <div class="flex flex-col md:flex-row gap-gutter">
@@ -285,7 +292,7 @@
             <header class="mb-12">
                 <h1 id="article-headline" class="font-headline-lg text-headline-lg text-ink-primary leading-tight mb-4 italic">Loading...</h1>
                 <div class="flex items-center gap-4 text-ink-faint font-label-caps text-label-caps">
-                    <span class="">JANUARY 24, 2024</span>
+                    <span id="article-date">JANUARY 24, 2024</span>
                     <span class="w-1 h-1 bg-border-hairline rounded-full"></span>
                     <span class="">EDITORIAL ANALYSIS</span>
                 </div>
@@ -486,8 +493,24 @@
                 }
                 
                 // Content
-                document.getElementById('article-headline').innerText = data.topic;
-                document.getElementById('article-content').innerHTML = marked.parse(data.final_article || "No article generated.");
+                let finalArticle = data.final_article || "No article generated.";
+                let title = data.topic; // Default to topic
+                
+                // If the first line is a markdown header, extract it as the title
+                const lines = finalArticle.trim().split('\n');
+                if (lines.length > 0 && lines[0].startsWith('#')) {
+                    title = lines[0].replace(/^#+\s*/, '').replace(/\*+/g, '');
+                    finalArticle = lines.slice(1).join('\n').trim();
+                }
+                
+                document.getElementById('article-headline').innerText = title;
+                
+                // Set dynamic date
+                const today = new Date();
+                const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+                document.getElementById('article-date').innerText = today.toLocaleDateString('en-US', dateOptions).toUpperCase();
+                
+                document.getElementById('article-content').innerHTML = marked.parse(finalArticle);
                 
             } catch (e) {
                 console.error(e);
