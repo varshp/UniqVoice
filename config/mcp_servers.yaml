@@ -27,6 +27,7 @@ servers:
     command: npm
     args:
       - "exec"
+      - "--silent"
       - "--no-update-notifier"
       - "--no-fund"
       - "--no-audit"
