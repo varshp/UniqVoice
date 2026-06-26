@@ -135,7 +135,8 @@ async def test_subject_anchored_001(runner):
         pass
         
     session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=session.id)
-    topic_candidates = " ".join(session.state.get("topic_candidates", []))
+    candidates = session.state.get("topic_candidates", [])
+    topic_candidates = " ".join([f"{c.get('title', '')} {c.get('description', '')}" for c in candidates])
     assert "SpaceX" in topic_candidates, f"SpaceX not in topic_candidates: {topic_candidates}"
     final_article = session.state.get("final_article", "")
     assert "SpaceX" in final_article, "SpaceX dropped from final_article"
