@@ -162,6 +162,11 @@ class ReportBuilderAgent(BaseAgent):
 
         # 5. Save to state and filesystem
         ctx.session.state["run_report"] = report_md
+        ctx.session.state["cost_metrics"] = {
+            "production_cost": total_cost,
+            "time_seconds": delta_seconds,
+            "human_baseline_cost": human_baseline.get("cost", 300)
+        }
         
         out_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "outputs")
         os.makedirs(out_dir, exist_ok=True)
@@ -175,7 +180,10 @@ class ReportBuilderAgent(BaseAgent):
 
         yield Event(
             author=self.name,
-            actions=EventActions(state_delta={"run_report": report_md})
+            actions=EventActions(state_delta={
+                "run_report": report_md,
+                "cost_metrics": ctx.session.state["cost_metrics"]
+            })
         )
 
 

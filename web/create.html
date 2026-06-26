@@ -218,23 +218,63 @@
         <article
             class="mx-auto max-w-[800px] bg-surface border border-border-hairline rounded-xl p-8 md:p-16 shadow-sm relative">
             <!-- ROI Metrics Bar -->
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-border-hairline pb-10 mb-12">
-                <div class="flex flex-col">
-                    <span class="font-label-caps text-[10px] text-ink-faint uppercase mb-1">Production Cost</span>
-                    <span id="roi-cost" class="font-data-mono text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">...</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-label-caps text-[10px] text-ink-faint uppercase mb-1">Time Invested</span>
-                    <span id="roi-time" class="font-data-mono text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">...</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-label-caps text-[10px] text-ink-faint uppercase mb-1">Estimated Value</span>
-                    <span
-                        class="font-data-mono text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">$300.00</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-label-caps text-[10px] text-ink-faint uppercase mb-1">Voice Match</span>
-                    <span id="roi-voice" class="font-data-mono text-primary font-bold">...</span>
+            <div class="bg-surface-container/30 border border-border-hairline rounded-xl p-6 mb-12">
+                <h3 class="font-label-caps text-xs text-ink-secondary uppercase tracking-wider mb-4 flex items-center justify-between">
+                    <span>Return on Investment (ROI)</span>
+                    <span class="text-[9px] opacity-70 normal-case">*Assumes ~$300 / 1 day (8hr) per human agency draft</span>
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Per Article Stats -->
+                    <div class="space-y-4">
+                        <div class="border-b border-border-hairline pb-2 mb-2">
+                            <span class="text-[10px] text-ink-faint uppercase font-bold tracking-wider">Per Article (Actuals)</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink-secondary">Production Cost</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[11px] text-success font-bold" id="roi-cost-mult">...</span>
+                                <span class="font-data-mono text-ink-primary text-sm font-bold bg-secondary-container/20 px-2 py-0.5 rounded" id="roi-cost-actual">...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink-secondary">Time Invested</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[11px] text-success font-bold" id="roi-time-mult">...</span>
+                                <span class="font-data-mono text-ink-primary text-sm font-bold bg-secondary-container/20 px-2 py-0.5 rounded" id="roi-time-actual">...</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-2 pt-2 border-t border-border-hairline/50">
+                            <span class="text-sm text-ink-primary font-bold">Total Saved</span>
+                            <span class="font-data-mono text-success font-bold" id="roi-saved-actual">...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Yearly Projection -->
+                    <div class="space-y-4 bg-surface p-4 rounded-lg border border-border-hairline shadow-sm">
+                        <div class="border-b border-border-hairline pb-2 mb-2 flex justify-between items-center">
+                            <span class="text-[10px] text-magic-violet uppercase font-bold tracking-wider">Yearly Projection</span>
+                            <span class="text-[9px] text-ink-faint uppercase tracking-wider">Projected at this rate (×52)</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink-secondary">Agency Baseline</span>
+                            <span class="font-data-mono text-ink-faint line-through text-sm" id="roi-proj-baseline">...</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink-secondary">Engine Cost</span>
+                            <span class="font-data-mono text-ink-primary text-sm font-bold" id="roi-proj-cost">...</span>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-2 pt-2 border-t border-border-hairline/50">
+                            <span class="text-sm text-ink-primary font-bold">Projected Savings</span>
+                            <span class="font-data-mono text-success font-bold text-lg" id="roi-proj-saved">...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Headline -->
@@ -387,15 +427,42 @@
                 }
                 
                 // ROI
-                const report = data.run_report || "";
-                const roiMatch = report.match(/~?\$([0-9.]+)\s*\/\s*~?(.*?)\s*vs/);
-                if (roiMatch) {
-                    document.getElementById('roi-cost').innerText = "$" + roiMatch[1];
-                    document.getElementById('roi-time').innerText = roiMatch[2].trim();
-                }
-                
-                if (data.voice_profile && data.voice_profile.tone) {
-                    document.getElementById('roi-voice').innerText = "Matched";
+                const cm = data.cost_metrics;
+                if (cm) {
+                    const baselineCost = cm.human_baseline_cost || 300;
+                    const prodCost = cm.production_cost || 0;
+                    const baselineTimeSec = 8 * 3600; // 1 day = 8 hours
+                    const prodTimeSec = cm.time_seconds || 1;
+                    
+                    const costSaved = baselineCost - prodCost;
+                    const costMult = prodCost > 0 ? (baselineCost / prodCost).toFixed(0) : 0;
+                    
+                    const timeMult = prodTimeSec > 0 ? (baselineTimeSec / prodTimeSec).toFixed(0) : 0;
+                    
+                    const formatTime = (secs) => {
+                        const mins = Math.floor(secs / 60);
+                        const s = Math.floor(secs % 60);
+                        if (mins > 0) return `${mins}m ${s}s`;
+                        return `${s}s`;
+                    };
+                    
+                    // Actuals
+                    document.getElementById('roi-cost-actual').innerText = `$${prodCost.toFixed(4)}`;
+                    if (costMult > 0) document.getElementById('roi-cost-mult').innerText = `${Number(costMult).toLocaleString()}× cheaper`;
+                    
+                    document.getElementById('roi-time-actual').innerText = formatTime(prodTimeSec);
+                    if (timeMult > 0) document.getElementById('roi-time-mult').innerText = `${Number(timeMult).toLocaleString()}× faster`;
+                    
+                    document.getElementById('roi-saved-actual').innerText = `+$${costSaved.toFixed(2)}`;
+                    
+                    // Projections (x52)
+                    const projBaseline = baselineCost * 52;
+                    const projCost = prodCost * 52;
+                    const projSaved = projBaseline - projCost;
+                    
+                    document.getElementById('roi-proj-baseline').innerText = `$${projBaseline.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('roi-proj-cost').innerText = `$${projCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('roi-proj-saved').innerText = `+$${projSaved.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                 }
                 
                 // Sources
