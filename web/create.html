@@ -313,43 +313,30 @@
             <!-- Fade Effect at bottom of main content if it were longer -->
             <!-- <div class="absolute bottom-0 left-0 right-0 h-32 editorial-gradient rounded-b-xl pointer-events-none"></div> -->
         </article>
-        <!-- Section 3: Actions -->
-        <div class="sticky bottom-8 z-50 mt-12 pointer-events-none">
-            <section class="max-w-[800px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 bg-canvas/80 backdrop-blur-md border border-border-hairline p-4 md:px-8 md:py-4 rounded-2xl shadow-lg pointer-events-auto">
-                <div class="flex items-center gap-4">
-                    <span class="font-label-caps text-label-caps text-ink-faint">SHARE ARTICLE</span>
-                    <div class="flex gap-2">
-                        <button
-                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                                data-icon="share">share</span>
-                        </button>
-                        <button
-                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                                data-icon="link">link</span>
-                        </button>
-                        <button
-                            class="w-10 h-10 bg-surface rounded-full border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group">
-                            <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary"
-                                data-icon="post_add">post_add</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <button
-                        class="flex items-center gap-2 px-6 py-3 bg-surface rounded-xl border border-border-hairline font-label-caps text-label-caps hover:bg-surface-container transition-all active:scale-95">
-                        <span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
-                        DOWNLOAD PDF
-                    </button>
-                    <button
-                        class="flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-white font-label-caps text-label-caps shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all active:scale-95">
-                        PUBLISH NOW
-                        <span class="material-symbols-outlined text-lg" data-icon="send">send</span>
+
+        <!-- Sticky Action Bar -->
+        <section
+            class="sticky bottom-8 mt-12 bg-surface/90 backdrop-blur-xl border border-border-hairline rounded-2xl p-4 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.1)] flex items-center justify-between z-40 max-w-container-max mx-auto">
+            <div class="flex items-center gap-6 px-4">
+                <span class="font-label-caps text-label-caps text-ink-faint">EXPORT OPTIONS</span>
+                <div class="flex gap-2">
+                    <button id="btn-copy-md"
+                        class="w-auto px-5 h-12 bg-surface rounded-xl border border-border-hairline flex items-center justify-center hover:bg-surface-container transition-colors group gap-2 font-label-caps text-label-caps active:scale-95">
+                        <span class="material-symbols-outlined text-ink-secondary group-hover:text-primary transition-colors"
+                            data-icon="content_copy">content_copy</span>
+                        <span id="btn-copy-text" class="text-ink-secondary group-hover:text-primary transition-colors tracking-widest">COPY MARKDOWN</span>
                     </button>
                 </div>
-            </section>
-        </div>
+            </div>
+            <div class="flex gap-4">
+                <button id="btn-download-md"
+                    class="flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-white font-label-caps text-label-caps shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all active:scale-95 tracking-widest">
+                    <span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                    DOWNLOAD .MD
+                </button>
+            </div>
+        </section>
+
     </main>
     <!-- Contextual Micro-interaction JS -->
     <script>
@@ -511,6 +498,45 @@
                 document.getElementById('article-date').innerText = today.toLocaleDateString('en-US', dateOptions).toUpperCase();
                 
                 document.getElementById('article-content').innerHTML = marked.parse(finalArticle);
+                
+                // Export Actions
+                const rawMarkdown = data.final_article || "No article generated.";
+                
+                document.getElementById('btn-copy-md').addEventListener('click', async function() {
+                    try {
+                        await navigator.clipboard.writeText(rawMarkdown);
+                        const textSpan = document.getElementById('btn-copy-text');
+                        const iconSpan = this.querySelector('.material-symbols-outlined');
+                        const oldText = textSpan.innerText;
+                        const oldIcon = iconSpan.innerText;
+                        
+                        textSpan.innerText = "COPIED!";
+                        iconSpan.innerText = "check";
+                        textSpan.classList.add('!text-success');
+                        iconSpan.classList.add('!text-success');
+                        
+                        setTimeout(() => {
+                            textSpan.innerText = oldText;
+                            iconSpan.innerText = oldIcon;
+                            textSpan.classList.remove('!text-success');
+                            iconSpan.classList.remove('!text-success');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                });
+                
+                document.getElementById('btn-download-md').addEventListener('click', function() {
+                    const blob = new Blob([rawMarkdown], { type: 'text/markdown' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'article'}.md`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                });
                 
             } catch (e) {
                 console.error(e);
