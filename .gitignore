@@ -28,3 +28,14 @@ profile/
 *.wav
 __pycache__/
 .venv/
+
+# scratch & generated
+debug_events.py
+parse_test.py
+test_adk_*.py
+test_full.py
+test_stream.py
+.DS_Store
+outputs/run_report_*.md
+
+frontend/
