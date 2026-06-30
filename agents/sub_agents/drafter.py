@@ -77,6 +77,7 @@ Non-negotiable rules:
 bullet dumps).
 - Length: 800–1 200 words.
 - Do NOT invent statistics or quotes you cannot support from the brief.
+- Do NOT fabricate real-world publications (e.g., The Atlantic, The Athletic, NYT) or invent sources. If you need an example, use a hypothetical scenario.
 - Do NOT open with "In today's rapidly evolving..." or any AI cliché.
 - Output the article text ONLY — no preamble, no JSON wrapper.
 """

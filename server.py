@@ -198,6 +198,7 @@ async def resume(req: ResumeRequest):
                 "voice_profile": state.get("voice_profile", {}),
                 "angle_brief": state.get("angle_brief", {}),
                 "serp_findings": state.get("serp_findings", {}),
+                "cost_metrics": state.get("cost_metrics", {}),
                 "topic": state.get("topic", ""),
             }
             def _safe_dump(o):
@@ -248,6 +249,7 @@ async def run_pipeline_no_hitl(req: RunRequest):
         "voice_profile": state.get("voice_profile", {}),
         "angle_brief": state.get("angle_brief", {}),
         "serp_findings": state.get("serp_findings", {}),
+        "cost_metrics": state.get("cost_metrics", {}),
         "topic": state.get("topic", req.topic),
     }
 

@@ -109,6 +109,7 @@ Output ONLY valid JSON matching this schema exactly:
 Rules:
 - The angle MUST differ meaningfully from all common_claims (eval requirement).
 - Do NOT be generic. "Use AI to do X faster" is not an acceptable angle.
+- Do NOT fabricate real-world publications or invent sources for the outline or must_include.
 - Output ONLY the JSON — no markdown fences, no preamble, no explanation.
 """
 
