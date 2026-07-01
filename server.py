@@ -145,16 +145,16 @@ async def resume(req: ResumeRequest):
                     if "serp_findings" in delta and "serp_analyst" not in completed_agents:
                         completed_agents.add("serp_analyst")
                         yield json.dumps({"type": "agent_complete", "agent": "serp_analyst"}) + "\n"
-                    if "draft_angle" in delta and "angle_finder" not in completed_agents:
+                    if "angle_brief" in delta and "angle_finder" not in completed_agents:
                         completed_agents.add("angle_finder")
                         yield json.dumps({"type": "agent_complete", "agent": "angle_finder"}) + "\n"
-                    if "draft_article" in delta and "drafter" not in completed_agents:
+                    if "draft" in delta and "drafter" not in completed_agents:
                         completed_agents.add("drafter")
                         yield json.dumps({"type": "agent_complete", "agent": "drafter"}) + "\n"
-                    if "editor_review" in delta and "editor_guard" not in completed_agents:
+                    if "final_article" in delta and "editor_guard" not in completed_agents:
                         completed_agents.add("editor_guard")
                         yield json.dumps({"type": "agent_complete", "agent": "editor_guard"}) + "\n"
-                    if "final_report" in delta and "report_builder" not in completed_agents:
+                    if "run_report" in delta and "report_builder" not in completed_agents:
                         completed_agents.add("report_builder")
                         yield json.dumps({"type": "agent_complete", "agent": "report_builder"}) + "\n"
 
