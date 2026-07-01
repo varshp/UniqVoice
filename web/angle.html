@@ -492,7 +492,7 @@
                             
                             if (data.type === 'complete') {
                                 localStorage.setItem('lastRunData', JSON.stringify(data));
-                                window.location.href = `/create?run_id=${currentRunId}`;
+                                setTimeout(() => { window.location.href = `/create?run_id=${currentRunId}`; }, 1500);
                             }
                         } catch(err) {
                             console.error("Error parsing JSON chunk:", line, err);
@@ -506,7 +506,7 @@
                         if (window.handleStreamEvent) window.handleStreamEvent(data);
                         if (data.type === 'complete') {
                             localStorage.setItem('lastRunData', JSON.stringify(data));
-                            window.location.href = `/create?run_id=${currentRunId}`;
+                            setTimeout(() => { window.location.href = `/create?run_id=${currentRunId}`; }, 1500);
                         }
                     } catch(err) {
                         console.error("Error parsing final chunk:", buffer, err);
