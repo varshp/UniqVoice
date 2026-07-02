@@ -40,10 +40,18 @@ def _is_allowed_domain(domain: str) -> bool:
             return True
     return False
 
+_run_notes = {}
+
 def _append_policy_note(tool_context: ToolContext, msg: str):
-    current_notes = tool_context.state.get("policy_notes", "")
-    prefix = "\n" if current_notes else ""
-    tool_context.state["policy_notes"] = current_notes + f"{prefix}- {msg}"
+    global _run_notes
+    session_id = str(tool_context.session.id) if hasattr(tool_context, 'session') else "default"
+    
+    if session_id not in _run_notes:
+        _run_notes[session_id] = []
+        
+
+    _run_notes[session_id].append(msg)
+    tool_context.state["policy_notes"] = "\n".join(f"- {n}" for n in _run_notes[session_id])
 
 
 async def fetch_before_policy_callback(
@@ -98,7 +106,7 @@ async def fetch_after_policy_callback(
     after_tool_callback for the fetch tool.
     Implements the semantic policy check (ToU and PII).
     """
-    if tool.name != "fetch":
+    if tool.name not in ("fetch", "mcp-server-fetch_fetch", "fetch_fetch"):
         return None
 
     url = args.get("url", "")
@@ -112,7 +120,12 @@ async def fetch_after_policy_callback(
             if isinstance(c, dict) and c.get("type") == "text":
                 content_text += c.get("text", "")
 
-    if not content_text or "Content blocked" in content_text[:50]:
+    if not content_text:
+        msg = f"{url} - blocked (fetch failed or empty)"
+        _append_policy_note(tool_context, msg)
+        return {"content": [{"type": "text", "text": "Content blocked: fetch failed or returned empty text."}]}
+
+    if "Content blocked" in content_text[:50]:
         return None # Already blocked by previous checks
 
     client = Client()

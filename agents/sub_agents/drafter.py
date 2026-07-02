@@ -36,6 +36,28 @@ logger = logging.getLogger(__name__)
 
 _MODEL = os.getenv("DRAFTER_MODEL", "gemini-2.5-flash")
 
+def _append_warning(state: dict, msg: str) -> None:
+    current = state.get("policy_notes", "")
+    prefix = "\n" if current else ""
+    state["policy_notes"] = current + f"{prefix}- [System Warning] {msg}"
+
+def _bootstrap_drafter_context(callback_context: CallbackContext) -> None:
+    state = callback_context.state
+    if not state.get("angle_brief"):
+        logger.warning("[drafter] angle_brief missing! Bootstrapping fallback.")
+        state["angle_brief"] = '{"angle": "Fallback angle", "why_new": "Fallback why_new", "outline": ["Point 1"], "must_include": []}'
+        _append_warning(state, "angle_brief missing; used fallback draft outline.")
+    if not state.get("explicit_topic_request"):
+        state["explicit_topic_request"] = "Fallback primary subject"
+        _append_warning(state, "explicit_topic_request missing; used fallback.")
+    if not state.get("voice_profile"):
+        state["voice_profile"] = "Standard professional tone"
+        _append_warning(state, "voice_profile missing; used fallback standard tone.")
+    if not state.get("tone_notes"):
+        state["tone_notes"] = "Clear and engaging"
+    return None
+
+
 # ── M2 Instruction — uses only {angle_brief} ─────────────────────────────────
 # Keys guarded as prose (not live {braces}) until their producers exist:
 #
@@ -91,6 +113,7 @@ drafter_agent = LlmAgent(
     name="drafter",
     model=_MODEL,
     instruction=_INSTRUCTION,
+    before_agent_callback=_bootstrap_drafter_context,
     output_key="draft",
     description=(
         "M2: writes a full article from the angle_brief JSON. "
@@ -98,3 +121,4 @@ drafter_agent = LlmAgent(
         "voice_profile and tone_notes added in M6."
     ),
 )
+

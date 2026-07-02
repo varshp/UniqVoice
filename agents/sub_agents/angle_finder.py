@@ -43,6 +43,26 @@ logger = logging.getLogger(__name__)
 
 _MODEL = os.getenv("ANGLE_FINDER_MODEL", "gemini-2.5-pro")
 
+def _append_warning(state: dict, msg: str) -> None:
+    current = state.get("policy_notes", "")
+    prefix = "\n" if current else ""
+    state["policy_notes"] = current + f"{prefix}- [System Warning] {msg}"
+
+def _bootstrap_serp_findings(callback_context: CallbackContext) -> None:
+    state = callback_context.state
+    if not state.get("serp_findings"):
+        logger.warning("[angle_finder] serp_findings missing! Bootstrapping fallback.")
+        state["serp_findings"] = '{"sources": [], "common_claims": ["Fallback claim 1", "Fallback claim 2"]}'
+        _append_warning(state, "serp_findings missing; used fallback commodity consensus.")
+    if not state.get("explicit_topic_request"):
+        state["explicit_topic_request"] = "Fallback primary subject"
+        _append_warning(state, "explicit_topic_request missing; used fallback.")
+    if not state.get("topic"):
+        state["topic"] = "Fallback chosen angle"
+        _append_warning(state, "topic missing; used fallback.")
+    return None
+
+
 # ── M2 Instruction — uses only {topic} and {serp_findings} ───────────────────
 # Keys guarded as prose (not live {braces}) until their producers exist:
 #
@@ -122,6 +142,10 @@ angle_finder_agent = LlmAgent(
     name="angle_finder",
     model=_MODEL,
     instruction=_INSTRUCTION,
+    # ── before_agent_callback ──────────────────────────────────────────────────
+    before_agent_callback=_bootstrap_serp_findings,
+    # ── output_key ─────────────────────────────────────────────────────────────
+    # writes its JSON to session.state['angle_brief'].
     output_key="angle_brief",
     description=(
         "M2: finds a non-commodity angle from the SERP consensus. "

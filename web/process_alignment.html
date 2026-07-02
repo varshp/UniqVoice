@@ -123,48 +123,13 @@
         .step-pending {
             color: #8B8B93;
         }
-        .pulse-ring {
-            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            50% { transform: scale(1.05); opacity: 0.3; }
-            100% { transform: scale(0.95); opacity: 0.5; }
-        }
-        .scanning-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #4113d9, transparent);
-            position: absolute;
-            width: 100%;
-            top: 0;
-            animation: scan 4s linear infinite;
-        }
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-        .node-pulse {
-            animation: node-flash 3s ease-in-out infinite;
-        }
-        @keyframes node-flash {
-            0%, 100% { fill: #4113d9; r: 3; }
-            50% { fill: #ded7ff; r: 5; }
-        }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="bg-canvas text-ink-primary font-body-md min-h-screen flex flex-col">
 <!-- TopNavBar from Shared Components -->
 <nav class="bg-surface border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
 <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
 <div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
-<div class="hidden md:flex items-center space-x-8">
-<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/">1 Voice</a>
-<a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/angle">2 Angle</a>
-<a class="text-magic-violet font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer" href="/create">3 Create</a>
-</div>
-<div class="flex items-center">
-<span class="material-symbols-outlined text-magic-violet cursor-pointer hover:opacity-80 transition-opacity">account_circle</span>
-</div>
 </div>
 </nav>
 <main class="flex-grow flex flex-col md:flex-row max-w-container-max mx-auto w-full p-margin-mobile md:p-margin-desktop gap-12">
@@ -189,45 +154,45 @@
 </div>
 </div>
 </div>
-<!-- Step 2: Complete -->
+<!-- Step 2: Active -->
 <div id="step-serp_analyst" class="flex gap-4 items-start relative z-10">
-<div class="bg-secondary rounded-full p-1">
-<span class="material-symbols-outlined text-white text-[14px]">check</span>
-</div>
-<div>
-<p class="title-text font-body-md text-ink-primary font-semibold">Reading the field</p>
-<div class="flex items-center gap-2 mt-0.5">
-  <p class="font-data-mono text-[11px] text-ink-secondary">serp_analyst</p>
-  <span class="text-ink-secondary text-[8px]">&bull;</span>
-  <p class="status-text font-data-mono text-[11px] text-on-secondary-container">Complete</p>
-</div>
-</div>
-</div>
-<!-- Step 3: Complete -->
-<div id="step-angle_finder" class="flex gap-4 items-start relative z-10">
-<div class="bg-secondary rounded-full p-1">
-<span class="material-symbols-outlined text-white text-[14px]">check</span>
-</div>
-<div>
-<p class="title-text font-body-md text-ink-primary font-semibold">Finding the gap</p>
-<div class="flex items-center gap-2 mt-0.5">
-  <p class="font-data-mono text-[11px] text-ink-secondary">angle_finder</p>
-  <span class="text-ink-secondary text-[8px]">&bull;</span>
-  <p class="status-text font-data-mono text-[11px] text-on-secondary-container">Complete</p>
-</div>
-</div>
-</div>
-<!-- Step 4: Active -->
-<div id="step-drafter" class="flex gap-4 items-start relative z-10">
 <div class="icon-container bg-primary rounded-full p-1 ring-4 ring-accent-soft">
 <span class="material-symbols-outlined text-white text-[14px] animate-spin">refresh</span>
 </div>
 <div>
-<p class="title-text font-body-md text-primary font-semibold">Drafting in your voice</p>
+<p class="title-text font-body-md text-primary font-semibold">Reading the field</p>
+<div class="flex items-center gap-2 mt-0.5">
+  <p class="font-data-mono text-[11px] text-ink-secondary">serp_analyst</p>
+  <span class="text-ink-secondary text-[8px]">&bull;</span>
+  <p class="status-text font-data-mono text-[11px] text-primary">In Progress...</p>
+</div>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div id="step-angle_finder" class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="icon-container bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px] flex items-center justify-center"></div>
+</div>
+<div>
+<p class="title-text font-body-md text-ink-faint font-semibold">Finding the gap</p>
+<div class="flex items-center gap-2 mt-0.5">
+  <p class="font-data-mono text-[11px] text-ink-secondary">angle_finder</p>
+  <span class="text-ink-secondary text-[8px]">&bull;</span>
+  <p class="status-text font-data-mono text-[11px]">Pending</p>
+</div>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div id="step-drafter" class="flex gap-4 items-start relative z-10 opacity-50">
+<div class="icon-container bg-outline-variant rounded-full p-1">
+<div class="w-[14px] h-[14px] flex items-center justify-center"></div>
+</div>
+<div>
+<p class="title-text font-body-md text-ink-faint font-semibold">Drafting in your voice</p>
 <div class="flex items-center gap-2 mt-0.5">
   <p class="font-data-mono text-[11px] text-ink-secondary">drafter</p>
   <span class="text-ink-secondary text-[8px]">&bull;</span>
-  <p class="status-text font-data-mono text-[11px] text-primary">In Progress...</p>
+  <p class="status-text font-data-mono text-[11px]">Pending</p>
 </div>
 </div>
 </div>
@@ -271,78 +236,16 @@
 </header>
 
 <!-- Detailed View (Logs) -->
-<div class="w-full max-w-2xl flex flex-col gap-2 mb-10 text-left mx-auto md:mx-0">
+<div class="w-full max-w-4xl flex flex-col gap-2 mb-4 text-left mx-auto md:mx-0 flex-grow">
 <div class="flex justify-between items-end px-1">
 <p class="font-data-mono text-[11px] text-ink-secondary font-bold uppercase tracking-wider">Detailed View</p>
 </div>
-<div class="bg-surface border border-border-subtle text-ink-primary font-data-mono text-[12px] p-4 rounded-xl overflow-y-auto h-40 flex flex-col gap-2 shadow-sm" id="live-logs">
+<div class="bg-surface border border-border-subtle text-ink-primary font-data-mono text-[12px] p-6 rounded-xl overflow-y-auto h-[450px] shadow-sm" id="live-logs">
 <div><span class="text-primary font-semibold">[System]</span> Initializing pipeline...</div>
 </div>
 </div>
 
-<!-- Visual Mapping Interface -->
-<div class="relative bg-surface border border-border-hairline rounded-xl aspect-[16/9] mb-4 overflow-hidden flex items-center justify-center">
-<!-- Decorative Grid Background -->
-<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#17171B 1px, transparent 0); background-size: 40px 40px;"></div>
-<div class="relative w-full h-full p-12 flex justify-between items-center z-10">
-<!-- Left: Draft Angle Cluster -->
-<div class="flex flex-col items-center gap-6">
-<div class="relative">
-<div class="absolute inset-0 pulse-ring bg-primary rounded-full"></div>
-<div class="w-32 h-32 border border-primary bg-primary-container/10 rounded-xl flex items-center justify-center relative z-10">
-<span class="material-symbols-outlined text-primary text-4xl">edit_note</span>
-</div>
-</div>
-<div class="text-center">
-<p class="font-label-caps text-label-caps text-primary mb-1">Source State</p>
-<p class="font-body-md font-bold text-ink-primary">Draft Angle</p>
-</div>
-</div>
-<!-- Center: The Mapping Visualizer (SVG) -->
-<div class="flex-grow h-full px-8 relative">
-<svg class="w-full h-full" fill="none" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-<!-- Animated Connection Lines -->
-<path class="opacity-30" d="M40,100 C140,20 260,180 360,100" stroke="#5a3df0" stroke-dasharray="4 4" stroke-width="1.5"></path>
-<path class="opacity-30" d="M40,100 C140,180 260,20 360,100" stroke="#5a3df0" stroke-dasharray="4 4" stroke-width="1.5"></path>
-<path class="opacity-60" d="M40,100 L360,100" id="mainPath" stroke="#5a3df0" stroke-width="2"></path>
-<!-- Moving Nodes -->
-<circle class="node-pulse" cx="120" cy="80" r="4"></circle>
-<circle class="node-pulse" cx="200" cy="120" r="4" style="animation-delay: 0.5s"></circle>
-<circle class="node-pulse" cx="280" cy="70" r="4" style="animation-delay: 1.2s"></circle>
-<!-- Scanning Interface Overlay -->
-<rect class="animate-scan-x" fill="url(#grad)" height="160" width="2" x="50" y="20">
-<animate attributeName="x" dur="4s" from="40" repeatCount="indefinite" to="360"></animate>
-</rect>
-<defs>
-<linearGradient id="grad" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="transparent"></stop>
-<stop offset="50%" stop-color="#5a3df0"></stop>
-<stop offset="100%" stop-color="transparent"></stop>
-</linearGradient>
-</defs>
-</svg>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-<div class="bg-white/80 backdrop-blur-sm border border-border-hairline px-4 py-2 rounded-full shadow-sm">
-<p class="font-data-mono text-[12px] text-primary whitespace-nowrap">Generating Content...</p>
-</div>
-</div>
-</div>
-<!-- Right: Voice Profile Cluster -->
-<div class="flex flex-col items-center gap-6">
-<div class="relative">
-<div class="absolute inset-0 pulse-ring bg-secondary rounded-full"></div>
-<div class="w-32 h-32 border border-secondary bg-secondary-container/10 rounded-full flex items-center justify-center relative z-10 overflow-hidden">
-<div class="absolute inset-0 scanning-line"></div>
-<span class="material-symbols-outlined text-secondary text-4xl">fingerprint</span>
-</div>
-</div>
-<div class="text-center">
-<p class="font-label-caps text-label-caps text-secondary mb-1">Target Persona</p>
-<p class="font-body-md font-bold text-ink-primary">Voice Profile</p>
-</div>
-</div>
-</div>
-</div>
+
 </section>
 </main>
 <footer class="mt-auto py-8 border-t border-border-hairline bg-surface/50">
@@ -404,9 +307,9 @@
         window.handleStreamEvent = (data) => {
             if (data.type === 'tool_call') {
                 if (progress < 40) progress += 2;
-                if (data.tool === 'search') {
+                if (data.tool && data.tool.includes('search')) {
                     appendLog(`[Research] Searching web for: ${data.args.query || 'topic'}`);
-                } else if (data.tool === 'fetch') {
+                } else if (data.tool && data.tool.includes('fetch')) {
                     appendLog(`[Research] Reading source: ${data.args.url}`);
                 } else {
                     appendLog(`[Tool] ${data.tool} invoked.`);

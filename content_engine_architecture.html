@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniqVoice — architecture</title>
+<style>
+  :root{
+    --ink:#1f2430; --muted:#5b6472; --line:#d7dbe2; --bg:#f7f8fa; --card:#ffffff;
+    --purple:#534ab7; --purple-bg:#eeedfe;
+    --teal:#0f6e56;   --teal-bg:#e1f5ee;
+    --blue:#185fa5;   --blue-bg:#e6f1fb;
+    --gray:#444441;   --gray-bg:#f1efe8;
+    --amber:#9a6b00;  --amber-bg:#fbf0d6;
+    --rose:#a23b6c;   --rose-bg:#fbe7f0;
+    --slate:#3a4a5a;  --slate-bg:#e9eef3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;padding:24px 16px}
+  .wrap{max-width:600px;margin:0 auto}
+  h1{font-size:20px;font-weight:600;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+  .flow{display:flex;flex-direction:column;align-items:center;gap:0}
+  .box{width:100%;max-width:360px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:11px 16px;text-align:center}
+  .box .name{font-weight:600;font-size:15px}
+  .box .key{font-size:12px;color:var(--muted);margin-top:2px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .arrow{width:2px;height:18px;background:var(--line);position:relative}
+  .arrow::after{content:"";position:absolute;left:-4px;bottom:0;border-left:5px solid transparent;
+    border-right:5px solid transparent;border-top:7px solid var(--line)}
+  .stage{width:100%;border:1.5px dashed #b7bdc8;border-radius:16px;
+    padding:14px 12px 18px;margin:6px 0;background:rgba(255,255,255,.45)}
+  .stage-label{font-size:12px;color:var(--muted);font-weight:700;margin:0 0 12px 2px;
+    letter-spacing:.03em;text-transform:uppercase}
+  .agent{border-width:1px;border-style:solid}
+  .purple{background:var(--purple-bg);border-color:var(--purple);color:#26215c}
+  .teal{background:var(--teal-bg);border-color:var(--teal);color:#04342c}
+  .rose{background:var(--rose-bg);border-color:var(--rose);color:#5e1d3d}
+  .gray{background:var(--gray-bg);border-color:#b4b2a9;color:#2c2c2a}
+  .slate{background:var(--slate-bg);border-color:var(--slate);color:#1f2c38}
+  .agent .key{color:inherit;opacity:.78}
+  .hitl{display:inline-block;font-size:11px;font-weight:600;color:#6b4b00;
+    background:var(--amber-bg);border:1px solid var(--amber);border-radius:999px;
+    padding:2px 8px;margin-top:6px}
+  .api{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:7px}
+  .api code{font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;color:var(--slate)}
+  .side{display:flex;align-items:center;gap:10px;width:100%;max-width:380px;margin:3px 0}
+  .side .pill{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid;white-space:nowrap}
+  .side .desc{font-size:12px;color:var(--muted)}
+  .feeds{font-size:12px;color:var(--muted);font-style:italic;margin:2px 0 0;text-align:center}
+  .legend{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+  .legend h2{font-size:14px;font-weight:600;margin:0 0 10px}
+  .legend ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  .legend li{display:flex;align-items:flex-start;gap:10px;font-size:13px}
+  .swatch{width:14px;height:14px;border-radius:4px;flex:none;margin-top:2px;border:1px solid rgba(0,0,0,.15)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>UniqVoice — architecture</h1>
+  <p class="sub">A sequential multi-agent pipeline on Google ADK, wrapped in a FastAPI web app. Onboarding runs once to learn the user's voice; the pipeline runs per article. Each agent writes one key to shared <code>session.state</code>; the final agent only reads, to compile the run report.</p>
+
+  <!-- WEB APP LAYER -->
+  <div class="stage">
+    <div class="stage-label">Web app &middot; FastAPI (server.py)</div>
+    <div class="flow">
+      <div class="box slate"><div class="name">Browser UI &mdash; Voice &middot; Angle &middot; Create</div><div class="key">static screens served from web/</div>
+        <div class="api"><code>/api/voice-upload</code><code>/api/scout</code><code>/api/resume</code></div>
+      </div>
+    </div>
+    <p class="feeds" style="margin-top:10px">the app calls the agents below &middot; HITL angle gate split across <code>/scout</code> &rarr; <code>/resume</code> &middot; pipeline streamed live (NDJSON)</p>
+  </div>
+
+  <div class="arrow" style="margin:0 auto"></div>
+
+  <!-- ONBOARDING -->
+  <div class="stage">
+    <div class="stage-label">Onboarding &middot; runs once</div>
+    <div class="flow">
+      <div class="box gray"><div class="name">Your voice (~1-min clip)</div><div class="key">recorded or uploaded &middot; no script</div></div>
+      <div class="arrow"></div>
+      <div class="box agent purple"><div class="name">voice_profile_builder</div><div class="key">multimodal Gemini &middot; reads audio natively</div><div class="key">&rarr; {voice_profile} {tone_notes}</div></div>
+      <div class="arrow"></div>
+      <div class="box gray"><div class="name">profile store</div><div class="key">voice_profile.json &middot; persisted</div></div>
+    </div>
+  </div>
+  <p class="feeds">&darr; voice profile feeds the drafter on every run</p>
+
+  <!-- PIPELINE -->
+  <div class="stage">
+    <div class="stage-label">Content pipeline &middot; per article &middot; SequentialAgent</div>
+    <div class="flow">
+      <div class="box gray"><div class="name">Your topic</div><div class="key">&rarr; {explicit_topic_request} (the subject)</div></div>
+      <div class="arrow"></div>
+      <div class="box agent purple"><div class="name">trend_scout</div><div class="key">search MCP &middot; proposes 2&ndash;3 angles</div><div class="key">subject-anchored &rarr; {topic}</div><span class="hitl">gate 1 &middot; you pick the angle</span></div>
+      <div class="arrow"></div>
+      <div class="box agent purple"><div class="name">serp_analyst</div><div class="key">search + fetch MCP &middot; reads the field</div><div class="key">&rarr; {serp_findings} + common_claims</div></div>
+      <div class="arrow"></div>
+      <div class="box agent purple"><div class="name">angle_finder</div><div class="key">finds the gap past the consensus</div><div class="key">&rarr; {angle_brief} (angle + why_new)</div></div>
+      <div class="arrow"></div>
+      <div class="box agent purple"><div class="name">drafter</div><div class="key">reads {angle_brief} + {voice_profile}</div><div class="key">&rarr; {draft} (in your voice)</div></div>
+      <div class="arrow"></div>
+      <div class="box agent teal"><div class="name">editor_guard</div><div class="key">slop-clean + final PII strip</div><div class="key">&rarr; {final_article} + {policy_notes}</div><span class="hitl">gate 2 &middot; you approve before publish</span></div>
+      <div class="arrow"></div>
+      <div class="box agent rose"><div class="name">report_builder</div><div class="key">reads state only &middot; pure-Python</div><div class="key">&rarr; {run_report} (take &middot; governance &middot; ROI)</div></div>
+    </div>
+
+    <div style="height:8px"></div>
+    <div class="side">
+      <span class="pill" style="background:var(--blue-bg);border-color:var(--blue);color:#042c53">mcp tools</span>
+      <span class="desc">search &middot; fetch &mdash; used by trend_scout &amp; serp_analyst</span>
+    </div>
+    <div class="side">
+      <span class="pill" style="background:var(--teal-bg);border-color:var(--teal);color:#04342c">policy guard</span>
+      <span class="desc">semantic ToU/PII check on every fetch + hard fetch cap (no loops); logged to policy_notes</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <h2>Colour key &mdash; and the course concept each part proves</h2>
+    <ul>
+      <li><span class="swatch" style="background:var(--slate-bg);border-color:var(--slate)"></span><span><b>Web app</b> &mdash; FastAPI wrapper + browser UI; live-streams the pipeline</span></li>
+      <li><span class="swatch" style="background:var(--purple-bg);border-color:var(--purple)"></span><span><b>Agents</b> &mdash; multi-agent system (ADK): 6 pipeline agents + 1 onboarding agent</span></li>
+      <li><span class="swatch" style="background:var(--teal-bg);border-color:var(--teal)"></span><span><b>Governance</b> &mdash; security: semantic guard + fetch cap + output PII strip</span></li>
+      <li><span class="swatch" style="background:var(--blue-bg);border-color:var(--blue)"></span><span><b>Tools</b> &mdash; MCP servers (search, fetch)</span></li>
+      <li><span class="swatch" style="background:var(--amber-bg);border-color:var(--amber)"></span><span><b>Human-in-the-loop</b> &mdash; two approval gates (pick the angle &middot; approve the final)</span></li>
+      <li><span class="swatch" style="background:var(--rose-bg);border-color:var(--rose)"></span><span><b>Run report</b> &mdash; per-run accountability: the take, governance trail, voice match, cost/time ROI</span></li>
+    </ul>
+    <p class="sub" style="margin:14px 0 0;font-size:12px">Run the web app: <code>uv run uvicorn server:app --reload --port 8001</code>. Evaluated by an ADK-native suite (<code>pytest</code> + <code>InMemoryRunner</code>), 6 cases passing. Architected for <code>agents-cli deploy</code> to Agent Engine; not deployed for judging.</p>
+  </div>
+</div>
+</body>
+</html>

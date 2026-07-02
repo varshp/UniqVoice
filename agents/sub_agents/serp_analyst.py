@@ -113,6 +113,11 @@ if os.path.exists(_config_path):
 _MODEL = os.getenv("SERP_ANALYST_MODEL", "gemini-2.5-flash")
 
 
+def _append_warning(state: dict, msg: str) -> None:
+    current = state.get("policy_notes", "")
+    prefix = "\n" if current else ""
+    state["policy_notes"] = current + f"{prefix}- [System Warning] {msg}"
+
 # ── M1 Topic Bootstrap Callback ───────────────────────────────────────────────
 def _bootstrap_topic(callback_context: CallbackContext) -> Optional[types.Content]:
     """
@@ -202,6 +207,10 @@ def _bootstrap_topic(callback_context: CallbackContext) -> Optional[types.Conten
     # callback_context.state is the writable State object; ADK merges this into
     # session.state automatically via the event delta mechanism.
     callback_context.state["topic"] = topic
+
+    if not callback_context.state.get("explicit_topic_request"):
+        callback_context.state["explicit_topic_request"] = "Fallback primary subject"
+        _append_warning(callback_context.state, "explicit_topic_request missing; used fallback in serp_analyst.")
 
     logger.info(
         "[serp_analyst] Bootstrap: wrote state['topic'] = %r from user message.",

@@ -105,6 +105,11 @@ async def _bootstrap_topic_seeds(callback_context: CallbackContext) -> None:
         callback_context.state["topic_seeds"] = seeds
         logger.info("[trend_scout] Bootstrapped default topic_seeds: %s", seeds)
 
+def _append_warning(state: dict, msg: str) -> None:
+    current = state.get("policy_notes", "")
+    prefix = "\n" if current else ""
+    state["policy_notes"] = current + f"{prefix}- [System Warning] {msg}"
+
 async def _unpack_scout_response(callback_context: CallbackContext) -> Optional[types.Content]:
     """
     after_agent_callback: Unpacks the JSON response into 'topic_candidates' 
@@ -125,13 +130,21 @@ async def _unpack_scout_response(callback_context: CallbackContext) -> Optional[
             
         data = json.loads(raw.strip())
         
-        callback_context.state["topic_candidates"] = data.get("topic_candidates", [])
-        callback_context.state["topic"] = data.get("topic", "")
+        candidates = data.get("topic_candidates", [])
+        callback_context.state["topic_candidates"] = candidates
+        
+        topic = data.get("topic", "")
+        if not topic and candidates:
+            topic = candidates[0].get("title", "Fallback topic")
+            _append_warning(callback_context.state, "trend_scout returned empty topic; used first candidate as fallback.")
+            
+        callback_context.state["topic"] = topic
         
     except Exception as e:
         logger.error("[trend_scout] Failed to parse JSON: %s. Raw: %s", e, raw)
         # Fallback to the raw text
-        callback_context.state["topic"] = raw
+        callback_context.state["topic"] = raw[:100]
+        _append_warning(callback_context.state, f"trend_scout JSON parsing failed; used raw output as fallback topic.")
         
     return None
 

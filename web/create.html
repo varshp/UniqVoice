@@ -167,14 +167,6 @@
     <nav class="bg-surface border-b border-border-subtle w-full h-20 flex items-center sticky top-0 z-50">
         <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
             <div class="font-headline-md text-headline-md text-ink-primary font-bold tracking-tight cursor-pointer" onclick="window.location.href='/'">UniqVoice</div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/">1 Voice</a>
-                <a class="text-ink-secondary font-body-md text-body-md hover:text-ink-primary transition-colors cursor-pointer" href="/angle">2 Angle</a>
-                <a class="text-magic-violet font-bold border-b-2 border-magic-violet pb-1 font-body-md text-body-md transition-colors cursor-pointer" href="/create">3 Create</a>
-            </div>
-            <div class="flex items-center">
-                <span class="material-symbols-outlined text-magic-violet cursor-pointer hover:opacity-80 transition-opacity">account_circle</span>
-            </div>
         </div>
     </nav>
     <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative">
@@ -311,6 +303,17 @@
                     <li>Loading...</li>
                 </ul>
             </div>
+
+            <!-- Policy Notes Section -->
+            <div class="mt-16 pt-8 border-t border-border-hairline">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="material-symbols-outlined text-orange-500">gavel</span>
+                    <h3 class="font-headline-md text-headline-md text-ink-primary">System & Policy Logs</h3>
+                </div>
+                <ul id="policy-notes-list" class="space-y-2 font-data-mono text-[13px] text-ink-secondary bg-surface-container/30 p-4 rounded-lg border border-border-hairline overflow-x-auto whitespace-pre-wrap">
+                    <li>No logs available.</li>
+                </ul>
+            </div>
             <!-- Fade Effect at bottom of main content if it were longer -->
             <!-- <div class="absolute bottom-0 left-0 right-0 h-32 editorial-gradient rounded-b-xl pointer-events-none"></div> -->
         </article>
@@ -400,14 +403,15 @@
                 }
                 
                 // Parse strings if they are JSON
-                let serp = data.serp_findings;
-                if (typeof serp === 'string') {
-                    try { serp = JSON.parse(serp.replace(/^```json\n|```$/g, '')); } catch(e) {}
-                }
-                let angle = data.angle_brief;
-                if (typeof angle === 'string') {
-                    try { angle = JSON.parse(angle.replace(/^```json\n|```$/g, '')); } catch(e) {}
-                }
+                const extractJSON = (str) => {
+                    if (typeof str !== 'string') return str;
+                    let match = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+                    let jsonStr = match ? match[1] : str;
+                    try { return JSON.parse(jsonStr); } catch(e) { console.error("JSON parse failed", e); return str; }
+                };
+                
+                let serp = extractJSON(data.serp_findings);
+                let angle = extractJSON(data.angle_brief);
                 
                 // Generic Traps
                 const trapsList = document.getElementById('generic-traps');
@@ -478,6 +482,38 @@
                     ).join('');
                 } else {
                     sourcesList.innerHTML = "<li class='text-sm italic opacity-50'>No specific sources were cited or fetched for this run.</li>";
+                }
+                
+                // Policy Notes
+                const policyList = document.getElementById('policy-notes-list');
+                if (data.policy_notes && data.policy_notes.trim() !== '') {
+                    // policy_notes is a string of newline-separated markdown list items
+                    // We'll just split by newline and render each as a div
+                    const notes = data.policy_notes.split('\n').filter(n => n.trim() !== '');
+                    policyList.innerHTML = notes.map(note => {
+                        let icon = "info";
+                        let colorClass = "text-ink-secondary";
+                        let bgClass = "";
+                        
+                        if (note.includes('[System Warning]')) {
+                            icon = "warning";
+                            colorClass = "text-error font-bold";
+                            bgClass = "bg-error/10";
+                        } else if (note.includes('blocked')) {
+                            icon = "block";
+                            colorClass = "text-orange-500";
+                        } else if (note.includes('fetched (ok)')) {
+                            icon = "check_circle";
+                            colorClass = "text-secondary";
+                        }
+                        
+                        return `<li class="flex items-start gap-2 p-1 rounded ${bgClass}">
+                            <span class="material-symbols-outlined text-[16px] ${colorClass} mt-0.5">${icon}</span>
+                            <span class="${colorClass}">${note.replace(/^- /, '')}</span>
+                        </li>`;
+                    }).join('');
+                } else {
+                    policyList.innerHTML = "<li>No policy actions recorded.</li>";
                 }
                 
                 // Content

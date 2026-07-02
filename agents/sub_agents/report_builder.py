@@ -69,7 +69,14 @@ class ReportBuilderAgent(BaseAgent):
             logger.error(f"[report_builder] Failed to parse serp_findings JSON: {e}")
             serp_findings = {"sources": []}
 
-        policy_notes = ctx.session.state.get("policy_notes", "No policy actions recorded.")
+        from agents.callbacks.policy import _run_notes
+        
+        # Read directly from memory to avoid ADK state merge race conditions
+        notes_list = _run_notes.get(str(ctx.session.id), [])
+        policy_notes = "\n".join(f"- {n}" for n in notes_list) if notes_list else "No policy notes available."
+        
+        # Save it into the state delta so the UI can read it
+        ctx.session.state["policy_notes"] = policy_notes
         voice_profile = ctx.session.state.get("voice_profile", {})
 
         # 3. Calculate Wall-clock Time & Token Usage

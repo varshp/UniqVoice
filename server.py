@@ -158,16 +158,16 @@ async def resume(req: ResumeRequest):
                         completed_agents.add("report_builder")
                         yield json.dumps({"type": "agent_complete", "agent": "report_builder"}) + "\n"
 
-                    policy_notes = delta.get("policy_notes", "")
-                    if policy_notes and len(policy_notes) > last_policy_notes_len:
-                        new_notes = policy_notes[last_policy_notes_len:].strip()
-                        for line in new_notes.split('\n'):
-                            if line.strip():
+                    from agents.callbacks.policy import _run_notes
+                    notes = _run_notes.get(req.run_id, [])
+                    if len(notes) > last_policy_notes_len:
+                        for note in notes[last_policy_notes_len:]:
+                            if note.strip():
                                 yield json.dumps({
                                     "type": "text",
-                                    "text": f"Log: {line.strip()}"
+                                    "text": f"Log: {note.strip()}"
                                 }) + "\n"
-                        last_policy_notes_len = len(policy_notes)
+                        last_policy_notes_len = len(notes)
 
                 output = getattr(event, "output", None)
                 if output and hasattr(output, "parts"):
