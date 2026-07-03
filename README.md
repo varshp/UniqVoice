@@ -85,7 +85,7 @@ factual accuracy is checked. The natural next step (see roadmap) is passing *sou
 into the brief, which would add grounding without sacrificing the drafter's style-independence.
 
 ### Architecture diagram
-See [`content_engine_architecture.html`](content_engine_architecture.html) for the full diagram
+See [`UniqVoice_Architecture.png`](UniqVoice_Architecture.png) for the full diagram
 (onboarding flow, the six-agent pipeline, MCP tools, the policy guard, and the two HITL gates).
 
 ---
@@ -178,7 +178,7 @@ The policy layer **evolved during the build**, and the final design is general-p
 
 ### 1. Install
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/varshp/UniqVoice.git
 cd UniqVoice
 uv sync            # or: pip install -r requirements.txt
 ```
@@ -223,7 +223,7 @@ real agent including its MCP tools). Run it with:
 uv run pytest tests/
 ```
 
-Six cases pass. The suite mixes **deterministic assertions** (for structured logic) with
+The full suite passes — 10 tests, including the six core eval cases below and the integration tests. The suite mixes **deterministic assertions** (for structured logic) with
 **LLM-as-a-judge** checks (for subjective generative output that a keyword or regex test couldn't
 fairly evaluate), and includes two **regression tests** for bugs found and fixed during the build:
 
