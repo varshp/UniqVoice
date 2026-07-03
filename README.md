@@ -1,195 +1,301 @@
-# UniqVoice — a voice-aware content engine
+# UniqVoice
 
-> A Google ADK multi-agent system that learns your writing voice and produces
-> on-brand, on-trend articles — with human-in-the-loop approval at every key decision.
+**A voice-aware content engine that finds the angle nobody else is taking, writes it in your own voice, and proves what the run cost.**
 
----
-
-## Problem
-
-Most AI-generated marketing content is commodity content: everyone prompts the same
-models with the same inputs and gets the same output. Separately, many AI marketing
-initiatives struggle to show measurable ROI, because they automate *volume* instead of *judgment*.
-
-## Solution
-
-This engine automates the tedious 80% of content production (research, gap-finding,
-drafting, compliance) while keeping the human in charge of the 20% that matters
-(which angle, final approval) — and it writes in the user's *own voice*, learned
-from a one-minute audio clip.
+Built on Google's Agent Development Kit (ADK) as a sequential multi-agent pipeline.
+Capstone · *Agents for Business* track · 5-Day AI Agents Intensive (Vibe Coding) with Google.
 
 ---
 
-## Architecture
+## The problem
 
-```
-┌─────────────────────── Onboarding (run once) ──────────────────────────┐
-│  Audio clip (+ optional answers) → voice_profile_builder → voice_profile.json │
-└─────────────────────────────────────────────────────────────────────────┘
+AI made content infinite — and identical. Everyone prompts the same models, so everyone
+publishes the same take in the same flat voice. In a world where AI answer engines summarize
+the web, *sounding like everyone else doesn't just make you boring — it makes you invisible.*
 
-┌─────────────────── Content Pipeline (SequentialAgent) ─────────────────┐
-│                                                                         │
-│  trend_scout ──► [HUMAN picks topic] ──► serp_analyst                  │
-│                                               │                         │
-│                                          angle_finder                   │
-│                                               │                         │
-│                                            drafter                      │
-│                                               │                         │
-│                                         editor_guard ──► report_builder │
-│                                               │                         │
-│                                        final_article.md                 │
-└─────────────────────────────────────────────────────────────────────────┘
+For a business, that's a real cost. Content is a budget line measured in agency retainers and
+team hours; undifferentiated content doesn't rank, doesn't get cited, and doesn't convert; and
+off-brand or non-compliant content is a liability. The two hardest parts of the job are exactly
+the parts generic AI tools skip:
 
-Tools: search MCP (tavily-mcp) · fetch MCP (mcp-server-fetch)
-Guard: policy callback (allowlist + semantic ToU/PII check) on every fetch
-```
+1. **Finding an angle nobody else has taken** — most tools rewrite the consensus, adding to the slop.
+2. **Keeping it authentically in *your* voice** — most tools give you the average take in a generic voice.
 
-*(See `specs/SPEC.md` Section 5 and `content_engine_architecture.html` for the full diagram.)*
+UniqVoice is built to do both, with a human in control of the decisions that matter and an
+auditable record of what every run cost and where its facts came from.
 
----
+## Why agents (not one prompt)
 
-## Live Web App
-
-The project includes a FastAPI web application (`server.py`) that wraps the ADK
-agent pipeline in a browser-based UI. The app is branded **UniqVoice** and provides
-a three-step guided workflow:
-
-### User Flow
-
-| Step | Page | What happens |
-|------|------|--------------|
-| **1 · Voice** | `/` → `/voice-loading` → `/tone-captured` | User uploads an audio clip. The `voice_profile_builder` processes it and generates `profile/voice_profile.json`. The tone-captured page displays the resulting linguistic analysis (tone, rhythm, signature moves, negative constraints). |
-| **2 · Angle** | `/angle` | User enters a topic. The frontend calls `/api/scout`, which runs `trend_scout` and returns topic candidates. The user picks one. The frontend then calls `/api/resume`, which streams the remaining pipeline (`serp_analyst → angle_finder → drafter → editor_guard → report_builder`) via NDJSON. A real-time sidebar shows agent progression, and a detailed log streams research/policy activity. |
-| **3 · Create** | `/create` | Displays the finished output: the generated article, SERP common claims vs. the unique angle chosen, an ROI panel (production cost and time vs. a stated human baseline), and sources/references. The user can copy the article markdown to clipboard or download it as a `.md` file. |
-
-### Running the Web App
-
-```bash
-# 1. Make sure .env is configured (see "Configure secrets" below)
-# 2. Start the server
-uv run uvicorn server:app --reload --port 8001
-
-# 3. Open in browser
-open http://127.0.0.1:8001
-```
-
-The `--reload` flag watches for file changes and auto-restarts. On first launch,
-the MCP servers (`tavily-mcp` and `mcp-server-fetch`) are started automatically
-via `config/mcp_servers.yaml`. You should see two `✅ MCP handshake successful`
-lines in the terminal confirming they connected.
-
-### API Endpoints
-
-| Method | Path | Request Body | What it does |
-|--------|------|-------------|--------------|
-| `POST` | `/api/voice-upload` | `multipart/form-data` with `audio` file | Runs `voice_profile_builder` on the uploaded audio clip. Returns the generated voice profile JSON, or an error. |
-| `POST` | `/api/scout` | `{ "topic": "..." }` | Kicks off the pipeline. Runs `trend_scout`, which calls the `request_input` function to present topic candidates. Returns `{ run_id, topic_candidates, topic }`. The `run_id` is needed to resume the pipeline. |
-| `POST` | `/api/resume` | `{ "run_id": "...", "chosen_index": 0 }` | Resumes the pipeline after the user picks a topic candidate. Returns a **streaming NDJSON response** with events: `tool_call` (search/fetch activity), `text` (policy log lines), `agent_complete` (sidebar progression), and a final `complete` object containing all session state (`final_article`, `serp_findings`, `angle_brief`, `run_report`, `cost_metrics`, etc.). |
-| `POST` | `/api/run` | `{ "topic": "..." }` | Runs the entire pipeline without human-in-the-loop — auto-selects the first topic candidate. Returns the full session state as JSON. Used by the Create page when loading from `localStorage` isn't possible. |
-
-### Page Routes
-
-| Path | File served |
-|------|-------------|
-| `/` | `web/index.html` — Voice upload / onboarding |
-| `/voice-loading` | `web/voice_loading.html` — Processing animation |
-| `/tone-captured` | `web/tone_captured.html` — Voice profile results |
-| `/angle` | `web/angle.html` — Topic scouting + candidate selection |
-| `/process-alignment` | `web/process_alignment.html` — Real-time pipeline execution view (loaded as an overlay by `/angle`) |
-| `/create` | `web/create.html` — Final article + ROI report |
-
-Static assets (CSS, images) are served from `web/static/`.
+This is genuinely multi-step work, and each step needs a different skill and a different tool:
+scout a topic, research what already ranks, reason about the gap, write in a learned voice,
+enforce governance, and report the run. A single prompt would have to do all of it at once —
+which is exactly where quality collapses. UniqVoice splits the job into **specialised agents that
+pass a shared state "baton" down a chain**, so each step stays sharp, debuggable, and individually
+testable (ADK's "reduction of search space" — fewer tools per agent, fewer wrong moves).
 
 ---
 
-## Quick Start (CLI only)
+## How it works
 
-If you want to use the ADK CLI playground instead of the web app:
+### Onboarding (runs once) — learn the voice
+You record a ~1-minute clip in your normal speaking voice. `voice_profile_builder` feeds the
+**raw audio directly** to a multimodal Gemini model (no transcription step — a transcript would
+throw away rhythm, emphasis, and cadence, which are exactly what define a voice) and extracts a
+persistent `voice_profile`: tone, sentence rhythm, rhetorical moves, and an explicit *avoid-list*.
+The profile is saved once and applied to every future run.
+
+### Pipeline (per article) — a `SequentialAgent` of six sub-agents
+`trend_scout → serp_analyst → angle_finder → drafter → editor_guard → report_builder`
+
+| Agent | Does | Writes to state |
+|---|---|---|
+| `trend_scout` | Proposes 2–3 candidate angles on your subject (search via MCP). **You pick one.** | `topic_candidates`, `topic` |
+| `serp_analyst` | Reads the top-ranking pages, extracts the consensus "commodity" take (search + fetch via MCP). | `serp_findings` (sources + `common_claims`) |
+| `angle_finder` | Finds the gap — an angle that reframes or contradicts the consensus. | `angle_brief` (`angle`, `why_new`, outline) |
+| `drafter` | Writes the article to the brief **in your voice** (uses `voice_profile`). | `draft` |
+| `editor_guard` | Slop-cleans and strips PII; logs every action. | `final_article`, `policy_notes` |
+| `report_builder` | Assembles the Content Run Report (reads state only). | `run_report` |
+
+Each agent reads only the keys it needs and writes exactly one via `output_key`. Two
+**human-in-the-loop gates** keep the user in control: *pick the angle*, and *approve the final
+article before any publish*.
+
+#### State flow (the baton)
+
+The agents pass work through shared `session.state`. The full read/write picture:
+
+| Agent | Reads | Writes |
+|---|---|---|
+| `trend_scout` | `explicit_topic_request`, `topic_seeds` | `topic_candidates`, `topic` |
+| `serp_analyst` | `topic` | `serp_findings` (sources + `common_claims`) |
+| `angle_finder` | `serp_findings`, `explicit_topic_request` | `angle_brief` (`angle`, `why_new`, outline) |
+| `drafter` | `angle_brief`, `voice_profile`, `tone_notes`, `explicit_topic_request` — **not `serp_findings`** | `draft` |
+| `editor_guard` | `draft` | `final_article`, `policy_notes` |
+| `report_builder` | (all, read-only) | `run_report` |
+
+**A deliberate design choice — the drafter is isolated from the source text.** It reads the
+*differentiated brief* and your *voice profile*, but **never** the raw `serp_findings`. This physical
+separation stops the drafter from absorbing the generic style of the top-ranking articles or echoing
+the commodity consensus — it's forced to write from your voice and the unique angle alone.
+
+The trade-off (named honestly): because the drafter doesn't see the source text, the draft's specific
+facts aren't directly grounded in the fetched sources. That's why UniqVoice surfaces its sources
+transparently in the run report and gates every article behind human approval — the human is where
+factual accuracy is checked. The natural next step (see roadmap) is passing *source-attributed facts*
+into the brief, which would add grounding without sacrificing the drafter's style-independence.
+
+### Architecture diagram
+See [`content_engine_architecture.html`](content_engine_architecture.html) for the full diagram
+(onboarding flow, the six-agent pipeline, MCP tools, the policy guard, and the two HITL gates).
+
+---
+
+## Course concepts demonstrated
+
+The capstone requires **at least three**. UniqVoice demonstrates four solidly, plus extras:
+
+| Concept | Where it lives |
+|---|---|
+| **Multi-agent system (ADK)** | `SequentialAgent` orchestrator + 6 pipeline sub-agents + 1 onboarding agent |
+| **MCP servers** | Tavily `search` + `mcp-server-fetch`, wired as agent tools via `MCPToolset` |
+| **Security features** | semantic ToU/PII guard + hard fetch cap + output PII strip + 2 HITL gates |
+| **Agent skills / Agents CLI + eval** | `agents-cli` setup & playground; an ADK-native eval suite (`pytest` + `InMemoryRunner`) |
+| *Antigravity* | the project was built in Antigravity |
+| *Multimodal voice onboarding* | `voice_profile_builder` learns voice from raw audio |
+| *Business ROI artifact* | the Content Run Report's cost/time panel |
+
+---
+
+## The Content Run Report — accountability, on every run
+
+Every run ends with a one-page report (`outputs/run_report_<timestamp>.md`) that turns "AI that
+writes" into "an accountable, governed, costed content run":
+
+1. **The take** — the chosen angle and *why it's non-commodity* (not the consensus).
+2. **Sources & governance** — the sources used, plus the full `policy_notes` trail: what was
+   fetched, what was blocked (ToU/PII), and whether the fetch cap was hit.
+3. **Voice match** — confirmation the draft was written against the loaded voice profile.
+4. **ROI panel** — estimated model cost and wall-clock time for the run vs a configurable human
+   baseline (e.g. `~$0.10 / ~1m 41s` vs `~$300 / 1 day` for an agency draft). Costs are computed
+   from real token usage where available and clearly labelled as estimates otherwise.
+
+---
+
+## Security & governance
+
+The policy layer **evolved during the build**, and the final design is general-purpose:
+
+- **Started** as a strict domain *allowlist gate* — but that starved non-marketing topics (a
+  finance query returned finance sources not on a marketing allowlist, blocking everything and
+  causing a retry loop).
+- **Redesigned** into a **semantic-first guard**: domains are allowed by default except a small
+  `blocklist.yaml`; a semantic Gemini check on every fetched page enforces **terms-of-use and PII**;
+  a **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop;
+  and `editor_guard` does a final PII strip on the article. The original allowlist is kept as a
+  *soft ranking preference*, not a hard gate.
+- Every decision is written to `policy_notes`, which doubles as a human-readable **audit trail**.
+
+🚨 **No API keys or secrets are committed.** All credentials are read via `os.getenv()`;
+`.env.example` lists key *names* only; `.env`, `profile/`, and audio files are gitignored.
+
+---
+
+## Tech stack
+
+- **Google ADK** — `SequentialAgent`, `LlmAgent`, callbacks, `InMemoryRunner`
+- **agents-cli** — project setup, local playground
+- **MCP** — `tavily-mcp` (search) + `mcp-server-fetch` (fetch) via `MCPToolset`
+- **Gemini 3.x** — Flash-tier models per agent (see "Model assignments" below)
+- **Antigravity** — the build environment
+- **pytest** — the ADK-native evaluation suite
+
+### Model assignments
+
+| Agent | Model |
+|---|---|
+| `voice_profile_builder` | `gemini-3.5-flash` (multimodal audio) |
+| `trend_scout` | `gemini-3.1-flash-lite` |
+| `serp_analyst` | `gemini-3-flash` |
+| `angle_finder` / `drafter` / `editor_guard` | `gemini-3.5-flash` |
+| `report_builder` | none (pure-Python `BaseAgent`) |
+| policy semantic check | `gemini-3.5-flash` / `flash-lite` |
+
+> All active agents run on Flash tiers — a deliberate cost choice that is also the project's own
+> thesis (proving AI ROI). `gemini-3.1-pro` is paid-only; `gemini-3.5-flash` outperforms it on
+> these agent tasks.
+
+---
+
+## Setup & running locally
+
+> Live deployment is **not required for judging**; this project runs locally via the steps below.
+> It is architected to deploy to Agent Engine via `agents-cli deploy` (a `Dockerfile` is included).
 
 ### Prerequisites
-
 - Python ≥ 3.11
-- Node.js ≥ 18 (for `npx tavily-mcp`)
-- [`uv`](https://docs.astral.sh/uv/) installed (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
+- [`uv`](https://github.com/astral-sh/uv) (or `pip`)
+- `npx` (for the Tavily MCP server) and `uvx` (for the fetch MCP server)
+- A **Gemini API key** (Google AI Studio) and a free **Tavily API key**
 
-### 1 · Clone and install
-
+### 1. Install
 ```bash
-git clone <repo-url>
-cd UniqVoice
-pip install -r requirements.txt
-uvx google-agents-cli setup   # one-time ADK CLI setup
+git clone <your-repo-url>
+cd uniqvoice
+uv sync            # or: pip install -r requirements.txt
 ```
 
-### 2 · Configure secrets
-
+### 2. Configure secrets
+Copy the example file and fill in your keys (names only shown here — never commit real values):
 ```bash
 cp .env.example .env
-# Edit .env and fill in:
-#   GOOGLE_API_KEY   — https://aistudio.google.com/app/apikey
-#   TAVILY_API_KEY   — https://tavily.com  (free tier)
+```
+```
+# .env
+GOOGLE_API_KEY=your-gemini-key
+GEMINI_API_KEY=your-gemini-key   # same value; both are read
+TAVILY_API_KEY=your-tavily-key
 ```
 
-### 3 · Run the dev UI
+### 3. Onboard your voice (once)
+Record a ~1-minute clip (talk naturally about what you write) and run:
+```bash
+uv run python scripts/run_onboarding.py myvoice.m4a
+```
+This creates `profile/voice_profile.json` (gitignored).
 
+### 4. Run the pipeline
 ```bash
 agents-cli playground
+# open http://127.0.0.1:8080/dev-ui/?app=agents
 ```
+Type a topic, pick an angle at the gate, and watch the pipeline produce a final article plus a
+run report in `outputs/`.
 
-Open the URL shown in the terminal. Use the **State tab** to inspect session state
-after each agent step.
+> **Note:** `.env` is read at server launch — restart the playground after editing it.
 
 ---
 
-## Eval suite
+## Evaluation
+
+UniqVoice ships with an **ADK-native eval suite** (`pytest` + ADK `InMemoryRunner`, which runs the
+real agent including its MCP tools). Run it with:
 
 ```bash
 uv run pytest tests/
 ```
 
-The suite was originally authored for `agents-cli eval`, but the Vertex-backed eval
-SDK can't introspect ADK `MCPToolset` objects, so it runs on an ADK-native
-`InMemoryRunner` harness instead.
+Six cases pass. The suite mixes **deterministic assertions** (for structured logic) with
+**LLM-as-a-judge** checks (for subjective generative output that a keyword or regex test couldn't
+fairly evaluate), and includes two **regression tests** for bugs found and fixed during the build:
 
-Six eval cases pass, including two regression tests for bugs found and fixed during the build:
-- `serp_reads_top_pages` — SERP analyst reads ≥ 2 sources and extracts `common_claims`
-- `guard_strips_pii` — editor guard removes an email and logs it to `policy_notes`
-- `angle_is_non_commodity` — angle finder contradicts / extends `common_claims`
-- `subject_anchored` (regression) — an explicit subject survives candidate selection through the final article
-- `security_blocks_no_loop` (regression) — fetch cap respected, run completes without looping, blocks logged
-- `voice_applied` — the draft honours the loaded voice profile
+1. **`serp_reads_top_pages`** — parses the `serp_analyst` output and asserts it extracted ≥2 real sources and synthesised a non-empty `common_claims` array (the commodity consensus to differentiate against). *Deterministic.*
+2. **`angle_is_non_commodity`** — passes the generated `angle_brief` to an independent Gemini judge instance that returns PASS/FAIL on whether the angle meaningfully reframes or contradicts the consensus (rather than restating it), whether `why_new` explains the differentiation, and whether the outline has ≥4 beats. *LLM-as-a-judge.*
+3. **`voice_applied`** — injects a stylised voice profile (e.g. narrative open, revelation-style close) and uses a Gemini judge to verify the final draft actually executes those rhetorical moves — the kind of subjective check a keyword test can't do reliably. *LLM-as-a-judge.*
+4. **`guard_strips_pii`** — injects raw emails/phone numbers into a draft and asserts `editor_guard` removes them *and* logs the action to the `policy_notes` audit trail. *Deterministic.*
+5. **`security_blocks_no_loop`** *(regression)* — built after a live bug: proves that against a run of blocked pages, the code-enforced fetch cap fires and the pipeline completes instead of looping. *Deterministic.*
+6. **`subject_anchored`** *(regression)* — ensures an explicit subject (e.g. "SpaceX") survives the human-in-the-loop transition and anchors the whole downstream pipeline through to a completed run report. *Deterministic.*
 
----
+Using an LLM judge to grade subjective outputs (voice adoption, contrarian angle) instead of brittle
+keyword checks is a deliberate choice for testing generative systems, where the "correct" answer
+isn't a fixed string.
 
-## Deployment
-
-```bash
-agents-cli deploy   # architected for Agent Engine; not deployed for judging
-```
-
-<!-- TODO (M7): add the deployed endpoint URL and any environment variables
-     required on the Agent Engine side. -->
+> The suite was originally authored for `agents-cli eval`, but the Vertex-backed eval SDK can't
+> introspect ADK `MCPToolset` objects, so it was moved to an ADK-native `InMemoryRunner` harness —
+> a real tooling-fit decision documented in `PROGRESS.md`.
 
 ---
 
 ## Repository structure
 
-See `AGENTS.md` for the full annotated tree and coding conventions.
+```
+uniqvoice/
+├── agents/
+│   ├── orchestrator.py            # SequentialAgent + before_agent_callback (loads voice profile)
+│   ├── sub_agents/                # trend_scout, serp_analyst, angle_finder, drafter, editor_guard, report_builder
+│   ├── onboarding/                # voice_profile_builder (multimodal audio → voice_profile)
+│   └── callbacks/                 # policy.py — the semantic security guard
+├── config/                        # allowlist.yaml, blocklist.yaml, cost.yaml, mcp_servers.yaml
+├── profile/                       # voice_profile.json (gitignored)
+├── outputs/                       # generated run reports
+├── scripts/run_onboarding.py      # one-time voice onboarding CLI
+├── specs/SPEC.md                  # the build spec (source of truth)
+├── tests/                         # ADK-native eval suite
+├── content_engine_architecture.html
+├── PROGRESS.md                    # build journey + design decisions
+├── .env.example                   # key names only
+├── Dockerfile
+└── requirements.txt
+```
 
 ---
 
-## Roadmap (Phase 2)
+## Design decisions & build journey
 
-- Internal/external link insertion with live 404 validation
-- Transcript ingestion for proprietary knowledge input
-- Real Google Trends API integration (once GA)
-- Live conversational voice onboarding (mic + TTS frontend)
-- Multi-topic batch runs via `LoopAgent`
-- Observability dashboard
+The full journey — including the bugs, the dead ends, and why each design choice was made — is in
+**[`PROGRESS.md`](PROGRESS.md)**. A few highlights:
+
+- **Semantic-first security, not an allowlist gate** — a fixed allowlist starved general topics; a
+  content-aware ToU/PII guard + a code-enforced fetch cap is general-purpose *and* still blocks.
+- **Subject vs angle are separate** — a subtle bug let a chosen angle drop the subject ("SpaceX")
+  and send the whole pipeline generic. Fixed by persisting the subject (`explicit_topic_request`)
+  through the pipeline; a regression test now locks it in.
+- **Voice from audio, not a transcript** — a transcript discards the very signal that defines voice.
+- **Explicit topic always beats the profile's topic seeds** — a persistent profile must never
+  override what the user actually typed.
+- **Honest cost reporting** — real token usage where available; estimates clearly labelled; a
+  defensible human baseline. Understatement is credibility.
 
 ---
 
-## Spec
+## Roadmap (what's next)
 
-The single source of truth for this project is `specs/SPEC.md`. Code is disposable;
-the spec is the asset.
+- **Proprietary-evidence backing** — vector search over first-party data / SME transcripts so the
+  angle is backed by evidence competitors can't access.
+- **Brand-rules / compliance layer** — `brand_rules.yaml` (banned claims, required disclaimers)
+  enforced by `editor_guard` and surfaced in the run report.
+- **Delivery action via MCP** — push the approved article + report to a Google Doc / Drive / email.
+- **Live conversational onboarding**, multi-topic batch runs (`LoopAgent`), and an editorial dashboard.
+
+---
+
+*Built solo, directing AI coding assistants, during the 5-Day AI Agents Intensive.*
