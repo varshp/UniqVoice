@@ -179,7 +179,7 @@ The policy layer **evolved during the build**, and the final design is general-p
 
 ### 1. Install
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/varshp/UniqVoice.git
 cd uniqvoice
 uv sync            # or: pip install -r requirements.txt
 ```
