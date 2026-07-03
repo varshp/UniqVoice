@@ -105,7 +105,7 @@ agents-cli deploy              # deploy to Agent Engine
 |------|-------|
 | Reasoning (angle_finder, editor_guard) | `gemini-2.5-pro` |
 | Fast / cheap (trend_scout, serp_analyst, drafter) | `gemini-2.5-flash` |
-| Multimodal audio (voice_profile_builder) | `gemini-2.5-flash` |
+| Multimodal audio (voice_profile_builder) | `gemini-3.5-flash` |
 
 ### State schema
 The shared session state "baton" is fully documented in Section 10 of `specs/SPEC.md`.
