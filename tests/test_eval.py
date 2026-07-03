@@ -229,7 +229,9 @@ from google.adk.tools import BaseTool, ToolContext
 @pytest.mark.asyncio
 async def test_policy_allowlist_soft_gate():
     """A domain not in blocklist (and not in allowlist) should NOT be blocked before fetch."""
-    tool = BaseTool(name="fetch", description="", parameters={})
+    class DummyTool:
+        name = "fetch"
+    tool = DummyTool()
     args = {"url": "https://random-unknown-domain.com/article"}
     
     class DummySession:
@@ -252,7 +254,9 @@ async def test_policy_allowlist_soft_gate():
 @pytest.mark.asyncio
 async def test_policy_blocklist_hard_gate():
     """A domain on the blocklist MUST be blocked before fetch."""
-    tool = BaseTool(name="fetch", description="", parameters={})
+    class DummyTool:
+        name = "fetch"
+    tool = DummyTool()
     args = {"url": "https://example-content-farm.com/spam"}
     
     class DummySession:
