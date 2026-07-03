@@ -116,7 +116,7 @@ writes" into "an accountable, governed, costed content run":
    fetched, what was blocked (ToU/PII), and whether the fetch cap was hit.
 3. **Voice match** — confirmation the draft was written against the loaded voice profile.
 4. **ROI panel** — estimated model cost and wall-clock time for the run vs a configurable human
-   baseline (e.g. `~$0.10 / ~1m 41s` vs `~$300 / 1 day` for an agency draft). Costs are computed
+   baseline (e.g. `~$0.10 / under 2 minutes` vs `~$300 / 1 day` for an agency draft). Costs are computed
    from real token usage where available and clearly labelled as estimates otherwise.
 
 ---
@@ -125,14 +125,10 @@ writes" into "an accountable, governed, costed content run":
 
 The policy layer **evolved during the build**, and the final design is general-purpose:
 
-- **Started** as a strict domain *allowlist gate* — but that starved non-marketing topics (a
-  finance query returned finance sources not on a marketing allowlist, blocking everything and
-  causing a retry loop).
-- **Redesigned** into a **semantic-first guard**: domains are allowed by default except a small
-  `blocklist.yaml`; a semantic Gemini check on every fetched page enforces **terms-of-use and PII**;
-  a **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop;
-  and `editor_guard` does a final PII strip on the article. The original allowlist is kept as a
-  *soft ranking preference*, not a hard gate.
+- **Strict domain allowlist gate** (`config/allowlist.yaml`) to ensure agents only fetch from explicitly trusted sources.
+- A semantic Gemini check on every fetched page enforces **terms-of-use and PII**.
+- A **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop.
+- `editor_guard` does a final PII strip on the article.
 - Every decision is written to `policy_notes`, which doubles as a human-readable **audit trail**.
 
 🚨 **No API keys or secrets are committed.** All credentials are read via `os.getenv()`;
@@ -145,19 +141,24 @@ The policy layer **evolved during the build**, and the final design is general-p
 - **Google ADK** — `SequentialAgent`, `LlmAgent`, callbacks, `InMemoryRunner`
 - **agents-cli** — project setup, local playground
 - **MCP** — `tavily-mcp` (search) + `mcp-server-fetch` (fetch) via `MCPToolset`
-- **Gemini 2.5 / 3.5** — Capability-routed models per agent (see "Model assignments" below)
+- **Gemini** — 2.5-flash for high-throughput steps, 2.5-pro for reasoning gates, and 3.5-flash for multimodal onboarding
 - **Antigravity** — the build environment
 - **pytest** — the ADK-native evaluation suite
 
 ### Model assignments
 
 | Agent | Model |
-|---|---|
+| --- | --- |
 | `voice_profile_builder` | `gemini-3.5-flash` (multimodal audio) |
-| `trend_scout` / `serp_analyst` / `drafter` | `gemini-2.5-flash` (fast / cheap) |
-| `angle_finder` / `editor_guard` | `gemini-2.5-pro` (deep reasoning) |
-| policy semantic check | `gemini-2.5-flash` |
+| `trend_scout` | `gemini-2.5-flash` |
+| `serp_analyst` | `gemini-2.5-flash` |
+| `angle_finder` | `gemini-2.5-pro` |
+| `drafter` | `gemini-2.5-flash` |
+| `editor_guard` | `gemini-2.5-pro` |
 | `report_builder` | none (pure-Python `BaseAgent`) |
+| policy semantic check | `gemini-2.5-flash` |
+
+> **Routing by capability.** Fast, cheap `gemini-2.5-flash` handles the high-throughput steps: `trend_scout`, `serp_analyst`, `drafter`, and the policy content scan. `gemini-2.5-pro` is reserved for the two reasoning-heavy gates: `angle_finder`, which deduces the contrarian gap, and `editor_guard`, which handles stricter governance. Multimodal onboarding uses `gemini-3.5-flash`. All models are env-configurable, so they can be swapped without touching agent code.
 
 ---
 
@@ -174,8 +175,8 @@ The policy layer **evolved during the build**, and the final design is general-p
 
 ### 1. Install
 ```bash
-git clone https://github.com/varshp/UniqVoice.git
-cd uniqvoice
+git clone <your-repo-url>
+cd UniqVoice
 uv sync            # or: pip install -r requirements.txt
 ```
 
@@ -236,7 +237,7 @@ isn't a fixed string.
 
 > The suite was originally authored for `agents-cli eval`, but the Vertex-backed eval SDK can't
 > introspect ADK `MCPToolset` objects, so it was moved to an ADK-native `InMemoryRunner` harness —
-> a real tooling-fit decision documented in `PROGRESS.md`.
+> a real tooling-fit decision.
 
 ---
 
@@ -256,7 +257,6 @@ uniqvoice/
 ├── specs/SPEC.md                  # the build spec (source of truth)
 ├── tests/                         # ADK-native eval suite
 ├── content_engine_architecture.html
-├── PROGRESS.md                    # build journey + design decisions
 ├── .env.example                   # key names only
 ├── Dockerfile
 └── requirements.txt
@@ -266,8 +266,7 @@ uniqvoice/
 
 ## Design decisions & build journey
 
-The full journey — including the bugs, the dead ends, and why each design choice was made — is in
-**[`PROGRESS.md`](PROGRESS.md)**. A few highlights:
+A few key decisions:
 
 - **Semantic-first security, not an allowlist gate** — a fixed allowlist starved general topics; a
   content-aware ToU/PII guard + a code-enforced fetch cap is general-purpose *and* still blocks.
