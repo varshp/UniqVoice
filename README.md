@@ -145,7 +145,7 @@ The policy layer **evolved during the build**, and the final design is general-p
 - **Google ADK** — `SequentialAgent`, `LlmAgent`, callbacks, `InMemoryRunner`
 - **agents-cli** — project setup, local playground
 - **MCP** — `tavily-mcp` (search) + `mcp-server-fetch` (fetch) via `MCPToolset`
-- **Gemini 3.x** — Flash-tier models per agent (see "Model assignments" below)
+- **Gemini 2.5 / 3.5** — Capability-routed models per agent (see "Model assignments" below)
 - **Antigravity** — the build environment
 - **pytest** — the ADK-native evaluation suite
 
@@ -154,15 +154,10 @@ The policy layer **evolved during the build**, and the final design is general-p
 | Agent | Model |
 |---|---|
 | `voice_profile_builder` | `gemini-3.5-flash` (multimodal audio) |
-| `trend_scout` | `gemini-3.1-flash-lite` |
-| `serp_analyst` | `gemini-3-flash` |
-| `angle_finder` / `drafter` / `editor_guard` | `gemini-3.5-flash` |
+| `trend_scout` / `serp_analyst` / `drafter` | `gemini-2.5-flash` (fast / cheap) |
+| `angle_finder` / `editor_guard` | `gemini-2.5-pro` (deep reasoning) |
+| policy semantic check | `gemini-2.5-flash` |
 | `report_builder` | none (pure-Python `BaseAgent`) |
-| policy semantic check | `gemini-3.5-flash` / `flash-lite` |
-
-> All active agents run on Flash tiers — a deliberate cost choice that is also the project's own
-> thesis (proving AI ROI). `gemini-3.1-pro` is paid-only; `gemini-3.5-flash` outperforms it on
-> these agent tasks.
 
 ---
 
