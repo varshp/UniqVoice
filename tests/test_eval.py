@@ -222,3 +222,51 @@ async def test_voice_applied_001(runner):
     """
     resp = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
     assert "PASS" in resp.text, f"LLM judge failed voice check. Output: {resp.text}"
+
+from agents.callbacks.policy import fetch_before_policy_callback
+from google.adk.tools import BaseTool, ToolContext
+
+@pytest.mark.asyncio
+async def test_policy_allowlist_soft_gate():
+    """A domain not in blocklist (and not in allowlist) should NOT be blocked before fetch."""
+    tool = BaseTool(name="fetch", description="", parameters={})
+    args = {"url": "https://random-unknown-domain.com/article"}
+    
+    class DummySession:
+        id = "test-session"
+        
+    class DummyContext:
+        session = DummySession()
+        state = {"fetch_attempt_count": 0}
+        
+    tool_context = DummyContext()
+    
+    result = await fetch_before_policy_callback(tool, args, tool_context)
+    
+    # Must return None to allow the tool to proceed
+    assert result is None
+    assert tool_context.state["fetch_attempt_count"] == 1
+    assert "not on allowlist" in tool_context.state.get("policy_notes", "")
+
+
+@pytest.mark.asyncio
+async def test_policy_blocklist_hard_gate():
+    """A domain on the blocklist MUST be blocked before fetch."""
+    tool = BaseTool(name="fetch", description="", parameters={})
+    args = {"url": "https://example-content-farm.com/spam"}
+    
+    class DummySession:
+        id = "test-session"
+        
+    class DummyContext:
+        session = DummySession()
+        state = {"fetch_attempt_count": 0}
+        
+    tool_context = DummyContext()
+    
+    result = await fetch_before_policy_callback(tool, args, tool_context)
+    
+    # Must return a dict blocking the fetch
+    assert result is not None
+    assert "content" in result
+    assert "blocked by structural policy (domain on blocklist)" in result["content"][0]["text"]

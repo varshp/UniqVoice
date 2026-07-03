@@ -40,6 +40,28 @@ def _is_allowed_domain(domain: str) -> bool:
             return True
     return False
 
+# Load blocklist at module level
+_blocklist_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+    "config",
+    "blocklist.yaml",
+)
+_blocked_domains = []
+if os.path.exists(_blocklist_path):
+    with open(_blocklist_path, "r", encoding="utf-8") as f:
+        _blocklist_config = yaml.safe_load(f) or {}
+        _blocked_domains = _blocklist_config.get("blocked_domains", [])
+
+
+def _is_blocked_domain(domain: str) -> bool:
+    """Checks if a domain ends with any blocked domain."""
+    domain = domain.lower()
+    for blocked in _blocked_domains:
+        blocked = blocked.lower()
+        if domain == blocked or domain.endswith("." + blocked):
+            return True
+    return False
+
 _run_notes = {}
 
 def _append_policy_note(tool_context: ToolContext, msg: str):
@@ -76,14 +98,20 @@ async def fetch_before_policy_callback(
     parsed = urllib.parse.urlparse(url)
     domain = parsed.netloc.split(":")[0]
 
-    # Allowlist check (structural policy)
-    if not _is_allowed_domain(domain):
-        msg = f"{url} - blocked (not on allowlist)"
+    # Blocklist check (hard gate)
+    if _is_blocked_domain(domain):
+        msg = f"{url} - blocked (on blocklist)"
         logger.warning("[Policy] %s", msg)
         _append_policy_note(tool_context, msg)
-        return {"content": [{"type": "text", "text": "Content blocked by structural policy (domain not on allowlist)."}]}
+        return {"content": [{"type": "text", "text": "Content blocked by structural policy (domain on blocklist)."}]}
 
-    # Enforce fetch cap ONLY for allowed domains
+    # Allowlist check (soft log only)
+    if not _is_allowed_domain(domain):
+        msg = f"{url} - not on allowlist; proceeding to semantic check"
+        logger.info("[Policy] %s", msg)
+        _append_policy_note(tool_context, msg)
+
+    # Enforce fetch cap
     fetch_count = tool_context.state.get("fetch_attempt_count", 0)
     if fetch_count >= 7:
         msg = f"{url} - skipped (fetch cap reached)"

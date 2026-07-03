@@ -125,10 +125,14 @@ writes" into "an accountable, governed, costed content run":
 
 The policy layer **evolved during the build**, and the final design is general-purpose:
 
-- **Strict domain allowlist gate** (`config/allowlist.yaml`) to ensure agents only fetch from explicitly trusted sources.
-- A semantic Gemini check on every fetched page enforces **terms-of-use and PII**.
-- A **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop.
-- `editor_guard` does a final PII strip on the article.
+- **Started** as a strict domain *allowlist gate* — but that starved non-marketing topics (a
+  finance query returned finance sources not on a marketing allowlist, blocking everything and
+  causing a retry loop).
+- **Redesigned** into a **semantic-first guard**: domains are allowed by default except a small
+  `blocklist.yaml`; a semantic Gemini check on every fetched page enforces **terms-of-use and PII**;
+  a **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop;
+  and `editor_guard` does a final PII strip on the article. The original allowlist is kept as a
+  *soft ranking preference*, not a hard gate.
 - Every decision is written to `policy_notes`, which doubles as a human-readable **audit trail**.
 
 🚨 **No API keys or secrets are committed.** All credentials are read via `os.getenv()`;
