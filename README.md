@@ -131,8 +131,7 @@ The policy layer **evolved during the build**, and the final design is general-p
 - **Redesigned** into a **semantic-first guard**: domains are allowed by default except a small
   `blocklist.yaml`; a semantic Gemini check on every fetched page enforces **terms-of-use and PII**;
   a **hard fetch cap is enforced in code** (not just in a prompt) so the pipeline can never loop;
-  and `editor_guard` does a final PII strip on the article. The original allowlist is kept as a
-  *soft ranking preference*, not a hard gate.
+  and `editor_guard` does a final PII strip on the article. The original allowlist is retained only to flag unfamiliar domains in the audit trail, not to block them.
 - Every decision is written to `policy_notes`, which doubles as a human-readable **audit trail**.
 
 🚨 **No API keys or secrets are committed.** All credentials are read via `os.getenv()`;
