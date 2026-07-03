@@ -45,13 +45,20 @@ def test_agent_stream() -> None:
     )
     assert len(events) > 0, "Expected at least one message"
 
-    has_text_content = False
+    has_valid_event = False
     for event in events:
-        if (
-            event.content
-            and event.content.parts
-            and any(part.text for part in event.content.parts)
-        ):
-            has_text_content = True
+        # Accept text content
+        if getattr(event, "content", None) and getattr(event.content, "parts", None):
+            for part in event.content.parts:
+                if getattr(part, "text", None):
+                    has_valid_event = True
+                    break
+                # Accept tool calls (like request_input from trend_scout)
+                tc = getattr(part, "function_call", None)
+                if tc and getattr(tc, "name", None):
+                    has_valid_event = True
+                    break
+        if has_valid_event:
             break
-    assert has_text_content, "Expected at least one message with text content"
+            
+    assert has_valid_event, "Expected at least one message with text content or tool calls"
