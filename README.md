@@ -259,8 +259,13 @@ uniqvoice/
 ├── scripts/run_onboarding.py      # one-time voice onboarding CLI
 ├── specs/SPEC.md                  # the build spec (source of truth)
 ├── tests/                         # ADK-native eval suite
-├── content_engine_architecture.html
+├── web/                           # static assets for the FastAPI frontend
+├── knowledge_base/                # proprietary takes and data notes
+├── server.py                      # FastAPI application entrypoint
+├── UniqVoice_Architecture.png
+├── AGENTS.md                      # AI agent coding guidelines and project rules
 ├── .env.example                   # key names only
+├── pyproject.toml                 # uv dependency management
 ├── Dockerfile
 └── requirements.txt
 ```
