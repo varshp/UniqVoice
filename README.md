@@ -67,8 +67,8 @@ The agents pass work through shared `session.state`. The full read/write picture
 | Agent | Reads | Writes |
 |---|---|---|
 | `trend_scout` | `explicit_topic_request`, `topic_seeds` | `topic_candidates`, `topic` |
-| `serp_analyst` | `topic` | `serp_findings` (sources + `common_claims`) |
-| `angle_finder` | `serp_findings`, `explicit_topic_request` | `angle_brief` (`angle`, `why_new`, outline) |
+| `serp_analyst` | `topic`, `explicit_topic_request` | `serp_findings` (sources + `common_claims`) |
+| `angle_finder` | `serp_findings`, `explicit_topic_request`, `topic` | `angle_brief` (`angle`, `why_new`, outline) |
 | `drafter` | `angle_brief`, `voice_profile`, `tone_notes`, `explicit_topic_request` — **not `serp_findings`** | `draft` |
 | `editor_guard` | `draft` | `final_article`, `policy_notes` |
 | `report_builder` | (all, read-only) | `run_report` |
