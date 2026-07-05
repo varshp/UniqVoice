@@ -214,7 +214,7 @@
 <div class="relative w-32 h-32 flex items-center justify-center">
 <svg class="w-full h-full -rotate-90">
 <circle class="text-surface-container" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-width="4"></circle>
-<circle id="loading-circle" class="text-magic-violet transition-all duration-1000 ease-in-out" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="188.5" stroke-width="4"></circle>
+<circle id="loading-circle" class="text-magic-violet origin-center animate-spin" cx="64" cy="64" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="280 377" stroke-width="4"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
 <span class="material-symbols-outlined text-magic-violet text-4xl">mic</span>
@@ -251,37 +251,7 @@
                     }
                 </style>
 </div>
-<!-- Execution Pipeline Footer -->
-<div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 stagger-appear" style="animation-delay: 0.4s;">
-<div class="flex items-center gap-4 bg-surface/40 p-4 rounded-lg border border-border-subtle/50">
-<div class="w-6 h-6 flex items-center justify-center">
-<span class="material-symbols-outlined text-magic-violet text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div>
-<p class="text-label-md font-label-md text-ink-primary">Uploading audio...</p>
-<p class="text-label-sm font-label-sm text-ink-secondary">Completed</p>
-</div>
-</div>
-<div class="flex items-center gap-4 bg-surface p-4 rounded-lg border border-magic-violet/20 shadow-sm relative overflow-hidden">
-<div class="absolute top-0 left-0 h-1 bg-magic-violet w-3/4"></div>
-<div class="w-6 h-6 flex items-center justify-center">
-<div class="w-2 h-2 bg-magic-violet rounded-full animate-ping"></div>
-</div>
-<div>
-<p id="loading-target-label" class="text-label-md font-label-md text-ink-primary">Analysing your voice...</p>
-<p class="text-label-sm font-label-sm text-magic-violet font-semibold">In Progress</p>
-</div>
-</div>
-<div class="flex items-center gap-4 bg-surface/40 p-4 rounded-lg border border-border-subtle/50 grayscale opacity-60">
-<div class="w-6 h-6 flex items-center justify-center">
-<span class="material-symbols-outlined text-ink-secondary text-sm" data-icon="circle">circle</span>
-</div>
-<div>
-<p class="text-label-md font-label-md text-ink-primary">Finalizing profile...</p>
-<p class="text-label-sm font-label-sm text-ink-secondary">Pending</p>
-</div>
-</div>
-</div>
+<!-- Execution Pipeline Footer Removed (Reflecting true single-step backend state) -->
 </div>
 </main>
 <!-- Side Feedback Action (Micro-interaction) -->
@@ -290,38 +260,5 @@
 <div class="hidden">
 <img data-alt="A sophisticated digital artwork showing abstract violet sound waves weaving through a minimalist architectural grid. The lighting is high-key and elegant, reflecting an editorial design aesthetic with soft paper textures and clean black and white accents. The mood is calm, professional, and technologically advanced, echoing a high-end productivity tool interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3wjfJ-hyN4Rubq3bG43mttlr4XR8CW4uAGMI2nsdxj_hYJ5oOw655H9Q3_8zbxVojbNn_xJ26aDPbKR65PxdAyRoCdM1r97ddW9Z1-19jTnD2-7tTU3SEWlkjgdSZTZn286urftdNy-FaQnb5IN62xGNwcnzjjGSCDMJHZch93AIMMdp9D6SBGE-ycZk48Uj_DuobXgmFALRFX6rhfSn69vKmR-T0nd1U-LKcT8YBPl7gxwGXIz3doTsiGK1_x0VOSbkcUhpgFSQ"/>
 </div>
-<script>
-        // Micro-interaction for the progress circle
-        (() => {
-            const circle = document.getElementById('loading-circle');
-            let progress = 50;
-            
-            // Simulating progress drift
-            setInterval(() => {
-                try {
-                    if (progress < 99) {
-                        progress += Math.random() * 1.2;
-                        if (progress > 99) progress = 99;
-                        const offset = 377 - (progress / 100) * 377;
-                        if (circle) circle.style.strokeDashoffset = offset;
-                    }
-                } catch(e) { console.error(e); }
-            }, 300);
-
-            // Rotating through 'Analysing' text
-            const labels = ['Analysing your voice...', 'Extracting tone & rhythm...', 'Building your profile...'];
-            let labelIndex = 0;
-            const targetLabel = document.getElementById('loading-target-label');
-            
-            setInterval(() => {
-                if (!targetLabel) return;
-                labelIndex = (labelIndex + 1) % labels.length;
-                targetLabel.style.opacity = 0;
-                setTimeout(() => {
-                    targetLabel.innerText = labels[labelIndex];
-                    targetLabel.style.opacity = 1;
-                }, 300);
-            }, 3000);
-        })();
-    </script>
+<!-- JavaScript Timers Removed -->
 </body></html>
