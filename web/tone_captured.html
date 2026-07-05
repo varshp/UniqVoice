@@ -195,19 +195,10 @@
 <h3 id="vp-tone" class="font-headline-lg text-3xl md:text-4xl text-primary mb-4 leading-tight italic flex-grow relative z-10">"Loading..."</h3>
 <div class="mt-auto relative z-10">
 <div class="bg-background/50 rounded-xl p-4 border border-border-subtle/50 font-mono text-[11px] leading-relaxed text-ink-secondary w-full">
-<span class="text-magic-violet">PROBABILITY DENSITY:</span>
-<div class="mt-2 flex items-end gap-1 h-12 w-full">
-<div class="flex-1 bg-magic-violet/10 h-[20%]"></div>
-<div class="flex-1 bg-magic-violet/20 h-[45%]"></div>
-<div class="flex-1 bg-magic-violet/40 h-[70%]"></div>
-<div class="flex-1 bg-magic-violet h-[95%]"></div>
-<div class="flex-1 bg-magic-violet/60 h-[50%]"></div>
-<div class="flex-1 bg-magic-violet/30 h-[25%]"></div>
-<div class="flex-1 bg-magic-violet/10 h-[10%]"></div>
-</div>
-<div class="mt-2 flex justify-between uppercase tracking-tighter w-full">
-<span class="">Qualifiers</span>
-<span class="">Direct Impact</span>
+<span class="text-magic-violet uppercase tracking-widest mb-3 block text-[10px]">Vocabulary Highlights</span>
+<div id="vp-vocabulary" class="flex flex-wrap gap-x-6 gap-y-3 mt-auto">
+    <!-- Rendered via JS -->
+    <div class="flex items-center gap-3"><div class="h-1 bg-magic-violet w-4 rounded-full"></div><span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">Loading...</span></div>
 </div>
 </div>
 </div>
@@ -218,20 +209,7 @@
 <span class="text-magic-violet font-label-sm uppercase tracking-[0.2em] border-b border-magic-violet/30 pb-1">02 Rhythm</span>
 </div>
 <h3 id="vp-rhythm" class="font-headline-lg text-2xl text-primary mb-6 leading-tight flex-grow">Loading...</h3>
-<div class="space-y-3 mt-auto">
-<div class="flex items-center gap-3">
-<div class="h-1 bg-magic-violet w-4 rounded-full"></div>
-<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">Staccato Burst</span>
-</div>
-<div class="flex items-center gap-3">
-<div class="h-1 bg-magic-violet w-12 rounded-full"></div>
-<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">Narrative Build</span>
-</div>
-<div class="flex items-center gap-3">
-<div class="h-1 bg-magic-violet w-2 rounded-full"></div>
-<span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">The "Drop"</span>
-</div>
-</div>
+
 </div>
 <!-- RHETORICAL MOVES (Spans 6) -->
 <div class="md:col-span-6 bg-surface border-2 border-primary rounded-2xl p-8 shadow-md relative group">
@@ -285,6 +263,15 @@
                         document.getElementById('vp-rhythm').innerText = vp.sentence_rhythm;
                     }
                     
+                    if (vp.vocabulary && vp.vocabulary.length > 0) {
+                        document.getElementById('vp-vocabulary').innerHTML = vp.vocabulary.map(v => `
+                            <div class="flex items-center gap-3">
+                                <div class="h-1 bg-magic-violet w-3 rounded-full"></div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-ink-secondary">${v}</span>
+                            </div>
+                        `).join('');
+                    }
+
                     if (vp.rhetorical_moves && vp.rhetorical_moves.length > 0) {
                         document.getElementById('vp-moves').innerHTML = vp.rhetorical_moves.map((m, index) => `
                             <div class="flex gap-4 items-start">
