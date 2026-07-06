@@ -3,7 +3,6 @@ load_dotenv()
 import os
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, StreamingResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import logging
 import json
@@ -14,9 +13,6 @@ from agents.orchestrator import root_agent
 
 app = FastAPI(title="UniqVoice Content Pipeline")
 logger = logging.getLogger(__name__)
-
-# Mount static files
-app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
 
 import uuid

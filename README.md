@@ -204,13 +204,12 @@ This creates `profile/voice_profile.json` (gitignored).
 
 ### 4. Run the pipeline
 ```bash
-agents-cli playground
-# open http://127.0.0.1:8080/dev-ui/?app=agents
+uv run uvicorn server:app --reload --port 8003
+# open http://127.0.0.1:8003
 ```
-Type a topic, pick an angle at the gate, and watch the pipeline produce a final article plus a
-run report in `outputs/`.
+Experience the three-screen UI flow (Voice → Angle → Create), ending in a Content Run Report in `outputs/`.
 
-> **Note:** `.env` is read at server launch — restart the playground after editing it.
+> **Note:** `.env` is read at server launch — restart the server after editing it (the `--reload` flag does not pick up `.env` changes).
 
 ---
 

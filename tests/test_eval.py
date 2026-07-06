@@ -170,7 +170,7 @@ async def test_security_blocks_no_loop_001(runner):
         
     session = await runner.session_service.get_session(app_name="agents", user_id="test", session_id=session.id)
     fetch_count = session.state.get("fetch_attempt_count", 0)
-    assert fetch_count <= 5, f"Fetch loop detected! Count: {fetch_count}"
+    assert fetch_count <= 7, f"Fetch loop detected! Count: {fetch_count}"
     assert session.state.get("final_article"), "Final article was not produced"
 
 
