@@ -191,7 +191,6 @@ cp .env.example .env
 ```
 # .env
 GOOGLE_API_KEY=your-gemini-key
-GEMINI_API_KEY=your-gemini-key   # same value; both are read
 TAVILY_API_KEY=your-tavily-key
 ```
 
