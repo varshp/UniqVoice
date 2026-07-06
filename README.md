@@ -199,7 +199,7 @@ TAVILY_API_KEY=your-tavily-key
 ```bash
 uv run uvicorn server:app --reload --port 8003
 ```
-# open http://127.0.0.1:8003
+open http://127.0.0.1:8003
 
 Note: `.env` is read at server launch — restart the server after editing it (the `--reload` flag does not pick up `.env` changes).
 
