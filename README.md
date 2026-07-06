@@ -199,9 +199,9 @@ Both onboarding paths feed the same `build_voice_profile` pipeline:
 
 - **Via the running web app** — the Voice screen records live from your microphone and uploads it directly (`/api/voice-upload`).
 - **Via the CLI** — for a pre-recorded file:
-
+```bash
   uv run python scripts/run_onboarding.py path/to/clip.mp3
-
+```
 Either path creates `profile/voice_profile.json` (gitignored).
 
 ### 4. Run the pipeline
