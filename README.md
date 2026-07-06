@@ -194,24 +194,19 @@ GOOGLE_API_KEY=your-gemini-key
 TAVILY_API_KEY=your-tavily-key
 ```
 
-### 3. Onboard your voice (once)
-Both onboarding paths feed the same `build_voice_profile` pipeline:
+### 3. Run the pipeline
 
-- **Via the running web app** — the Voice screen records live from your microphone and uploads it directly (`/api/voice-upload`).
-- **Via the CLI** — for a pre-recorded file:
-```bash
-uv run python scripts/run_onboarding.py path/to/clip.mp3
-```
-Either path creates `profile/voice_profile.json` (gitignored).
-
-### 4. Run the pipeline
 ```bash
 uv run uvicorn server:app --reload --port 8003
-# open http://127.0.0.1:8003
 ```
-Experience the three-screen UI flow (Voice → Angle → Create), ending in a Content Run Report in `outputs/`.
+# open http://127.0.0.1:8003
 
-> **Note:** `.env` is read at server launch — restart the server after editing it (the `--reload` flag does not pick up `.env` changes).
+Note: `.env` is read at server launch — restart the server after editing it (the `--reload` flag does not pick up `.env` changes).
+
+### 4. Onboard your voice (once)
+On the Voice screen, either record live from your microphone or upload an existing audio file — both are sent to `/api/voice-upload` and build your `profile/voice_profile.json`.
+
+Then continue through Angle → Create, ending in a Content Run Report in `outputs/`.
 
 ---
 
